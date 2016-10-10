@@ -1,0 +1,17 @@
+fileFormatVersion: 2
+guid: 89a2358380eb5484792c172b42e8b19c
+timeCreated: 1427120507
+licenseType: Store
+MonoImporter:
+  serializedVersion: 2
+  defaultReferences:
+  - slider: {instanceID: 0}
+  - bar: {instanceID: 0}
+  - steamParticles: {instanceID: 0}
+  - explosionParticles: {fileID: 19874418, guid: 6bc6d0dd8b8428e4ca316513f2cf13c6,
+      type: 2}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
