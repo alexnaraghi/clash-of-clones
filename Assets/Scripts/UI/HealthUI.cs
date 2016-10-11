@@ -6,7 +6,7 @@ using UnityEngine.UI;
 /// Gui for a slider based health display.
 /// </summary> 
 [RequireComponent(typeof(Entity))]
-public class HealthDisplay : MonoBehaviour
+public class HealthUI : MonoBehaviour
 {
     [SerializeField] private Slider _slider;
     [SerializeField] private Image _fillImage;

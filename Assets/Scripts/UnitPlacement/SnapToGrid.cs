@@ -33,7 +33,7 @@ public class SnapToGrid : MonoBehaviour
             // If the position is on the ground
             // If the territory is NOT controlled by the enemy ie friendly or neutral
             if (Physics.Raycast(ray, out hit, int.MaxValue, _groundMask)
-                && !GameState.Instance.EnemyPlayer.IsInTerritory(hit.point))
+                && !GameModel.Instance.EnemyPlayer.IsInTerritory(hit.point))
             {
                 var position = hit.point;
 

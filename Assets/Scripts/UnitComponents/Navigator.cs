@@ -90,7 +90,7 @@ public class Navigator : MonoBehaviour
 
     private Entity getClosestEnemyBuilding()
     {
-        var enemy = GameState.Instance.GetOppositePlayer(_entity.Owner);
+        var enemy = GameModel.Instance.GetOppositePlayer(_entity.Owner);
 
         // EARLY OUT! //
         if(enemy == null) return null;

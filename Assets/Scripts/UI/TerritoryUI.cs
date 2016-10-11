@@ -5,7 +5,7 @@ using UnityEngine.UI;
 /// <summary>
 /// Shows the territory of the enemy player.
 /// </summary>
-public class TerritoryDisplay : MonoBehaviour 
+public class TerritoryUI : MonoBehaviour 
 {
     /// <summary>
     /// The prefab of the image to display a territory with.
@@ -60,7 +60,7 @@ public class TerritoryDisplay : MonoBehaviour
         int numImagesUsed = 0;
         if(_isShowingEnemyTerritory)
         {
-            var player = GameState.Instance.EnemyPlayer;
+            var player = GameModel.Instance.EnemyPlayer;
             foreach(var building in player.Buildings)
             {
                 if(building.Entity != null && building.Entity.HP > 0)
@@ -96,7 +96,7 @@ public class TerritoryDisplay : MonoBehaviour
     /// </summary>
     /// <param name="territory">The territory to convert.</param>
     /// <returns>A rectangle in world space on the Y plane.</returns>
-    private Rect toWorldRect(Territory territory)
+    private Rect toWorldRect(TerritoryData territory)
     {
         Rect rect = new Rect(
             territory.StartX * Consts.GridCellWidth - Consts.GridCellWidth / 2f,

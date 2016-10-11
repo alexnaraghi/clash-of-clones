@@ -4,7 +4,7 @@ using UnityEngine.UI;
 /// <summary>
 /// Updates the clock.
 /// </summary>
-public class GameClock : MonoBehaviour 
+public class GameClockUI : MonoBehaviour 
 {
     [SerializeField] private Text _timer;
 
@@ -17,7 +17,7 @@ public class GameClock : MonoBehaviour
             return;
         }
 
-        int secondsLeft = Mathf.RoundToInt(GameState.Instance.SecondsLeft);
+        int secondsLeft = Mathf.RoundToInt(GameModel.Instance.SecondsLeft);
 
         int minutes = secondsLeft / 60;
         secondsLeft -= minutes * 60;

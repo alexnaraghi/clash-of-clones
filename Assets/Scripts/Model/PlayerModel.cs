@@ -5,7 +5,7 @@ using System.Collections.Generic;
 /// <summary>
 /// Represents the state of a player.
 /// </summary>
-public class Player : MonoBehaviour
+public class PlayerModel : MonoBehaviour
 {
     // Differentiate units and buildings per player.
     public Material PlayerMaterial;
@@ -19,7 +19,7 @@ public class Player : MonoBehaviour
     /// <summary>
     /// The current state of the player's deck, hand, discard.
     /// </summary>
-    public CardState CardState;
+    public PlayerCardModel CardState;
 
     /// <summary>
     /// All units belonging to this player currently in play.
@@ -44,12 +44,12 @@ public class Player : MonoBehaviour
     /// <summary>
     /// Definition of the territories belonging to the above buildings.
     /// </summary>
-    public TerritoryChunk[] TerritoryChunks;
+    public TerritoryChunkData[] TerritoryChunks;
 
     /// <summary>
     /// Building array for convenience, links a building with its territory.
     /// </summary>
-    [HideInInspector] public Building[] Buildings;
+    [HideInInspector] public BuildingData[] Buildings;
 
     void Awake()
     {
@@ -63,11 +63,11 @@ public class Player : MonoBehaviour
         // TODO: Refactor how territory is linked to buildings.
         if(TerritoryChunks.Length == 3)
         {
-            Buildings = new Building[3]
+            Buildings = new BuildingData[3]
             {
-                new Building(TopOutpost, TerritoryChunks[2]),
-                new Building(HQ, TerritoryChunks[1]),
-                new Building(BottomOutpost, TerritoryChunks[0])
+                new BuildingData(TopOutpost, TerritoryChunks[2]),
+                new BuildingData(HQ, TerritoryChunks[1]),
+                new BuildingData(BottomOutpost, TerritoryChunks[0])
             };
         }
         else
@@ -143,7 +143,7 @@ public class Player : MonoBehaviour
     {
         if(go != null)
         {
-            if(this == GameState.Instance.LeftPlayer)
+            if(this == GameModel.Instance.LeftPlayer)
             {
                 go.transform.Rotate(new Vector3(0f, 90f, 0f));
             }

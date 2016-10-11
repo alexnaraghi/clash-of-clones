@@ -25,12 +25,12 @@ public class DrawDebugGrid : MonoBehaviour
 
         if(IsDrawingEnemyGrid)
         {
-            CreateTerritoryGridForPlayer(GameState.Instance.EnemyPlayer);
+            CreateTerritoryGridForPlayer(GameModel.Instance.EnemyPlayer);
         }
         
         if(IsDrawingFriendlyGrid)
         {
-            CreateTerritoryGridForPlayer(GameState.Instance.MyPlayer);
+            CreateTerritoryGridForPlayer(GameModel.Instance.MyPlayer);
         }
 
         if(IsDrawingMapGrid)
@@ -47,7 +47,7 @@ public class DrawDebugGrid : MonoBehaviour
         }
     }
 
-    public void CreateTerritoryGridForPlayer(Player player)
+    public void CreateTerritoryGridForPlayer(PlayerModel player)
     {
         foreach(var building in player.Buildings)
         {

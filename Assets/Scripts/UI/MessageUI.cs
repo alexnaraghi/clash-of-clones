@@ -4,7 +4,7 @@ using UnityEngine.UI;
 /// <summary>
 /// Simply prints a big message to the center of the screen for some seconds.
 /// </summary>
-public class MessagePrinter : MonoBehaviour 
+public class MessageUI : MonoBehaviour 
 {
     [SerializeField] private Text _text;
 

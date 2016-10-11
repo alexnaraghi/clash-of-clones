@@ -11,7 +11,7 @@ public class AIController : MonoBehaviour
     /// <summary>
     /// The player to control.
     /// </summary>
-    [SerializeField] private Player _player;
+    [SerializeField] private PlayerModel _player;
 
     // AI PARAMETERS //
     private const float IntervalBetweenMoves = 2f;
@@ -20,7 +20,7 @@ public class AIController : MonoBehaviour
     
     void Awake()
     {
-        _player = GetComponent<Player>();
+        _player = GetComponent<PlayerModel>();
         Assert.IsNotNull(_player);
     }
 

@@ -5,12 +5,12 @@
 /// </summary>
 public class CardPanel : MonoBehaviour 
 {
-    public Card[] Hand;
-    public Card PeekCard;
+    public CardUI[] Hand;
+    public CardUI PeekCard;
 
     void Update()
     {
-        var handState = GameState.Instance.MyPlayer.CardState.Hand;
+        var handState = GameModel.Instance.MyPlayer.CardState.Hand;
 
         // EARLY OUT! //
         if(handState.Length != Hand.Length)
@@ -32,7 +32,7 @@ public class CardPanel : MonoBehaviour
             }
         }
 
-        var peekCard = GameState.Instance.MyPlayer.CardState.Peek();
+        var peekCard = GameModel.Instance.MyPlayer.CardState.Peek();
         if(peekCard != null)
         {
             PeekCard.Init(peekCard);

@@ -7,27 +7,27 @@ using UnityEngine.SceneManagement;
 /// Root object of all game-state.  Adding/removing entities, player managemment, lifecycle
 /// should be done through here.  Although, perhaps we can break out lifecycle if it gets unweildy.
 /// </summary>
-public class GameState : MonoBehaviour 
+public class GameModel : MonoBehaviour 
 {
     // Singleton instance.
     // Singletons suck, consider something more robust.  Can we have multiple game-states at a time?
     // Might be possible if we implement hosted multiplayer.
-    public static GameState Instance;
+    public static GameModel Instance;
 
-    [SerializeField] private MessagePrinter _messagePrinter;
+    [SerializeField] private MessageUI _messagePrinter;
  
     [Range(0, 1)] 
     public int LocalPlayerNum;
 
     public float SecondsLeft;
 
-    public Player LeftPlayer;
-    public Player RightPlayer;
+    public PlayerModel LeftPlayer;
+    public PlayerModel RightPlayer;
 
     /// <summary>
     /// Convenience array for iterating on players.
     /// </summary>
-    [NonSerialized] public Player[] Players;
+    [NonSerialized] public PlayerModel[] Players;
 
     /// <summary>
     /// If the game currently in progress?
@@ -38,7 +38,7 @@ public class GameState : MonoBehaviour
     /// <summary>
     /// The human controlled player.
     /// </summary>
-    public Player MyPlayer
+    public PlayerModel MyPlayer
     {
         get
         {
@@ -49,7 +49,7 @@ public class GameState : MonoBehaviour
     /// <summary>
     /// The AI.
     /// </summary>
-    public Player EnemyPlayer
+    public PlayerModel EnemyPlayer
     {
         get
         {
@@ -79,14 +79,14 @@ public class GameState : MonoBehaviour
         var messageObj = GameObject.Find("CenterMessage");
         if(messageObj != null)
         {
-            _messagePrinter = messageObj.GetComponent<MessagePrinter>();
+            _messagePrinter = messageObj.GetComponent<MessageUI>();
             if(_messagePrinter != null)
             {
                 _messagePrinter.PrintMessage("Clash of Clones");
             }
         }
 
-        Players = new Player[2];
+        Players = new PlayerModel[2];
         Players[0] = LeftPlayer;
         Players[1] = RightPlayer;
 
@@ -106,9 +106,9 @@ public class GameState : MonoBehaviour
     /// <summary>
     /// Get the player that is not the given player.
     /// </summary>
-    public Player GetOppositePlayer(Player player)
+    public PlayerModel GetOppositePlayer(PlayerModel player)
     {
-        Player opposite;
+        PlayerModel opposite;
         if(MyPlayer == player)
         {
             opposite = EnemyPlayer;
@@ -129,7 +129,7 @@ public class GameState : MonoBehaviour
             if(LeftPlayer.HQ.HP <= 0 || RightPlayer.HQ.HP <= 0 || SecondsLeft <= 0f)
             {
                 IsPlaying = false;
-                Player winner = determineWinner();
+                PlayerModel winner = determineWinner();
 
                 // Print message.
                 if(_messagePrinter != null)
@@ -152,7 +152,7 @@ public class GameState : MonoBehaviour
     /// <summary>
     /// Return the winner.  If tie, returns null.
     /// </summary>
-    private Player determineWinner()
+    private PlayerModel determineWinner()
     {
         int[] scores = new int[2];
 
@@ -175,7 +175,7 @@ public class GameState : MonoBehaviour
             }
         }
 
-        Player winner = null;
+        PlayerModel winner = null;
 
         if(scores[0] > scores[1])
         {

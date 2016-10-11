@@ -5,7 +5,7 @@ using System.Linq;
 /// <summary>
 /// Represents the state of the game with respect to the players' cards.
 /// </summary>
-public class CardState : MonoBehaviour 
+public class PlayerCardModel : MonoBehaviour 
 {
     public List<CardDefinition> Deck;
     public List<CardDefinition> Discard;

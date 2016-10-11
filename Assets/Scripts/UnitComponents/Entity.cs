@@ -30,11 +30,11 @@ public class Entity : MonoBehaviour
     }
     [SerializeField] private CardDefinition _definition;
 
-    public Player Owner 
+    public PlayerModel Owner 
     { 
         get { return _owner; } 
     }
-    [SerializeField] private Player _owner;
+    [SerializeField] private PlayerModel _owner;
 
     public int HP 
     { 
@@ -47,7 +47,7 @@ public class Entity : MonoBehaviour
         get { return Definition.StartHP; } 
     }
 
-    public void Init(Player owner, CardDefinition definition)
+    public void Init(PlayerModel owner, CardDefinition definition)
     {
         // EARLY OUT! //
         if(owner == null || definition == null)
@@ -81,11 +81,11 @@ public class Entity : MonoBehaviour
     /// Static initialization of an entity.
     /// </summary>
     /// <param name="owner">The owning player.  Recommend not writing, just reading from it
-    /// to let <see cref="GameState"/> be authoritative.</param>
+    /// to let <see cref="GameModel"/> be authoritative.</param>
     /// <param name="definition">The card's definition.</param>
     /// <param name="position">The spawn position.</param>
     /// <returns>The created entity.</returns>
-    public static Entity SpawnFromDefinition(Player owner, CardDefinition definition, Vector3 position)
+    public static Entity SpawnFromDefinition(PlayerModel owner, CardDefinition definition, Vector3 position)
     {
         var prefab = Resources.Load<GameObject>(Consts.UnitsPath + definition.PrefabName);
 

@@ -5,9 +5,9 @@ using UnityEngine;
 /// Represents a chunk of one or more territory rectangles.
 /// </summary>
 [Serializable]
-public class TerritoryChunk
+public class TerritoryChunkData
 {
-    public Territory[] Territories;
+    public TerritoryData[] Territories;
 
     public bool IsInTerritoryChunk(Vector3 position)
     {

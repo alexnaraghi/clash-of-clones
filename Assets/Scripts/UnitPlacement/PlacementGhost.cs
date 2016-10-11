@@ -14,7 +14,7 @@ public class PlacementGhost : MonoBehaviour
     /// <summary>
     /// The territory display so we can show enemy territory when we are placing.
     /// </summary>
-    [SerializeField] private TerritoryDisplay _territoryGui;
+    [SerializeField] private TerritoryUI _territoryGui;
 
     /// <summary>
     /// The card that is being placed.
@@ -36,9 +36,9 @@ public class PlacementGhost : MonoBehaviour
         // If the model is active, it is in a placeable location.
         if(Input.GetMouseButtonDown(0) && Model != null && Model.activeSelf)
         {
-            if(GameState.Instance.MyPlayer.CanPlayCard(_card))
+            if(GameModel.Instance.MyPlayer.CanPlayCard(_card))
             {
-                GameState.Instance.MyPlayer.PlayCard(_card, transform.position);
+                GameModel.Instance.MyPlayer.PlayCard(_card, transform.position);
                 PlacedEvent.Invoke();
                 clear();
             }
@@ -56,7 +56,7 @@ public class PlacementGhost : MonoBehaviour
     /// <summary>
     /// Set the ghost to a card.  If the card is null, clears the ghost.
     /// </summary>
-    public void SetCard(CardDefinition card, Player player)
+    public void SetCard(CardDefinition card, PlayerModel player)
     {
         if(card != null)
         {

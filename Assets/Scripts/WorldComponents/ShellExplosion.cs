@@ -28,7 +28,7 @@ public class ShellExplosion : MonoBehaviour
     [SerializeField] private ParticleSystem _explosionParticles;
     [SerializeField] private AudioSource _explosionAudio;              
 
-    private Player _owner;
+    private PlayerModel _owner;
     private int _areaDamage;
     
     private void Start ()
@@ -40,7 +40,7 @@ public class ShellExplosion : MonoBehaviour
         Destroy (gameObject, _maxLifeTime);
     }
 
-    public void Init(Player owner, int damage)
+    public void Init(PlayerModel owner, int damage)
     {
         _owner = owner;
         _areaDamage = damage;

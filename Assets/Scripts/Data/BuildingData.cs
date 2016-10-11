@@ -5,17 +5,17 @@ using UnityEngine;
 /// Links a building entity with its territory.
 /// </summary>
 [Serializable]
-public class Building 
+public class BuildingData 
 {
     public Entity Entity;
-    public TerritoryChunk Territory;
+    public TerritoryChunkData Territory;
 
     /// <summary>
     /// Default constructor.
     /// </summary>
-    public Building() { }
+    public BuildingData() { }
 
-    public Building(Entity entity, TerritoryChunk territory)
+    public BuildingData(Entity entity, TerritoryChunkData territory)
     {
         Entity = entity;
         Territory = territory;

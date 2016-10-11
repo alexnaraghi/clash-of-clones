@@ -4,7 +4,7 @@ using UnityEngine.UI;
 /// <summary>
 /// Display's the player's mana.
 /// </summary>
-public class Mana : MonoBehaviour 
+public class ManaUI : MonoBehaviour 
 {
     [SerializeField] private Slider _slider;
     [SerializeField] private Text _countText;
@@ -24,7 +24,7 @@ public class Mana : MonoBehaviour
 
     void Update()
     {
-        _slider.value = GameState.Instance.MyPlayer.Mana;
+        _slider.value = GameModel.Instance.MyPlayer.Mana;
         _countText.text = Mathf.FloorToInt(_slider.value).ToString();
     }
 }

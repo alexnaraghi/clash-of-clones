@@ -7,7 +7,7 @@ using UnityEngine;
 /// Area that is not convered by territory is neutral and both players may spawn units there.
 /// </summary>
 [Serializable]
-public class Territory 
+public class TerritoryData 
 {
     public int StartX;
     public int StartY;

@@ -5,7 +5,7 @@ using UnityEngine.UI;
 /// <summary>
 /// The display of a card in our hand.
 /// </summary>
-public class Card : MonoBehaviour 
+public class CardUI : MonoBehaviour 
 {
     [SerializeField] private Image _image;
     [SerializeField] private Text _manaText;
@@ -49,7 +49,7 @@ public class Card : MonoBehaviour
 
         if(isOn)
         {
-            _ghost.SetCard(Definition, GameState.Instance.RightPlayer);
+            _ghost.SetCard(Definition, GameModel.Instance.RightPlayer);
         }
         else
         {
