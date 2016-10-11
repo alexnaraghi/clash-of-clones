@@ -1,8 +1,11 @@
 ﻿using System.Collections.Generic;
 
+/// <summary>
+/// For testing, creates some cards that we can use to form decks.
+/// </summary>
 public static class TestFactory 
 {
-    public static CardDefinition CreateCard()    
+    public static CardDefinition CreateBasicTank()    
     {
         var card = new CardDefinition(
             prefabName : "Tank",
@@ -24,7 +27,7 @@ public static class TestFactory
         return card;
     }
 
-    public static CardDefinition CreateCard2()    
+    public static CardDefinition CreateHeavyTank()    
     {
         var card = new CardDefinition(
             prefabName : "Tank2",
@@ -46,7 +49,7 @@ public static class TestFactory
         return card;
     }
 
-    public static CardDefinition CreateSuperCard()    
+    public static CardDefinition CreateCheatTank()    
     {
         var card = new CardDefinition(
             prefabName : "Tank2",
@@ -69,7 +72,7 @@ public static class TestFactory
     }
 
     /// <summary>
-    /// Special case for permanent building
+    /// Special case for HQ building.
     /// </summary>
     public static CardDefinition CreateHQ()    
     {
@@ -125,11 +128,11 @@ public static class TestFactory
         // Make a deck.
         for (int i = 0; i < 6; i++)
         {
-            definitions.Add(CreateCard());
+            definitions.Add(CreateBasicTank());
         }
         for (int i = 7; i < 10; i++)
         {
-            definitions.Add(CreateCard2());
+            definitions.Add(CreateHeavyTank());
         }
         return definitions;
     }

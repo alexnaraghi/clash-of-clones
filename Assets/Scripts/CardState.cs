@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 
 /// <summary>
-/// Cards
+/// Represents the state of the game with respect to the players' cards.
 /// </summary>
 public class CardState : MonoBehaviour 
 {
@@ -20,7 +20,14 @@ public class CardState : MonoBehaviour
 
     public void Init(List<CardDefinition> deck)
     {
-        // Clone
+        // EARLY OUT! //
+        if(deck == null || deck.Count == 0)
+        {
+            Debug.LogWarning("Can't do anything without a deck.");
+            return;
+        }
+        
+        // Clone the start deck so we can manipulate it.
         Discard = deck.ToList();
         Shuffle();
         initHand();

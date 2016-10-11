@@ -3,7 +3,7 @@
 /// <summary>
 /// Utility to visualize placement grids for debugging.
 /// </summary>
-public class DrawGrid : MonoBehaviour 
+public class DrawDebugGrid : MonoBehaviour 
 {
     private const float _gridWidth = 100f;
     private const float _gridHeight = 100f;
@@ -12,23 +12,9 @@ public class DrawGrid : MonoBehaviour
     private const float _gridVerticalHeight = 0.2f;
     private const float _edgeThickness = 0.2f;
 
-    void Start()
-    {
-        /*
-        // Our snapping actually puts 0,0 in the middle of a grid square, so we need to make sure to
-        // offset by half a cell on the start position!
-        int startX = (int)((-_gridWidth / 2f) / Consts.GridCellWidth);
-        int startZ = (int)((-_gridHeight / 2f) / Consts.GridCellHeight);
-
-        int numWidths = (int)(_gridWidth / Consts.GridCellWidth);
-        int numHeights = (int)(_gridHeight / Consts.GridCellHeight);
-
-        CreateGrid(startX, startZ, numWidths, numHeights);
-        //*/
-        
-        //CreateTerritoryGridForPlayer(GameState.Instance.MyPlayer);
-        
-    }
+    public bool IsDrawingEnemyGrid;
+    public bool IsDrawingFriendlyGrid;
+    public bool IsDrawingMapGrid;
 
     void Update()
     {
@@ -36,7 +22,29 @@ public class DrawGrid : MonoBehaviour
         {
             Destroy(((Transform)child).gameObject);
         }
-        CreateTerritoryGridForPlayer(GameState.Instance.EnemyPlayer);
+
+        if(IsDrawingEnemyGrid)
+        {
+            CreateTerritoryGridForPlayer(GameState.Instance.EnemyPlayer);
+        }
+        
+        if(IsDrawingFriendlyGrid)
+        {
+            CreateTerritoryGridForPlayer(GameState.Instance.MyPlayer);
+        }
+
+        if(IsDrawingMapGrid)
+        {
+            // Our snapping actually puts 0,0 in the middle of a grid square, so we need to make sure to
+            // offset by half a cell on the start position!
+            int startX = (int)((-_gridWidth / 2f) / Consts.GridCellWidth);
+            int startZ = (int)((-_gridHeight / 2f) / Consts.GridCellHeight);
+
+            int numWidths = (int)(_gridWidth / Consts.GridCellWidth);
+            int numHeights = (int)(_gridHeight / Consts.GridCellHeight);
+
+            CreateGrid(startX, startZ, numWidths, numHeights);
+        }
     }
 
     public void CreateTerritoryGridForPlayer(Player player)

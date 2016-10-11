@@ -1,6 +1,10 @@
 ﻿using UnityEngine;
+using UnityEngine.Assertions;
 using UnityEngine.UI;
 
+/// <summary>
+/// The display of a card in our hand.
+/// </summary>
 public class Card : MonoBehaviour 
 {
     [SerializeField] private Image _image;
@@ -13,7 +17,10 @@ public class Card : MonoBehaviour
 
     void Awake()
     {
+        // We have to get the placement ghost to be able to toggle ourselves off when the card is placed.
         _ghost = GameObject.Find("PlacementGhost").GetComponent<PlacementGhost>();
+
+        Assert.IsNotNull(_ghost);
 
         if(_ghost != null)
         {
@@ -21,7 +28,10 @@ public class Card : MonoBehaviour
         }
     }
 
-    public void SetCard(CardDefinition definition)
+    /// <summary>
+    /// Change the card's artwork and attributes to match the given definition.
+    /// </summary>
+    public void Init(CardDefinition definition)
     {
         // EARLY OUT! //
         if(definition == null || _image == null || _manaText == null) return;

@@ -1,32 +1,49 @@
 using UnityEngine;
+using UnityEngine.Assertions;
 
+/// <summary>
+/// Represents a projectile explosion.  Damages enemy entities with an area effect.
+/// </summary>
 public class ShellExplosion : MonoBehaviour
 {
-    // Used to filter what the projectile can collide with.
-    public LayerMask _impactMask;
+    /// <summary>
+    /// Used to filter what the projectile can collide with.
+    /// </summary>
+    [SerializeField] private LayerMask _impactMask;
 
-    // Used to filter what the explosion does damage to.
-    public LayerMask _damageMask;                
+    /// <summary>
+    /// Used to filter what the explosion does damage to. 
+    /// </summary>
+    [SerializeField] private LayerMask _damageMask;
 
-    public ParticleSystem m_ExplosionParticles;         // Reference to the particles that will play on explosion.
-    public AudioSource m_ExplosionAudio;                // Reference to the audio that will play on explosion.
-    public int AreaDamage = 30;                         // The amount of damage done if the explosion is centred on a tank.
-    public float m_ExplosionForce = 1000f;              // The amount of force added to a tank at the centre of the explosion.
-    public float m_MaxLifeTime = 2f;                    // The time in seconds before the shell is removed.
-    public float m_ExplosionRadius = 5f;                // The maximum distance away from the explosion tanks can be and are still affected.
+    /// <summary>
+    /// The time in seconds before the shell is removed.
+    /// </summary>
+    [SerializeField] private float _maxLifeTime = 2f;
+
+    /// <summary>
+    /// The maximum distance away from the explosion tanks can be and are still affected.
+    /// </summary>
+    [SerializeField] private float _explosionRadius = 5f;
+    [SerializeField] private ParticleSystem _explosionParticles;
+    [SerializeField] private AudioSource _explosionAudio;              
 
     private Player _owner;
-
+    private int _areaDamage;
+    
     private void Start ()
     {
+        Assert.IsNotNull(_explosionParticles);
+        Assert.IsNotNull(_explosionAudio);
+
         // If it isn't destroyed by then, destroy the shell after it's lifetime.
-        Destroy (gameObject, m_MaxLifeTime);
+        Destroy (gameObject, _maxLifeTime);
     }
 
     public void Init(Player owner, int damage)
     {
         _owner = owner;
-        AreaDamage = damage;
+        _areaDamage = damage;
     }
 
     private void OnTriggerEnter (Collider other)
@@ -38,7 +55,7 @@ public class ShellExplosion : MonoBehaviour
         if(isImpactLayer) return;
 
         // Collect all the colliders in a sphere from the shell's current position to a radius of the explosion radius.
-        Collider[] colliders = Physics.OverlapSphere (transform.position, m_ExplosionRadius, _damageMask);
+        Collider[] colliders = Physics.OverlapSphere (transform.position, _explosionRadius, _damageMask);
 
         for (int i = 0; i < colliders.Length; i++)
         {
@@ -50,22 +67,22 @@ public class ShellExplosion : MonoBehaviour
                 // If it's an enemy unit, do damage to it.
                 if(targetEntity.Owner != _owner)
                 {
-                    targetEntity.TakeDamage(AreaDamage);
+                    targetEntity.TakeDamage(_areaDamage);
                 }
             }
         }
 
         // Unparent the particles from the shell.
-        m_ExplosionParticles.transform.parent = null;
+        _explosionParticles.transform.parent = null;
 
         // Play the particle system.
-        m_ExplosionParticles.Play();
+        _explosionParticles.Play();
 
         // Play the explosion sound effect.
-        m_ExplosionAudio.Play();
+        _explosionAudio.Play();
 
         // Once the particles have finished, destroy the gameobject they are on.
-        Destroy (m_ExplosionParticles.gameObject, m_ExplosionParticles.duration);
+        Destroy (_explosionParticles.gameObject, _explosionParticles.duration);
 
         // Destroy the shell.
         Destroy (gameObject);

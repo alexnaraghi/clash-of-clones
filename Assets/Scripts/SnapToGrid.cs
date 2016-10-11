@@ -1,15 +1,13 @@
 ﻿using UnityEngine;
-using System.Collections;
-using System.Collections.Generic;
 
 /// <summary>
 /// Snaps placement ghost to grid.  The grid puts 0,0 at the center of a cell.
 /// </summary>
 public class SnapToGrid : MonoBehaviour
 {
-    private LayerMask _groundMask;
-
     [SerializeField] private PlacementGhost _ghost;
+    
+    private LayerMask _groundMask;
 
     void Awake()
     {
@@ -27,7 +25,7 @@ public class SnapToGrid : MonoBehaviour
         {
             var inputPosition = Input.mousePosition;
 
-            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+            Ray ray = Camera.main.ScreenPointToRay(inputPosition);
             RaycastHit hit;
 
             bool isValidCell = false;

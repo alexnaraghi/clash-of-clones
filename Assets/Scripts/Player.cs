@@ -1,8 +1,9 @@
 ﻿using UnityEngine;
+using UnityEngine.Assertions;
 using System.Collections.Generic;
 
 /// <summary>
-/// Inventory
+/// Represents the state of a player.
 /// </summary>
 public class Player : MonoBehaviour
 {
@@ -10,16 +11,39 @@ public class Player : MonoBehaviour
     public Material PlayerMaterial;
     public Color PlayerColor;
 
+    /// <summary>
+    /// The cards passed in as the start deck.
+    /// </summary>
     public List<CardDefinition> AllCards;
+
+    /// <summary>
+    /// The current state of the player's deck, hand, discard.
+    /// </summary>
     public CardState CardState;
+
+    /// <summary>
+    /// All units belonging to this player currently in play.
+    /// </summary>
     public List<Entity> Units;
+    
+    /// <summary>
+    /// Current mana.
+    /// </summary>
     public float Mana;
+
+    /// <summary>
+    /// Player name.
+    /// </summary>
     public string Name;
 
+    // Buildings
     public Entity TopOutpost;
     public Entity HQ;
     public Entity BottomOutpost;
 
+    /// <summary>
+    /// Definition of the territories belonging to the above buildings.
+    /// </summary>
     public TerritoryChunk[] TerritoryChunks;
 
     /// <summary>
@@ -31,6 +55,12 @@ public class Player : MonoBehaviour
     {
         Units = new List<Entity>();
 
+        Assert.IsNotNull(TopOutpost);
+        Assert.IsNotNull(HQ);
+        Assert.IsNotNull(BottomOutpost);
+
+        // If this looks nasty it's because it is.
+        // TODO: Refactor how territory is linked to buildings.
         if(TerritoryChunks.Length == 3)
         {
             Buildings = new Building[3]
@@ -49,7 +79,11 @@ public class Player : MonoBehaviour
     public void Init(string name, List<CardDefinition> deck)
     {
         // EARLY OUT! //
-        if(Name == null || CardState == null) return;
+        if(Name == null || CardState == null)
+        {
+            Debug.LogWarning("Name and deck of cards are required to initialize player.");
+            return;
+        }
 
         Name = name;
         Mana = Consts.StartMana;
@@ -61,16 +95,6 @@ public class Player : MonoBehaviour
         initBuildings();
     }
 
-    private void initBuildings()
-    {
-        // EARLY OUT! //
-        if(TopOutpost == null || HQ == null || BottomOutpost == null) return;
-
-        TopOutpost.Init(    this, TestFactory.CreateOutpost());
-        BottomOutpost.Init( this, TestFactory.CreateOutpost());
-        HQ.Init(            this, TestFactory.CreateHQ());
-    }
-
     void Update()
     {
         float unclampedMana = Mana + Consts.ManaRechargePerSecond * Time.deltaTime;
@@ -79,20 +103,36 @@ public class Player : MonoBehaviour
 
     public bool CanPlayCard(CardDefinition card)
     {
-        return (CardState.Hand.IndexOf(card) != -1 && Mana >= card.ManaCost);
+        return card != null
+            && (CardState.Hand.IndexOf(card) != -1 
+            && Mana >= card.ManaCost);
     }
 
     public void PlayCard(CardDefinition card, Vector3 position)
     {
         // EARLY OUT! //
-        if(!CanPlayCard(card)) return;
+        if(card == null)
+        {
+            Debug.LogWarning("Cannot play a null card!");
+            return;
+        }
+
+        // EARLY OUT! //
+        if(!CanPlayCard(card))
+        {
+            Debug.LogWarning("Tried to play a card that couldn't be played: " + card.PrefabName);
+            return;
+        }
 
         CardState.PlayCard(card);
         Mana -= card.ManaCost;
 
         var unit = Entity.SpawnFromDefinition(this, card, position);
+
+        // Rotate the unit to face the enemy bases.
         RotateForPlayer(unit.gameObject);
         
+        //TODO: Remove units when out of HP.
         Units.Add(unit);
     }
     
@@ -130,5 +170,15 @@ public class Player : MonoBehaviour
         }
 
         return isInTerritory;
+    }
+
+    private void initBuildings()
+    {
+        // EARLY OUT! //
+        if(TopOutpost == null || HQ == null || BottomOutpost == null) return;
+
+        TopOutpost.Init(    this, TestFactory.CreateOutpost());
+        BottomOutpost.Init( this, TestFactory.CreateOutpost());
+        HQ.Init(            this, TestFactory.CreateHQ());
     }
 }

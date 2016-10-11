@@ -1,7 +1,9 @@
-﻿using System;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.UI;
 
+/// <summary>
+/// Updates the clock.
+/// </summary>
 public class GameClock : MonoBehaviour 
 {
     [SerializeField] private Text _timer;
@@ -9,7 +11,11 @@ public class GameClock : MonoBehaviour
     void Update()
     {
         // EARLY OUT! //
-        if(_timer == null) return;
+        if(_timer == null)
+        {
+            Debug.LogWarning("Clock requires text.");
+            return;
+        }
 
         int secondsLeft = Mathf.RoundToInt(GameState.Instance.SecondsLeft);
 

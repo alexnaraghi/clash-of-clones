@@ -1,42 +1,37 @@
 ﻿using UnityEngine;
-using System;
+using UnityEngine.Assertions;
 using System.Collections.Generic;
 
 /// <summary>
-/// Component that manages aggro on entities. 
+/// Component that manages aggro on entities.  Who is this entity targeting?
 /// </summary>
 [RequireComponent(typeof(Entity))]
 public class EntityAggro : MonoBehaviour 
 {
-    public Entity Target;
+    public Entity Target
+    {
+        get { return _target; }
+    }
+    [SerializeField]private Entity _target;
 
     private Entity _entity;
 
     void Awake()
     {
         _entity = GetComponent<Entity>();
-
-        // EARLY OUT! //
-        if(_entity == null) return;
-
-        _entity.InitializedEvent.AddListener(init);
-    }
-
-    private void init()
-    {
-        
+        Assert.IsNotNull(_entity);
     }
 
     void Update()
     {
         // Clear out dead or invalid aggro target.
-        if(Target != null && Target.HP <= 0)
+        if(_target != null && _target.HP <= 0)
         {
-            Target = null;
+            _target = null;
         }
 
-        // If no aggro target.
-        if (Target == null)
+        // If no aggro target, find one.
+        if (_target == null)
         {
             var enemies = getAllEnemiesInRange(_entity.Definition.AggroRange);
             if (enemies.Length > 0)
@@ -57,11 +52,14 @@ public class EntityAggro : MonoBehaviour
                 }
 
                 // Enemy logically can't be null since the array was greater than 0 in size.
-                Target = closestEnemy;
+                Assert.IsNotNull(closestEnemy);
+
+                _target = closestEnemy;
             }
         }
     }
 
+    // Question, will this be sufficient for flying enemies?  Or do we want a box check?
     private Entity[] getAllEnemiesInRange(float radius)
     {
         Collider[] allColliders = Physics.OverlapSphere(transform.position, radius);

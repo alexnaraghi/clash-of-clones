@@ -2,20 +2,45 @@
 using UnityEngine;
 using UnityEngine.UI;
 
-public class TerritoryGui : MonoBehaviour 
+/// <summary>
+/// Shows the territory of the enemy player.
+/// </summary>
+public class TerritoryDisplay : MonoBehaviour 
 {
+    /// <summary>
+    /// The prefab of the image to display a territory with.
+    /// </summary>
     [SerializeField] private Image _imagePrefab;
 
+    /// <summary>
+    /// Pool of images to use for the territory.
+    /// TODO: Add general pooling functionality to game.
+    /// </summary>
     private List<RectTransform> _imagePool;
+    private int _numberOfTerritoriesToPool = 6;
 
-    public bool IsShowingEnemyTerritory;
-    public int NumberOfTerritoriesToPool = 6;
+    /// <summary>
+    /// Is the territory display showing?
+    /// </summary>
+    public bool IsShowingEnemyTerritory
+    {
+        get { return _isShowingEnemyTerritory;}
+        set { _isShowingEnemyTerritory = value; }
+    }
+    private bool _isShowingEnemyTerritory;
 
     void OnEnable()
     {
+        // EARLY OUT! //
+        if(_imagePrefab == null)
+        {
+            Debug.LogWarning("TerritoryDisplay requires an image prefab.");
+            return;
+        }
+
         _imagePool = new List<RectTransform>();
 
-        for (int i = 0; i < NumberOfTerritoriesToPool; i++)
+        for (int i = 0; i < _numberOfTerritoriesToPool; i++)
         {
             var image = Instantiate(_imagePrefab);
             var rectTransform = image.GetComponent<RectTransform>();
@@ -33,7 +58,7 @@ public class TerritoryGui : MonoBehaviour
     void Update()
     {
         int numImagesUsed = 0;
-        if(IsShowingEnemyTerritory)
+        if(_isShowingEnemyTerritory)
         {
             var player = GameState.Instance.EnemyPlayer;
             foreach(var building in player.Buildings)
@@ -66,6 +91,11 @@ public class TerritoryGui : MonoBehaviour
         }
     }
     
+    /// <summary>
+    /// Converts a territory definition into world space.
+    /// </summary>
+    /// <param name="territory">The territory to convert.</param>
+    /// <returns>A rectangle in world space on the Y plane.</returns>
     private Rect toWorldRect(Territory territory)
     {
         Rect rect = new Rect(

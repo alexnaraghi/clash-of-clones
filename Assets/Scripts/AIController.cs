@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.Assertions;
 
 /// <summary>
 /// He who controls the robots controls mankind.
@@ -7,14 +8,20 @@
 /// </summary>
 public class AIController : MonoBehaviour 
 {
+    /// <summary>
+    /// The player to control.
+    /// </summary>
     [SerializeField] private Player _player;
 
+    // AI PARAMETERS //
     private const float IntervalBetweenMoves = 2f;
     private readonly Vector3 OffsetFromBuilding = new Vector3(-15f, 0f, 0f);
-
+    /////////////////// 
+    
     void Awake()
     {
         _player = GetComponent<Player>();
+        Assert.IsNotNull(_player);
     }
 
     void OnEnable()

@@ -1,16 +1,19 @@
 ﻿using System;
 using UnityEngine;
 
+/// <summary>
+/// Links a building entity with its territory.
+/// </summary>
 [Serializable]
 public class Building 
 {
     public Entity Entity;
     public TerritoryChunk Territory;
 
-    public Building()
-    {
-
-    }
+    /// <summary>
+    /// Default constructor.
+    /// </summary>
+    public Building() { }
 
     public Building(Entity entity, TerritoryChunk territory)
     {

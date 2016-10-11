@@ -3,6 +3,9 @@ using UnityEngine;
 
 public static class Utils 
 {
+    /// <summary>
+    /// Gets the index of an element in an array.
+    /// </summary>
     public static int IndexOf<T>(this T[] arr, T element) where T : class
     {
         int index = -1;

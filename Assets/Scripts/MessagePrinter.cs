@@ -1,6 +1,9 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 
+/// <summary>
+/// Simply prints a big message to the center of the screen for some seconds.
+/// </summary>
 public class MessagePrinter : MonoBehaviour 
 {
     [SerializeField] private Text _text;
@@ -10,15 +13,14 @@ public class MessagePrinter : MonoBehaviour
     /// </summary>
     [SerializeField] private float _displaySeconds;
 
-    void Start()
-    {
-        PrintMessage("Clash of Clones");
-    }
-
-    public void PrintMessage(string message)    
+    public void PrintMessage(string message)
     {
         // EARLY OUT! //
-        if(_text == null) return;
+        if (_text == null)
+        {
+            Debug.LogWarning("Can't print a message without text.");
+            return;
+        }
 
         _text.enabled = true;
         _text.text = message;
@@ -32,5 +34,10 @@ public class MessagePrinter : MonoBehaviour
         if(_text == null) return;
 
         _text.enabled = false;
+    }
+
+    void OnDestroy()
+    {
+        this.CancelInvoke();
     }
 }

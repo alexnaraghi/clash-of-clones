@@ -4,14 +4,19 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 
 /// <summary>
-/// GameState
+/// Root object of all game-state.  Adding/removing entities, player managemment, lifecycle
+/// should be done through here.  Although, perhaps we can break out lifecycle if it gets unweildy.
 /// </summary>
 public class GameState : MonoBehaviour 
 {
     // Singleton instance.
+    // Singletons suck, consider something more robust.  Can we have multiple game-states at a time?
+    // Might be possible if we implement hosted multiplayer.
     public static GameState Instance;
 
-    [Range(0, 1)]
+    [SerializeField] private MessagePrinter _messagePrinter;
+ 
+    [Range(0, 1)] 
     public int LocalPlayerNum;
 
     public float SecondsLeft;
@@ -19,10 +24,20 @@ public class GameState : MonoBehaviour
     public Player LeftPlayer;
     public Player RightPlayer;
 
+    /// <summary>
+    /// Convenience array for iterating on players.
+    /// </summary>
     [NonSerialized] public Player[] Players;
 
+    /// <summary>
+    /// If the game currently in progress?
+    /// TODO: Add state machine for lifecycle management.
+    /// </summary>
     public bool IsPlaying;
 
+    /// <summary>
+    /// The human controlled player.
+    /// </summary>
     public Player MyPlayer
     {
         get
@@ -31,6 +46,9 @@ public class GameState : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// The AI.
+    /// </summary>
     public Player EnemyPlayer
     {
         get
@@ -47,16 +65,32 @@ public class GameState : MonoBehaviour
         }
         else
         {
+            Debug.LogWarning("More than once game state instance is running!  Destroying...");
             Destroy(this);
         }
 
         // EARLY OUT! //
-        if(LeftPlayer == null || RightPlayer == null) return;
+        if (LeftPlayer == null || RightPlayer == null)
+        {
+            Debug.LogWarning("Need two players to have a working game state.");
+            return;
+        }
+
+        var messageObj = GameObject.Find("CenterMessage");
+        if(messageObj != null)
+        {
+            _messagePrinter = messageObj.GetComponent<MessagePrinter>();
+            if(_messagePrinter != null)
+            {
+                _messagePrinter.PrintMessage("Clash of Clones");
+            }
+        }
 
         Players = new Player[2];
         Players[0] = LeftPlayer;
         Players[1] = RightPlayer;
 
+        // Just use default decks for now.
         InitGame(TestFactory.CreateDeck(), TestFactory.CreateDeck());
     }
 
@@ -69,6 +103,9 @@ public class GameState : MonoBehaviour
         IsPlaying = true;
     }
 
+    /// <summary>
+    /// Get the player that is not the given player.
+    /// </summary>
     public Player GetOppositePlayer(Player player)
     {
         Player opposite;
@@ -95,20 +132,15 @@ public class GameState : MonoBehaviour
                 Player winner = determineWinner();
 
                 // Print message.
-                var message = GameObject.Find("CenterMessage");
-                if(message != null)
+                if(_messagePrinter != null)
                 {
-                    var printer = message.GetComponent<MessagePrinter>();
-                    if(printer != null)
+                    if(winner != null)
                     {
-                        if(winner != null)
-                        {
-                            printer.PrintMessage(winner.Name + " won!");
-                        }
-                        else
-                        {
-                            printer.PrintMessage("Tie game!");
-                        }
+                        _messagePrinter.PrintMessage(winner.Name + " won!");
+                    }
+                    else
+                    {
+                        _messagePrinter.PrintMessage("Tie game!");
                     }
 
                     this.Invoke(restart, 3f);
@@ -157,6 +189,7 @@ public class GameState : MonoBehaviour
         return winner;
     }
 
+    // TODO: Play again? button
     private void restart()
     {
         SceneManager.LoadScene("ClashScene", LoadSceneMode.Single);

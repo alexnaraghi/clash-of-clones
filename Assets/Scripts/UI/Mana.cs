@@ -1,6 +1,9 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 
+/// <summary>
+/// Display's the player's mana.
+/// </summary>
 public class Mana : MonoBehaviour 
 {
     [SerializeField] private Slider _slider;
@@ -9,7 +12,11 @@ public class Mana : MonoBehaviour
     void Start()
     {
         // EARLY OUT! //
-        if(_slider == null) return;
+        if(_slider == null || _countText == null)
+        {
+            Debug.LogWarning("Mana requires slider and count text.");
+            return;
+        }
 
         _slider.minValue = 0f;
         _slider.maxValue = Consts.MaxMana;

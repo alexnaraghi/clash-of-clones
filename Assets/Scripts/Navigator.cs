@@ -22,7 +22,11 @@ public class Navigator : MonoBehaviour
         _aggro = GetComponent<EntityAggro>();
 
         // EARLY OUT! //
-        if(_entity == null || _agent == null || _aggro == null) return;
+        if(_entity == null || _agent == null || _aggro == null)
+        {
+            Debug.LogWarning("Navigator requires entity, agent, and aggro");
+            return;
+        }
 
         _entity.InitializedEvent.AddListener(init);
     }
@@ -30,11 +34,6 @@ public class Navigator : MonoBehaviour
     private void init()
     {
         _agent.speed = _entity.Definition.MovementSpeed;
-    }
-
-    public void Init(float speed)
-    {
-        _agent.speed = speed;
     }
 
     void Update()
@@ -93,36 +92,33 @@ public class Navigator : MonoBehaviour
     {
         var enemy = GameState.Instance.GetOppositePlayer(_entity.Owner);
 
+        // EARLY OUT! //
+        if(enemy == null) return null;
+
         Entity closestEnemyBuilding = null;
         float closestDist = float.MaxValue;
 
-        // Check structures
-        PickIfCloser(enemy.TopOutpost,    ref closestEnemyBuilding, ref closestDist);
-        PickIfCloser(enemy.HQ,            ref closestEnemyBuilding, ref closestDist);
-        PickIfCloser(enemy.BottomOutpost, ref closestEnemyBuilding, ref closestDist);
+        // Find the closest structure.
+        foreach(var building in enemy.Buildings)
+        {
+            var entity = building.Entity;
+            if(entity != null && entity.HP > 0)
+            {
+                var dist = Vector3.Distance(transform.position, entity.transform.position);
+                if (dist < closestDist)
+                {
+                    closestEnemyBuilding = entity;
+                    closestDist = dist;
+                }
+            }
+        }
 
         return closestEnemyBuilding;
     }
 
     /// <summary>
-    /// Helper to find the closest enemy building.
+    /// Set the nav agent's destination.
     /// </summary>
-    /// <param name="entityToCheck">The transform to check.  If it's closer, sets the closestEnemyTransform to it.</param>
-    /// <param name="closestEntity">The closest transform found so far.</param>
-    /// <param name="nearestDist">The distance of the closest transform so far.</param>
-    private void PickIfCloser(Entity entityToCheck, ref Entity closestEntity, ref float nearestDist)
-    {
-        if(entityToCheck.HP > 0)
-        {
-            var dist = Vector3.Distance(transform.position, entityToCheck.transform.position);
-            if (dist < nearestDist)
-            {
-                closestEntity = entityToCheck;
-                nearestDist = dist;
-            }
-        }
-    }
-
     private void moveTo(Vector3 destination)
     {
         _isNavigating = true;
@@ -132,6 +128,9 @@ public class Navigator : MonoBehaviour
         _agent.Resume();
     }
 
+    /// <summary>
+    /// Cancel the nav agent's movement.
+    /// </summary>
     private void cancelMove()
     {
         _isNavigating = false;

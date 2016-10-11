@@ -2,7 +2,9 @@
 using UnityEngine;
 
 /// <summary>
-/// Definition of a territory square in cell coordinates.
+/// Definition of a territory rectangle in grid space.  Territory is area that a player controls and
+/// therefore the other player cannot spawn units on.  It may also have other uses.
+/// Area that is not convered by territory is neutral and both players may spawn units there.
 /// </summary>
 [Serializable]
 public class Territory 

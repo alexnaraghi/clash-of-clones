@@ -2,18 +2,34 @@
 using UnityEngine.Events;
 
 /// <summary>
-/// UnitPlacement
+/// Display to allow the human player to place a unit.
 /// </summary>
 public class PlacementGhost : MonoBehaviour 
 {
-    public int Width;
-    public int Height;
-    public GameObject Model;
-    public UnityEvent PlacedEvent;
-
+    /// <summary>
+    /// The sound when the player tries to place but doesn't have enough mana.
+    /// </summary>
     [SerializeField] private AudioSource _errorSound;
-    [SerializeField] private TerritoryGui _territoryGui;
+
+    /// <summary>
+    /// The territory display so we can show enemy territory when we are placing.
+    /// </summary>
+    [SerializeField] private TerritoryDisplay _territoryGui;
+
+    /// <summary>
+    /// The card that is being placed.
+    /// </summary>
     private CardDefinition _card;
+
+    /// <summary>
+    /// The ghost's model.
+    /// </summary>
+    public GameObject Model;
+    
+    /// <summary>
+    /// Triggered on successful placement of a card.
+    /// </summary>
+    public UnityEvent PlacedEvent;
 
     void Update()
     {

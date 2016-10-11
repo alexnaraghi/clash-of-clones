@@ -1,6 +1,8 @@
 ﻿using UnityEngine;
-using UnityEngine.Assertions;
 
+/// <summary>
+/// Keeps the hand display up to date.
+/// </summary>
 public class CardPanel : MonoBehaviour 
 {
     public Card[] Hand;
@@ -17,6 +19,7 @@ public class CardPanel : MonoBehaviour
             return;
         }
 
+        // Hmm maybe convert this to something more event driven?
         for(int i = 0; i < Hand.Length; i++)
         {
             var visibleCard = Hand[i].Definition;
@@ -25,14 +28,14 @@ public class CardPanel : MonoBehaviour
             if(visibleCard != handCard)
             {
                 //Change card.
-                Hand[i].SetCard(handCard);
+                Hand[i].Init(handCard);
             }
         }
 
         var peekCard = GameState.Instance.MyPlayer.CardState.Peek();
         if(peekCard != null)
         {
-            PeekCard.SetCard(peekCard);
+            PeekCard.Init(peekCard);
         }
     }
 }

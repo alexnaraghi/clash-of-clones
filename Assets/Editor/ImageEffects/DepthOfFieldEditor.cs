@@ -1,4 +1,3 @@
-using System;
 using UnityEditor;
 using UnityEditor.AnimatedValues;
 using UnityEngine;

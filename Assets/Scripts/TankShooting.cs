@@ -1,32 +1,85 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 
+/// <summary>
+/// Projectile shooting code.  Largely untouched from Tanks!  codebase.
+/// </summary>
 [RequireComponent(typeof(Entity))]
 [RequireComponent(typeof(EntityAggro))]
 [RequireComponent(typeof(Rigidbody))]
 public class TankShooting : MonoBehaviour
 {
-    public Rigidbody _shell;                   // Prefab of the shell.
-    public Transform _fireTransform;           // A child of the tank where the shells are spawned.
-    public AudioSource _shootingAudio;         // Reference to the audio source used to play the shooting audio. NB: different to the movement audio source.
-    public AudioClip _fireClip;                // Audio that plays when each shot is fired.
-    public float _minLaunchForce = 15f;        // The force given to the shell if the fire button is not held.
-
     private float _cooldownSeconds;
-
     private Entity _entity;
     private EntityAggro _aggro;
     private Rigidbody _rigidbody;
 
+    /// <summary>
+    /// Prefab of the shell.
+    /// </summary>
+    public Rigidbody _shell;                   
+
+    /// <summary>
+    /// A child of the tank where the shells are spawned.
+    /// </summary>
+    public Transform _fireTransform;           
+
+    /// <summary>
+    /// Reference to the audio source used to play the shooting audio. NB: different to the movement audio source.
+    /// </summary>
+    public AudioSource _shootingAudio;         
+
+    /// <summary>
+    /// Audio that plays when each shot is fired.
+    /// </summary>
+    public AudioClip _fireClip;                
+
+    /// <summary>
+    /// The force given to the shell if the fire button is not held.
+    /// </summary>
+    public float _minLaunchForce = 15f;        
+
     // OLD STUFF FROM TANKS GAME //
-    public Slider _aimSlider;                  // A child of the tank that displays the current launch force.
-    public AudioClip _chargingClip;            // Audio that plays when each shot is charging up.
-    public float _maxLaunchForce = 30f;        // The force given to the shell if the fire button is held for the max charge time.
-    public float _maxChargeTime = 0.75f;       // How long the shell can charge for before it is fired at max force.
-    private string _fireButton;                // The input axis that is used for launching shells.
-    private float _currentLaunchForce;         // The force that will be given to the shell when the fire button is released.
-    private float _chargeSpeed;                // How fast the launch force increases, based on the max charge time.
-    private bool _fired;                       // Whether or not the shell has been launched with this button press.
+
+    /// <summary>
+    /// A child of the tank that displays the current launch force.
+    /// </summary>
+    public Slider _aimSlider;                  
+
+    /// <summary>
+    /// Audio that plays when each shot is charging up.
+    /// </summary>
+    public AudioClip _chargingClip;            
+
+    /// <summary>
+    /// The force given to the shell if the fire button is held for the max charge time.
+    /// </summary>
+    public float _maxLaunchForce = 30f;        
+
+    /// <summary>
+    /// How long the shell can charge for before it is fired at max force.
+    /// </summary>
+    public float _maxChargeTime = 0.75f;       
+
+    /// <summary>
+    /// The input axis that is used for launching shells.
+    /// </summary>
+    private string _fireButton;                
+
+    /// <summary>
+    /// The force that will be given to the shell when the fire button is released.
+    /// </summary>
+    private float _currentLaunchForce;         
+
+    /// <summary>
+    /// How fast the launch force increases, based on the max charge time.
+    /// </summary>
+    private float _chargeSpeed;                
+
+    /// <summary>
+    /// Whether or not the shell has been launched with this button press.
+    /// </summary>
+    private bool _fired;                       
     ///////////////////////////////
 
     void Awake()
@@ -36,7 +89,11 @@ public class TankShooting : MonoBehaviour
         _rigidbody = GetComponent<Rigidbody>();
 
         // EARLY OUT! //
-        if(_entity == null || _aggro == null || _rigidbody == null) return;
+        if(_entity == null || _aggro == null || _rigidbody == null)
+        {
+            Debug.LogWarning("TankShooting requires entity, aggro, and rigidbody.");
+            return;
+        }
 
         _entity.InitializedEvent.AddListener(init);
     }
@@ -63,6 +120,7 @@ public class TankShooting : MonoBehaviour
     {
         TEST_updateShootFromInput();
 
+        // Our code which does simple shooting AI on cooldown if we have a target.
         _cooldownSeconds -= Time.deltaTime;
 
         var aggroTarget = _aggro.Target;

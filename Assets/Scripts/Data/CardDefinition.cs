@@ -1,18 +1,23 @@
 ﻿using System;
-using UnityEngine;
-using System.Collections;
-using System.Collections.Generic;
 
 /// <summary>
-/// UnitDefinition
+/// Definition of a card.  Intended to be the definition of a card in the deck of the player.  For how cards 
+/// get modified by effects during play, see <see cref="Entity"/> (currently a TODO).
 /// </summary>
+/// <remarks>
+/// We also use cards to define the default player structures.  They also will fire weapons, and this structure
+/// is reasonable for that.  Consider breaking this up into two or more definition structures if it becomes
+/// unwieldy, for now it feels robust enough to keep using.
+/// </remarks>
 [Serializable]
 public class CardDefinition 
 {
+    // Prefab values.
     public string PrefabName;
     public string GhostPrefabName;
     public string CardImageName;
 
+    // TODO: Quantify better what these values mean.
     public int ManaCost;
 
     public int PlacementWidth;
@@ -20,7 +25,7 @@ public class CardDefinition
 
     public int StartHP;
 
-    // Right now this is seconds between attack.
+    // Right now this is seconds between attack, but shouldn't this be the inverse?
     public int AttackSpeed;
     public int MovementSpeed;
     public int DirectAttackDamage;
@@ -32,10 +37,10 @@ public class CardDefinition
     public bool IsBuilding;
     public bool AttacksUnits;
 
-    public CardDefinition()
-    {
-
-    }
+    /// <summary>
+    /// Default constructor.
+    /// </summary>
+    public CardDefinition() { }
 
     /// <summary>
     /// Constructor for test factory, ensures everything gets set on test objects.
