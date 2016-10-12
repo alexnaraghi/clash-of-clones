@@ -145,7 +145,7 @@ public class PlayerModel : MonoBehaviour
         {
             if(this == GameModel.Instance.LeftPlayer)
             {
-                go.transform.Rotate(new Vector3(0f, 90f, 0f));
+                go.transform.Rotate(new Vector3(0f, -90f, 0f));
             }
             else
             {
