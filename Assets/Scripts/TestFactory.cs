@@ -33,8 +33,8 @@ public static class TestFactory
             prefabName : "Tank2",
             cardImageName : "Tank2",
             ghostPrefabName : "TankGhost2",
-            manaCost : 5,
-            startHP : 200,
+            manaCost : 6,
+            startHP : 250,
             placementWidth : 1,
             placementHeight : 1,
             attackSpeed : 3,
@@ -86,10 +86,10 @@ public static class TestFactory
             placementHeight : 0,
             attackSpeed : 3,
             movementSpeed : 0,
-            areaAttackDamage : 30,
-            directAttackDamage : 0,
-            aggroRange : 20,
-            attackRange : 20,
+            areaAttackDamage : 0,
+            directAttackDamage : 50,
+            aggroRange : 25,
+            attackRange : 25,
             isBuilding : true,
             attacksUnits : true
         );
@@ -109,10 +109,35 @@ public static class TestFactory
             startHP : 750,
             placementWidth : 0,
             placementHeight : 0,
-            attackSpeed : 3,
+            attackSpeed : 1,
             movementSpeed : 0,
-            areaAttackDamage : 30,
-            directAttackDamage : 0,
+            areaAttackDamage : 0,
+            directAttackDamage : 30,
+            aggroRange : 25,
+            attackRange : 25,
+            isBuilding : true,
+            attacksUnits : true
+        );
+        return card;
+    }
+
+    /// <summary>
+    /// Special case for permanent building
+    /// </summary>
+    public static CardDefinition CreateStaticDefense()    
+    {
+        var card = new CardDefinition(
+            prefabName : "Turret",
+            cardImageName : "Turret",
+            ghostPrefabName : "TurretGhost",
+            manaCost : 4,
+            startHP : 200,
+            placementWidth : 1,
+            placementHeight : 1,
+            attackSpeed : 1,
+            movementSpeed : 0,
+            areaAttackDamage : 0,
+            directAttackDamage : 15,
             aggroRange : 20,
             attackRange : 20,
             isBuilding : true,
@@ -130,10 +155,11 @@ public static class TestFactory
         {
             definitions.Add(CreateBasicTank());
         }
-        for (int i = 7; i < 10; i++)
+        for (int i = 7; i < 9; i++)
         {
             definitions.Add(CreateHeavyTank());
         }
+        definitions.Add(CreateStaticDefense());
         return definitions;
     }
 }

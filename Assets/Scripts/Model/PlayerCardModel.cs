@@ -70,7 +70,7 @@ public class PlayerCardModel : MonoBehaviour
     /// </summary>
     public void Shuffle()
     {
-        Debug.Log("Shuffling discard into deck, Count: " + Discard.Count);
+        //Debug.Log("Shuffling discard into deck, Count: " + Discard.Count);
         
         // Randomized shuffle.
         Deck = Discard.OrderBy(c => Random.value).ToList();
