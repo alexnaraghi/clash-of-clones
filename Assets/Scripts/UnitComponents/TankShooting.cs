@@ -9,10 +9,15 @@ using UnityEngine.UI;
 [RequireComponent(typeof(Rigidbody))]
 public class TankShooting : MonoBehaviour
 {
-    private float _cooldownSeconds;
-    private Entity _entity;
-    private EntityAggro _aggro;
-    private Rigidbody _rigidbody;
+    /// <summary>
+    /// Does this entity need to be facing the other entity to attack?
+    /// </summary>
+    [SerializeField] private bool _isDirectional;
+
+    /// <summary>
+    /// The amount of recoil to give to this entity after firing a shot.
+    /// </summary>
+    [SerializeField] private float _projectileRecoil;
 
     /// <summary>
     /// Prefab of the shell.
@@ -37,7 +42,12 @@ public class TankShooting : MonoBehaviour
     /// <summary>
     /// The force given to the shell if the fire button is not held.
     /// </summary>
-    public float _minLaunchForce = 15f;        
+    public float _minLaunchForce = 15f;   
+    
+    private float _cooldownSeconds;
+    private Entity _entity;
+    private EntityAggro _aggro;
+    private Rigidbody _rigidbody;      
 
     // OLD STUFF FROM TANKS GAME //
 
@@ -79,7 +89,7 @@ public class TankShooting : MonoBehaviour
     /// <summary>
     /// Whether or not the shell has been launched with this button press.
     /// </summary>
-    private bool _fired;                       
+    private bool _fired;                      
     ///////////////////////////////
 
     void Awake()
@@ -94,20 +104,14 @@ public class TankShooting : MonoBehaviour
             Debug.LogWarning("TankShooting requires entity, aggro, and rigidbody.");
             return;
         }
-
-        _entity.InitializedEvent.AddListener(init);
     }
 
-    private void init()
+    private void Start ()
     {
         // When the tank is turned on, reset the launch force and the UI
         _currentLaunchForce = _minLaunchForce;
         _aimSlider.value = _minLaunchForce;
-    }
 
-
-    private void Start ()
-    {
         // The fire axis is based on the player number.
         _fireButton = "Fire" + 1;
 
@@ -126,24 +130,20 @@ public class TankShooting : MonoBehaviour
         var aggroTarget = _aggro.Target;
         if(aggroTarget != null && _cooldownSeconds <= 0f)
         {
-            // Fire a shot if we are close enough and pointing approximately at the target.
-            var distance = Vector3.Distance(transform.position, aggroTarget.transform.position);
+            float distance = Vector3.Distance(transform.position, aggroTarget.transform.position);
 
-            var ourDirection = transform.forward.normalized;
-            var targetDirection = (aggroTarget.transform.position - transform.position).normalized;
-            var dot = Vector3.Dot(ourDirection, targetDirection);
-
-            bool isInSights = Mathf.Abs(dot) >  (1f - Consts.directionThreshholdForProjectileShot);
-
-            if (distance < _entity.Definition.AttackRange && isInSights)
+            if (distance < _entity.Definition.AttackRange)
             {
-                _cooldownSeconds = _entity.Definition.AttackSpeed;
-                fire();
+                if (_aggro.IsInSights(aggroTarget.transform, _isDirectional))
+                {
+                    _cooldownSeconds = _entity.Definition.AttackSpeed;
+                    fireProjectile();
+                }
             }
         }
     }
 
-    private void fire()
+    private void fireProjectile()
     {
         // Set the fired flag so only Fire is only called once.
         _fired = true;
@@ -162,7 +162,12 @@ public class TankShooting : MonoBehaviour
         if(explosion != null && entity != null)
         {
             explosion.Init(entity.Owner, _entity.Definition.AreaAttackDamage);
-            _rigidbody.AddForce(-transform.forward * 10f, ForceMode.VelocityChange);
+
+            // Apply recoil to this entity for firing.
+            if(_projectileRecoil > 0f)
+            {
+                _rigidbody.AddForce(-transform.forward * _projectileRecoil, ForceMode.VelocityChange);
+            }
         }
         else
         {
@@ -177,7 +182,6 @@ public class TankShooting : MonoBehaviour
         _currentLaunchForce = _minLaunchForce;
     }
 
-
     /// <summary>
     /// TODO: Remove this, it's from the old game (but helpful for debugging so maybe keep?)
     /// </summary>
@@ -191,7 +195,7 @@ public class TankShooting : MonoBehaviour
         {
             // ... use the max force and launch the shell.
             _currentLaunchForce = _maxLaunchForce;
-            fire ();
+            fireProjectile ();
         }
         // Otherwise, if the fire button has just started being pressed...
         else if (Input.GetButtonDown (_fireButton))
@@ -216,7 +220,7 @@ public class TankShooting : MonoBehaviour
         else if (Input.GetButtonUp (_fireButton) && !_fired)
         {
             // ... launch the shell.
-            fire ();
+            fireProjectile ();
         }
     }
 }

@@ -15,7 +15,7 @@ public class HealthUI : MonoBehaviour
     // I'd like to see it moved to its own component, it doesn't have much to do with the health display.
 
     /// <summary>
-    /// A prefab that will be instantiated in Awake, then used whenever the tank dies.
+    /// Optional.  A prefab that will be instantiated in Awake, then used whenever the tank dies.
     /// </summary>
     [SerializeField] private GameObject _explosionPrefab;
 
@@ -31,14 +31,17 @@ public class HealthUI : MonoBehaviour
 
     private void Awake()
     {
-        // Instantiate the explosion prefab and get a reference to the particle system on it.
-        _explosionParticles = Instantiate(_explosionPrefab).GetComponent<ParticleSystem>();
+        if(_explosionPrefab != null)
+        {
+            // Instantiate the explosion prefab and get a reference to the particle system on it.
+            _explosionParticles = Instantiate(_explosionPrefab).GetComponent<ParticleSystem>();
+        
+            // Get a reference to the audio source on the instantiated prefab.
+            _explosionAudio = _explosionParticles.GetComponent<AudioSource>();
 
-        // Get a reference to the audio source on the instantiated prefab.
-        _explosionAudio = _explosionParticles.GetComponent<AudioSource>();
-
-        // Disable the prefab so it can be activated when it's required.
-        _explosionParticles.gameObject.SetActive(false);
+            // Disable the prefab so it can be activated when it's required.
+            _explosionParticles.gameObject.SetActive(false);
+        }
 
         _entity = GetComponent<Entity>();
         Assert.IsNotNull(_entity);
@@ -100,15 +103,21 @@ public class HealthUI : MonoBehaviour
         // Set the flag so that this function is only called once.
         _dead = true;
 
-        // Move the instantiated explosion prefab to the tank's position and turn it on.
-        _explosionParticles.transform.position = transform.position;
-        _explosionParticles.gameObject.SetActive(true);
+        if(_explosionParticles != null)
+        {
+            // Move the instantiated explosion prefab to the tank's position and turn it on.
+            _explosionParticles.transform.position = transform.position;
+            _explosionParticles.gameObject.SetActive(true);
 
-        // Play the particle system of the tank exploding.
-        _explosionParticles.Play();
+            // Play the particle system of the tank exploding.
+            _explosionParticles.Play();
+        }
 
-        // Play the tank explosion sound effect.
-        _explosionAudio.Play();
+        if(_explosionAudio)
+        {
+            // Play the tank explosion sound effect.
+            _explosionAudio.Play();
+        }
 
         // Turn the tank off.
         gameObject.SetActive(false);

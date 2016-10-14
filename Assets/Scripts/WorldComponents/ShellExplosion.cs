@@ -7,16 +7,6 @@ using UnityEngine.Assertions;
 public class ShellExplosion : MonoBehaviour
 {
     /// <summary>
-    /// Used to filter what the projectile can collide with.
-    /// </summary>
-    [SerializeField] private LayerMask _impactMask;
-
-    /// <summary>
-    /// Used to filter what the explosion does damage to. 
-    /// </summary>
-    [SerializeField] private LayerMask _damageMask;
-
-    /// <summary>
     /// The time in seconds before the shell is removed.
     /// </summary>
     [SerializeField] private float _maxLifeTime = 2f;
@@ -48,27 +38,21 @@ public class ShellExplosion : MonoBehaviour
 
     private void OnTriggerEnter (Collider other)
     {
-        bool isImpactLayer = ((1 << other.gameObject.layer) & _impactMask) == 0;
-        
         // EARLY OUT! //
         // If the trigger isn't on an impact layer, ignore it.
-        if(isImpactLayer) return;
+        if(!CombatUtils.IsEntity(other.gameObject.layer)) return;
 
         // Collect all the colliders in a sphere from the shell's current position to a radius of the explosion radius.
-        Collider[] colliders = Physics.OverlapSphere (transform.position, _explosionRadius, _damageMask);
+        Collider[] colliders = Physics.OverlapSphere (transform.position, _explosionRadius, CombatUtils.EntityMask);
 
         for (int i = 0; i < colliders.Length; i++)
         {
             Entity targetEntity = colliders[i].GetComponent<Entity> ();
-
-            // If there is no entity script attached to the gameobject, go on to the next collider.
-            if (targetEntity != null)
+            
+            // If it's an enemy unit, do damage to it.
+            if(CombatUtils.IsEnemy(_owner, targetEntity))
             {
-                // If it's an enemy unit, do damage to it.
-                if(targetEntity.Owner != _owner)
-                {
-                    targetEntity.TakeDamage(_areaDamage);
-                }
+                targetEntity.TakeDamage(_areaDamage);
             }
         }
 

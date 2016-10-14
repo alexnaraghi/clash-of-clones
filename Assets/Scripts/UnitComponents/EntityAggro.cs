@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.Assertions;
 using System.Collections.Generic;
+using System.Linq;
 
 /// <summary>
 /// Component that manages aggro on entities.  Who is this entity targeting?
@@ -75,5 +76,63 @@ public class EntityAggro : MonoBehaviour
             }
         }
         return enemies.ToArray();
+    }
+
+    public bool IsInSights(Transform targetTransform, bool isDirectional)
+    {
+        // If the entity needs to aim, we have to wait until the target is in our sights.
+        // If the direction doesn't matter, we should be ready to fire.
+        bool isInSights;
+        if(isDirectional)
+        {
+            isInSights = IsInSights(targetTransform);
+        }
+        else
+        {
+            isInSights = true;
+        }
+
+        return isInSights;
+    }
+
+    public bool IsInSights(Transform targetTansform)
+    {
+        bool isInSights = false;
+        if(targetTansform != null)
+        {
+            var ourDirection = transform.forward.normalized;
+            var targetDirection = (targetTansform.position - transform.position).normalized;
+            var dot = Vector3.Dot(ourDirection, targetDirection);
+
+            isInSights = Mathf.Abs(dot) > (1f - Consts.directionThreshholdForProjectileShot);
+        }
+
+        return isInSights;
+    }
+
+    
+
+    public Entity[] GetEnemiesInRange(PlayerModel enemyPlayer, float radius)
+    {
+        // Collect all the colliders in a sphere from the shell's current position to a radius of the explosion radius.
+        Collider[] colliders = Physics.OverlapSphere (transform.position, radius, CombatUtils.EntityMask);
+
+        List<Entity> entities = new List<Entity>();
+        for (int i = 0; i < colliders.Length; i++)
+        {
+            Entity targetEntity = colliders[i].GetComponent<Entity> ();
+
+            // If there is no entity script attached to the gameobject, go on to the next collider.
+            if (targetEntity != null)
+            {
+                // If it's an enemy unit, do damage to it.
+                if(targetEntity.Owner == enemyPlayer)
+                {
+                    entities.Add(targetEntity);
+                }
+            }
+        }
+
+        return entities.ToArray();
     }
 }

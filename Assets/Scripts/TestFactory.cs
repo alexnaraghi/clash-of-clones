@@ -146,18 +146,47 @@ public static class TestFactory
         return card;
     }
 
+    /// <summary>
+    /// Special case for permanent building
+    /// </summary>
+    public static CardDefinition CreateSkeletonArmy()    
+    {
+        var card = new CardDefinition(
+            prefabName : "Skelly",
+            cardImageName : "Skelly",
+            ghostPrefabName : "SkellyGhost",
+            manaCost : 1,
+            startHP : 100,
+            placementWidth : 1,
+            placementHeight : 1,
+            attackSpeed : 1,
+            movementSpeed : 5,
+            areaAttackDamage : 0,
+            directAttackDamage : 50,
+            aggroRange : 20,
+            attackRange : 3,
+            isBuilding : false,
+            attacksUnits : true
+        );
+        return card;
+    }
+
     public static List<CardDefinition> CreateDeck()
     {
         var definitions = new List<CardDefinition>();
 
         // Make a deck.
-        for (int i = 0; i < 6; i++)
+        for (int i = 0; i < 2; i++)
         {
             definitions.Add(CreateBasicTank());
         }
-        for (int i = 7; i < 9; i++)
+        for (int i = 3; i < 4; i++)
         {
             definitions.Add(CreateHeavyTank());
+        }
+        for (int i = 5; i < 9; i++)
+        {
+            definitions.Add(CreateSkeletonArmy());
         }
         definitions.Add(CreateStaticDefense());
         return definitions;

@@ -8,21 +8,26 @@
 [RequireComponent(typeof(EntityAggro))]
 public class DirectShooting : MonoBehaviour 
 {
-    private float _cooldownSeconds;
-    private Entity _entity;
-    private EntityAggro _aggro;
+    [SerializeField] private Bullet _bulletPrefab;
 
-    public Bullet _bulletPrefab;
+    /// <summary>
+    /// Does this entity need to be facing the other entity to attack?
+    /// </summary>
+    [SerializeField] private bool _isDirectional;
 
     /// <summary>
     /// A child of the entity where the bullets are spawned.
     /// </summary>
-    public Transform _fireTransform;
+    [SerializeField] private Transform _fireTransform;
 
     /// <summary>
     /// Reference to the audio source.
     /// </summary>
-    public AudioSource _shootingAudio;
+    [SerializeField] private AudioSource _shootingAudio;
+
+    private float _cooldownSeconds;
+    private Entity _entity;
+    private EntityAggro _aggro;
 
     void Awake()
     {
@@ -30,9 +35,9 @@ public class DirectShooting : MonoBehaviour
         _aggro = GetComponent<EntityAggro>();
 
         // EARLY OUT! //
-        if(_entity == null || _aggro == null || _bulletPrefab == null)
+        if(_entity == null || _aggro == null || _bulletPrefab == null || _fireTransform == null)
         {
-            Debug.LogWarning("DirectShooting requires entity, aggro, and bulletPrefab.");
+            Debug.LogWarning("Requires entity, aggro, bulletPrefab, fireTransform.");
             return;
         }
     }
@@ -50,18 +55,8 @@ public class DirectShooting : MonoBehaviour
             // Fire a shot if we are close enough and pointing approximately at the target.
             var distance = Vector3.Distance(transform.position, aggroTarget.transform.position);
 
-            // TODO: How do we resolve static defenses with no direction versus targets that need to aim to
-            // shoot?  Buildings (well, at least some of them) don't need to turn, they just fire in any
-            // direction instantly.
-            /*
-            var ourDirection = transform.forward.normalized;
-            var targetDirection = (aggroTarget.transform.position - transform.position).normalized;
-            var dot = Vector3.Dot(ourDirection, targetDirection);
-
-            bool isInSights = Mathf.Abs(dot) >  (1f - Consts.directionThreshholdForProjectileShot);
-            */
-
-            if (distance < _entity.Definition.AttackRange )//&& isInSights)
+            bool isInSights = _aggro.IsInSights(aggroTarget.transform, _isDirectional);
+            if (distance < _entity.Definition.AttackRange && isInSights)
             {
                 _cooldownSeconds = _entity.Definition.AttackSpeed;
                 fire(aggroTarget);
@@ -78,8 +73,13 @@ public class DirectShooting : MonoBehaviour
 
             if(bullet != null)
             {
-                _shootingAudio.Play();
                 bullet.Init(target, 100, _entity.Definition.DirectAttackDamage);
+
+                // Play audio, if any.
+                if(_shootingAudio != null)
+                {
+                    _shootingAudio.Play();
+                }
             }
             else
             {
