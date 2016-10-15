@@ -10,7 +10,7 @@ public class ShellExplosion : MonoBehaviour
     /// <summary>
     /// The time in seconds before the shell is removed.
     /// </summary>
-    [SerializeField] private float _maxLifeTime = 2f;
+    [SerializeField] private float _maxLifeTime = 10f;
 
     /// <summary>
     /// The maximum distance away from the explosion tanks can be and are still affected.
@@ -54,6 +54,10 @@ public class ShellExplosion : MonoBehaviour
         // EARLY OUT! //
         // If the trigger isn't on an impact layer, ignore it.
         if(!CombatUtils.IsProjectileCollider(other.gameObject.layer)) return;
+
+        // EARLY OUT! //
+        // If the collider is a friendly entity, early out.
+        if(CombatUtils.IsEntity(other.gameObject.layer) && !CombatUtils.IsEnemy(_owner, other)) return;
 
         // Collect all the colliders in a sphere from the shell's current position to a radius of the explosion radius.
         Collider[] colliders = Physics.OverlapSphere (transform.position, _explosionRadius, CombatUtils.EntityMask);

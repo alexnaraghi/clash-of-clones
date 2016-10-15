@@ -171,6 +171,31 @@ public static class TestFactory
         return card;
     }
 
+    /// <summary>
+    /// Special case for permanent building
+    /// </summary>
+    public static CardDefinition CreateFireball()    
+    {
+        var card = new CardDefinition(
+            prefabName : "Fireball",
+            cardImageName : "Fireball",
+            ghostPrefabName : "FireballGhost",
+            manaCost : 3,
+            startHP : 0,
+            placementWidth : 1,
+            placementHeight : 1,
+            attackSpeed : 0,
+            movementSpeed : 0,
+            areaAttackDamage : 100,
+            directAttackDamage : 0,
+            aggroRange : 0,
+            attackRange : 0,
+            isBuilding : false,
+            attacksUnits : false
+        );
+        return card;
+    }
+
     public static List<CardDefinition> CreateDeck()
     {
         var definitions = new List<CardDefinition>();
@@ -180,15 +205,22 @@ public static class TestFactory
         {
             definitions.Add(CreateBasicTank());
         }
-        for (int i = 3; i < 4; i++)
+        for (int i = 2; i < 4; i++)
         {
             definitions.Add(CreateHeavyTank());
         }
-        for (int i = 5; i < 9; i++)
+        for (int i = 4; i < 7; i++)
         {
             definitions.Add(CreateSkeletonArmy());
         }
-        definitions.Add(CreateStaticDefense());
+        for (int i = 7; i < 8; i++)
+        {
+            definitions.Add(CreateStaticDefense());
+        }
+        for (int i = 8; i < 10; i++)
+        {
+            definitions.Add(CreateFireball());
+        }
         return definitions;
     }
 }

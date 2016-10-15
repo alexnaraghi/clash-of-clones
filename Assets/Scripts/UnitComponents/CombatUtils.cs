@@ -41,6 +41,38 @@ public static class CombatUtils
         return velocity;
     }
 
+    public static void FireProjectile(Entity creator, Rigidbody projectilePrefab, Transform fireTransform, 
+        Vector3 destination, float secondsToFlyHorizontalMeter)
+    {
+        // EARLY OUT! //
+        if(creator == null || projectilePrefab == null || fireTransform == null)
+        {
+            Debug.LogWarning("Requires creator, projectilePrefab, fireTransform");
+            return;
+        }
+
+        // Create an instance of the shell and store a reference to it's rigidbody.
+        Rigidbody projectileRigidbody =
+            GameObject.Instantiate (projectilePrefab, fireTransform.position, fireTransform.rotation) as Rigidbody;
+
+        Vector3 velocity = CombatUtils.CalculateVelocityToHit(
+            fireTransform.position, 
+            destination, 
+            secondsToFlyHorizontalMeter);
+
+        projectileRigidbody.AddForce(velocity, ForceMode.VelocityChange);
+
+        var projectile = projectileRigidbody.GetComponent<ShellExplosion>();
+        if(projectile != null)
+        {
+            projectile.Init(creator.Owner, creator.Definition.AreaAttackDamage);
+        }
+        else
+        {
+            Debug.LogWarning("Problem with the projectile setup.");
+        }
+    }
+
     /// <summary>
     /// Gets the layer mask that covers all entities.
     /// </summary>
