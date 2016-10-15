@@ -20,6 +20,11 @@ public class TankShooting : MonoBehaviour
     [SerializeField] private float _projectileRecoil;
 
     /// <summary>
+    /// The speed at which the projectile should be fired (in terms of the horizontal distance it will travel).
+    /// </summary>
+    [SerializeField] private float _secondsToFlyHorizontalMeter = 1 / 15f;
+
+    /// <summary>
     /// Prefab of the shell.
     /// </summary>
     public Rigidbody _shell;                   
@@ -39,10 +44,7 @@ public class TankShooting : MonoBehaviour
     /// </summary>
     public AudioClip _fireClip;                
 
-    /// <summary>
-    /// The force given to the shell if the fire button is not held.
-    /// </summary>
-    public float _minLaunchForce = 15f;   
+      
     
     private float _cooldownSeconds;
     private Entity _entity;
@@ -50,6 +52,11 @@ public class TankShooting : MonoBehaviour
     private Rigidbody _rigidbody;      
 
     // OLD STUFF FROM TANKS GAME //
+
+    /// <summary>
+    /// The force given to the shell if the fire button is not held.
+    /// </summary>
+    public float _minLaunchForce = 15f; 
 
     /// <summary>
     /// A child of the tank that displays the current launch force.
@@ -137,13 +144,13 @@ public class TankShooting : MonoBehaviour
                 if (_aggro.IsInSights(aggroTarget.transform, _isDirectional))
                 {
                     _cooldownSeconds = _entity.Definition.AttackSpeed;
-                    fireProjectile();
+                    fireProjectile(aggroTarget);
                 }
             }
         }
     }
 
-    private void fireProjectile()
+    private void fireProjectile(Entity target)
     {
         // Set the fired flag so only Fire is only called once.
         _fired = true;
@@ -152,20 +159,23 @@ public class TankShooting : MonoBehaviour
         Rigidbody shellInstance =
             Instantiate (_shell, _fireTransform.position, _fireTransform.rotation) as Rigidbody;
 
-        // TODO: Make the launch force correspond to where we want the projectile to hit!!!!
-        // Set the shell's velocity to the launch force in the fire position's forward direction.
-        shellInstance.velocity = _currentLaunchForce * _fireTransform.forward;
+        Vector3 velocity = CombatUtils.CalculateVelocityToHit(
+            _fireTransform.position, 
+            target.transform.position, 
+            _secondsToFlyHorizontalMeter);
+
+        shellInstance.AddForce(velocity, ForceMode.VelocityChange);
 
         var explosion = shellInstance.GetComponent<ShellExplosion>();
-        var entity = GetComponent<Entity>();
 
-        if(explosion != null && entity != null)
+        if(explosion != null && _entity != null)
         {
-            explosion.Init(entity.Owner, _entity.Definition.AreaAttackDamage);
+            explosion.Init(_entity.Owner, _entity.Definition.AreaAttackDamage);
 
             // Apply recoil to this entity for firing.
             if(_projectileRecoil > 0f)
             {
+                
                 _rigidbody.AddForce(-transform.forward * _projectileRecoil, ForceMode.VelocityChange);
             }
         }
@@ -195,7 +205,7 @@ public class TankShooting : MonoBehaviour
         {
             // ... use the max force and launch the shell.
             _currentLaunchForce = _maxLaunchForce;
-            fireProjectile ();
+            fireProjectile (_aggro.Target);
         }
         // Otherwise, if the fire button has just started being pressed...
         else if (Input.GetButtonDown (_fireButton))
@@ -220,7 +230,7 @@ public class TankShooting : MonoBehaviour
         else if (Input.GetButtonUp (_fireButton) && !_fired)
         {
             // ... launch the shell.
-            fireProjectile ();
+            fireProjectile (_aggro.Target);
         }
     }
 }

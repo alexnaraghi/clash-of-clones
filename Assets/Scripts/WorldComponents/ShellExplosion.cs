@@ -4,6 +4,7 @@ using UnityEngine.Assertions;
 /// <summary>
 /// Represents a projectile explosion.  Damages enemy entities with an area effect.
 /// </summary>
+[RequireComponent(typeof(Rigidbody))]
 public class ShellExplosion : MonoBehaviour
 {
     /// <summary>
@@ -16,15 +17,18 @@ public class ShellExplosion : MonoBehaviour
     /// </summary>
     [SerializeField] private float _explosionRadius = 5f;
     [SerializeField] private ParticleSystem _explosionParticles;
-    [SerializeField] private AudioSource _explosionAudio;              
+    [SerializeField] private AudioSource _explosionAudio;            
 
     private PlayerModel _owner;
+    private Rigidbody _rigidbody;
     private int _areaDamage;
     
     private void Start ()
     {
+        _rigidbody = GetComponent<Rigidbody>();
         Assert.IsNotNull(_explosionParticles);
         Assert.IsNotNull(_explosionAudio);
+        Assert.IsNotNull(_rigidbody);
 
         // If it isn't destroyed by then, destroy the shell after it's lifetime.
         Destroy (gameObject, _maxLifeTime);
@@ -36,11 +40,20 @@ public class ShellExplosion : MonoBehaviour
         _areaDamage = damage;
     }
 
+    void Update()
+    {
+        // Point the projectile to its direction of movement.
+        if(_rigidbody != null && !Mathf.Approximately(_rigidbody.velocity.sqrMagnitude, 0f))
+        {
+            transform.forward = _rigidbody.velocity;
+        }
+    }
+
     private void OnTriggerEnter (Collider other)
     {
         // EARLY OUT! //
         // If the trigger isn't on an impact layer, ignore it.
-        if(!CombatUtils.IsEntity(other.gameObject.layer)) return;
+        if(!CombatUtils.IsProjectileCollider(other.gameObject.layer)) return;
 
         // Collect all the colliders in a sphere from the shell's current position to a radius of the explosion radius.
         Collider[] colliders = Physics.OverlapSphere (transform.position, _explosionRadius, CombatUtils.EntityMask);
