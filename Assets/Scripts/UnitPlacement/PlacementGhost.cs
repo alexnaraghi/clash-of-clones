@@ -19,7 +19,7 @@ public class PlacementGhost : MonoBehaviour
     /// <summary>
     /// The card that is being placed.
     /// </summary>
-    private CardDefinition _card;
+    private CardData _card;
 
     /// <summary>
     /// The ghost's model.
@@ -31,7 +31,7 @@ public class PlacementGhost : MonoBehaviour
     /// </summary>
     public UnityEvent PlacedEvent;
 
-    public CardDefinition Card
+    public CardData Card
     {
         get { return _card; }
     }
@@ -61,7 +61,7 @@ public class PlacementGhost : MonoBehaviour
     /// <summary>
     /// Set the ghost to a card.  If the card is null, clears the ghost.
     /// </summary>
-    public void SetCard(CardDefinition card, PlayerModel player)
+    public void SetCard(CardData card, PlayerModel player)
     {
         if(card != null)
         {
@@ -100,7 +100,7 @@ public class PlacementGhost : MonoBehaviour
     /// If the given card is active, unset it.  If it's a different card, do nothing.
     /// </summary>
     /// <param name="card"></param>
-    public void UnsetCard(CardDefinition card)
+    public void UnsetCard(CardData card)
     {
         if(card != null && _card == card)
         {

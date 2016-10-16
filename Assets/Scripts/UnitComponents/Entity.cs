@@ -24,11 +24,11 @@ public class Entity : MonoBehaviour
     public UnityEvent InitializedEvent;
 
     // TODO: Hide the definition!
-    public CardDefinition Definition 
+    public CardData Definition 
     { 
         get { return _definition; } 
     }
-    [SerializeField] private CardDefinition _definition;
+    [SerializeField] private CardData _definition;
 
     public PlayerModel Owner 
     { 
@@ -47,7 +47,7 @@ public class Entity : MonoBehaviour
         get { return Definition.StartHP; } 
     }
 
-    public void Init(PlayerModel owner, CardDefinition definition)
+    public void Init(PlayerModel owner, CardData definition)
     {
         // EARLY OUT! //
         if(owner == null || definition == null)
@@ -85,7 +85,7 @@ public class Entity : MonoBehaviour
     /// <param name="definition">The card's definition.</param>
     /// <param name="position">The spawn position.</param>
     /// <returns>The created entity.</returns>
-    public static Entity SpawnFromDefinition(PlayerModel owner, CardDefinition definition, Vector3 position)
+    public static Entity SpawnFromDefinition(PlayerModel owner, CardData definition, Vector3 position)
     {
          var prefab = Resources.Load<GameObject>(Consts.UnitsPath + definition.PrefabName);
                              

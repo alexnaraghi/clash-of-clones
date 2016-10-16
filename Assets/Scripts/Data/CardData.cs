@@ -10,7 +10,7 @@
 /// unwieldy, for now it feels robust enough to keep using.
 /// </remarks>
 [Serializable]
-public class CardDefinition 
+public class CardData 
 {
     // Prefab values.
     public string PrefabName;
@@ -47,12 +47,12 @@ public class CardDefinition
     /// <summary>
     /// Default constructor.
     /// </summary>
-    public CardDefinition() { }
+    public CardData() { }
 
     /// <summary>
     /// Constructor for test factory, ensures everything gets set on test objects.
     /// </summary>
-    public CardDefinition(string prefabName, string ghostPrefabName, string cardImageName, int manaCost,
+    public CardData(string prefabName, string ghostPrefabName, string cardImageName, int manaCost,
         int placementWidth, int placementHeight, int startHP, int attackSpeed, int movementSpeed, 
         int directAttackDamage, int areaAttackDamage, int aggroRange, int attackRange, bool isBuilding, 
         bool attacksUnits, bool isProjectile, int spawnSeconds)

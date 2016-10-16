@@ -57,7 +57,7 @@ public class AIController : MonoBehaviour
         if(_player == null) return;
 
         // Choose card.  Random for now.
-        CardDefinition randomCard = _player.CardState.GetRandomCardFromHand();
+        CardData randomCard = _player.CardState.GetRandomCardFromHand();
 
         // If we don't have enough mana, just skip playing the card for now.
         if(_player.CanPlayCard(randomCard) && _player.Buildings.Length > 0)

@@ -7,18 +7,18 @@ using System.Linq;
 /// </summary>
 public class PlayerCardModel : MonoBehaviour 
 {
-    public List<CardDefinition> Deck;
-    public List<CardDefinition> Discard;
-    public CardDefinition[] Hand;
+    public List<CardData> Deck;
+    public List<CardData> Discard;
+    public CardData[] Hand;
 
     void Awake()
     {
-        Deck = new List<CardDefinition>();
-        Discard = new List<CardDefinition>();
-        Hand = new CardDefinition[Consts.HandSize];
+        Deck = new List<CardData>();
+        Discard = new List<CardData>();
+        Hand = new CardData[Consts.HandSize];
     }
 
-    public void Init(List<CardDefinition> deck)
+    public void Init(List<CardData> deck)
     {
         // EARLY OUT! //
         if(deck == null || deck.Count == 0)
@@ -33,7 +33,7 @@ public class PlayerCardModel : MonoBehaviour
         initHand();
     }
 
-    public void PlayCard(CardDefinition card)
+    public void PlayCard(CardData card)
     {
         int index = Hand.IndexOf(card);
         if(index != -1)
@@ -46,7 +46,7 @@ public class PlayerCardModel : MonoBehaviour
         }
     }
 
-    public CardDefinition Peek()
+    public CardData Peek()
     {
         if(Deck.Count == 0)
         {
@@ -59,7 +59,7 @@ public class PlayerCardModel : MonoBehaviour
     /// <summary>
     /// Get a random card from the hand.  Useful for basic AI card selection, not much else.
     /// </summary>
-    public CardDefinition GetRandomCardFromHand()
+    public CardData GetRandomCardFromHand()
     {
         int rand = Random.Range(0, Hand.Length);
         return Hand[rand];
@@ -91,7 +91,7 @@ public class PlayerCardModel : MonoBehaviour
         }
     }
 
-    private void replaceInHand(int handIndex, CardDefinition newCard)
+    private void replaceInHand(int handIndex, CardData newCard)
     {
         if(Hand[handIndex] != null)
         {
@@ -100,7 +100,7 @@ public class PlayerCardModel : MonoBehaviour
         Hand[handIndex] = drawCard();
     }
 
-    private CardDefinition drawCard()
+    private CardData drawCard()
     {
         if(Deck.Count == 0)
         {

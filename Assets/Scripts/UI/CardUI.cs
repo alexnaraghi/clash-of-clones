@@ -13,7 +13,7 @@ public class CardUI : MonoBehaviour
     
     private PlacementGhost _ghost;
 
-    public CardDefinition Definition;
+    public CardData Definition;
 
     void Awake()
     {
@@ -31,7 +31,7 @@ public class CardUI : MonoBehaviour
     /// <summary>
     /// Change the card's artwork and attributes to match the given definition.
     /// </summary>
-    public void Init(CardDefinition definition)
+    public void Init(CardData definition)
     {
         // EARLY OUT! //
         if(definition == null || _image == null || _manaText == null) return;

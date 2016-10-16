@@ -94,7 +94,7 @@ public class GameModel : MonoBehaviour
         InitGame(TestFactory.CreateDeck(), TestFactory.CreateDeck());
     }
 
-    public void InitGame(List<CardDefinition> leftDeck, List<CardDefinition> rightDeck)
+    public void InitGame(List<CardData> leftDeck, List<CardData> rightDeck)
     {
         LeftPlayer.Init("Computer", leftDeck);
         RightPlayer.Init("Alex", rightDeck);

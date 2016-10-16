@@ -5,9 +5,9 @@
 /// </summary>
 public static class TestFactory 
 {
-    public static CardDefinition CreateBasicTank()    
+    public static CardData CreateBasicTank()    
     {
-        var card = new CardDefinition(
+        var card = new CardData(
             prefabName : "Tank",
             ghostPrefabName : "TankGhost",
             cardImageName : "Tank",
@@ -29,9 +29,9 @@ public static class TestFactory
         return card;
     }
 
-    public static CardDefinition CreateHeavyTank()    
+    public static CardData CreateHeavyTank()    
     {
-        var card = new CardDefinition(
+        var card = new CardData(
             prefabName : "Tank2",
             cardImageName : "Tank2",
             ghostPrefabName : "TankGhost2",
@@ -53,9 +53,9 @@ public static class TestFactory
         return card;
     }
 
-    public static CardDefinition CreateCheatTank()    
+    public static CardData CreateCheatTank()    
     {
-        var card = new CardDefinition(
+        var card = new CardData(
             prefabName : "Tank2",
             cardImageName : "Tank2",
             ghostPrefabName : "TankGhost2",
@@ -80,9 +80,9 @@ public static class TestFactory
     /// <summary>
     /// Special case for HQ building.
     /// </summary>
-    public static CardDefinition CreateHQ()    
+    public static CardData CreateHQ()    
     {
-        var card = new CardDefinition(
+        var card = new CardData(
             prefabName : "",
             cardImageName : "",
             ghostPrefabName : "",
@@ -107,9 +107,9 @@ public static class TestFactory
     /// <summary>
     /// Special case for permanent building
     /// </summary>
-    public static CardDefinition CreateOutpost()    
+    public static CardData CreateOutpost()    
     {
-        var card = new CardDefinition(
+        var card = new CardData(
             prefabName : "",
             cardImageName : "",
             ghostPrefabName : "",
@@ -134,9 +134,9 @@ public static class TestFactory
     /// <summary>
     /// Special case for permanent building
     /// </summary>
-    public static CardDefinition CreateStaticDefense()    
+    public static CardData CreateStaticDefense()    
     {
-        var card = new CardDefinition(
+        var card = new CardData(
             prefabName : "Turret",
             cardImageName : "Turret",
             ghostPrefabName : "TurretGhost",
@@ -159,9 +159,9 @@ public static class TestFactory
         return card;
     }
 
-    public static CardDefinition CreateSkeletonArmy()    
+    public static CardData CreateSkeletonArmy()    
     {
-        var card = new CardDefinition(
+        var card = new CardData(
             prefabName : "SkellyArmy",
             cardImageName : "SkellyArmy",
             ghostPrefabName : "SkellyGhost",
@@ -183,9 +183,9 @@ public static class TestFactory
         return card;
     }
 
-    public static CardDefinition CreateSkeletonHouse()    
+    public static CardData CreateSkeletonHouse()    
     {
-        var card = new CardDefinition(
+        var card = new CardData(
             prefabName : "SkellyHouse",
             cardImageName : "SkellyHouse",
             ghostPrefabName : "SkellyHouseGhost",
@@ -207,9 +207,9 @@ public static class TestFactory
         return card;
     }
 
-    public static CardDefinition CreateSkeleton()    
+    public static CardData CreateSkeleton()    
     {
-        var card = new CardDefinition(
+        var card = new CardData(
             prefabName : "Skelly",
             cardImageName : "Skelly",
             ghostPrefabName : "",
@@ -231,9 +231,9 @@ public static class TestFactory
         return card;
     }
 
-    public static CardDefinition CreateFireball()    
+    public static CardData CreateFireball()    
     {
-        var card = new CardDefinition(
+        var card = new CardData(
             prefabName : "FireballSpell",
             cardImageName : "Fireball",
             ghostPrefabName : "FireballSpellGhost",
@@ -255,9 +255,9 @@ public static class TestFactory
         return card;
     }
 
-    public static List<CardDefinition> CreateDeck()
+    public static List<CardData> CreateDeck()
     {
-        var definitions = new List<CardDefinition>();
+        var definitions = new List<CardData>();
 
         // Make a deck.
         for (int i = 0; i < 2; i++)

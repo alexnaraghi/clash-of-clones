@@ -14,7 +14,7 @@ public class PlayerModel : MonoBehaviour
     /// <summary>
     /// The cards passed in as the start deck.
     /// </summary>
-    public List<CardDefinition> AllCards;
+    public List<CardData> AllCards;
 
     /// <summary>
     /// The current state of the player's deck, hand, discard.
@@ -76,7 +76,7 @@ public class PlayerModel : MonoBehaviour
         }
     }
 
-    public void Init(string name, List<CardDefinition> deck)
+    public void Init(string name, List<CardData> deck)
     {
         // EARLY OUT! //
         if(Name == null || CardState == null)
@@ -101,14 +101,14 @@ public class PlayerModel : MonoBehaviour
         Mana = Mathf.Clamp(unclampedMana, 0f, Consts.MaxMana);
     }
 
-    public bool CanPlayCard(CardDefinition card)
+    public bool CanPlayCard(CardData card)
     {
         return card != null
             && (CardState.Hand.IndexOf(card) != -1 
             && Mana >= card.ManaCost);
     }
 
-    public void PlayCard(CardDefinition card, Vector3 position)
+    public void PlayCard(CardData card, Vector3 position)
     {
         // EARLY OUT! //
         if(card == null)
