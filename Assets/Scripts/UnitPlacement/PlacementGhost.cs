@@ -31,6 +31,11 @@ public class PlacementGhost : MonoBehaviour
     /// </summary>
     public UnityEvent PlacedEvent;
 
+    public CardDefinition Card
+    {
+        get { return _card; }
+    }
+
     void Update()
     {
         // If the model is active, it is in a placeable location.
@@ -73,7 +78,11 @@ public class PlacementGhost : MonoBehaviour
                 {
                     Model.transform.SetParent(transform, false);
                     player.RotateForPlayer(Model);
-                    _territoryGui.IsShowingEnemyTerritory = true;
+
+                    if(!_card.IsProjectile)
+                    {
+                        _territoryGui.IsShowingEnemyTerritory = true;
+                    }
                 }
             }
             else

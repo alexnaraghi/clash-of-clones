@@ -22,7 +22,8 @@ public static class TestFactory
             aggroRange : 15,
             attackRange : 15,
             isBuilding : false,
-            attacksUnits : true
+            attacksUnits : true,
+            isProjectile : false
         );
         return card;
     }
@@ -44,7 +45,8 @@ public static class TestFactory
             aggroRange : 20,
             attackRange : 20,
             isBuilding : false,
-            attacksUnits : true
+            attacksUnits : true,
+            isProjectile : false
         );
         return card;
     }
@@ -66,7 +68,8 @@ public static class TestFactory
             aggroRange : 20,
             attackRange : 20,
             isBuilding : false,
-            attacksUnits : true
+            attacksUnits : true,
+            isProjectile : false
         );
         return card;
     }
@@ -91,7 +94,8 @@ public static class TestFactory
             aggroRange : 25,
             attackRange : 25,
             isBuilding : true,
-            attacksUnits : true
+            attacksUnits : true,
+            isProjectile : false
         );
         return card;
     }
@@ -116,7 +120,8 @@ public static class TestFactory
             aggroRange : 25,
             attackRange : 25,
             isBuilding : true,
-            attacksUnits : true
+            attacksUnits : true,
+            isProjectile : false
         );
         return card;
     }
@@ -141,7 +146,8 @@ public static class TestFactory
             aggroRange : 20,
             attackRange : 20,
             isBuilding : true,
-            attacksUnits : true
+            attacksUnits : true,
+            isProjectile : false
         );
         return card;
     }
@@ -152,9 +158,35 @@ public static class TestFactory
     public static CardDefinition CreateSkeletonArmy()    
     {
         var card = new CardDefinition(
+            prefabName : "SkellyArmy",
+            cardImageName : "SkellyArmy",
+            ghostPrefabName : "SkellyGhost",
+            manaCost : 4,
+            startHP : 0,
+            placementWidth : 1,
+            placementHeight : 1,
+            attackSpeed : 0,
+            movementSpeed : 0,
+            areaAttackDamage : 0,
+            directAttackDamage : 0,
+            aggroRange : 0,
+            attackRange : 0,
+            isBuilding : false,
+            attacksUnits : false,
+            isProjectile : false
+        );
+        return card;
+    }
+
+    /// <summary>
+    /// Special case for permanent building
+    /// </summary>
+    public static CardDefinition CreateSkeleton()    
+    {
+        var card = new CardDefinition(
             prefabName : "Skelly",
             cardImageName : "Skelly",
-            ghostPrefabName : "SkellyGhost",
+            ghostPrefabName : "",
             manaCost : 1,
             startHP : 100,
             placementWidth : 1,
@@ -166,7 +198,8 @@ public static class TestFactory
             aggroRange : 20,
             attackRange : 3,
             isBuilding : false,
-            attacksUnits : true
+            attacksUnits : true,
+            isProjectile : false 
         );
         return card;
     }
@@ -177,9 +210,9 @@ public static class TestFactory
     public static CardDefinition CreateFireball()    
     {
         var card = new CardDefinition(
-            prefabName : "Fireball",
+            prefabName : "FireballSpell",
             cardImageName : "Fireball",
-            ghostPrefabName : "FireballGhost",
+            ghostPrefabName : "FireballSpellGhost",
             manaCost : 3,
             startHP : 0,
             placementWidth : 1,
@@ -191,7 +224,8 @@ public static class TestFactory
             aggroRange : 0,
             attackRange : 0,
             isBuilding : false,
-            attacksUnits : false
+            attacksUnits : false,
+            isProjectile : true
         );
         return card;
     }
@@ -209,11 +243,11 @@ public static class TestFactory
         {
             definitions.Add(CreateHeavyTank());
         }
-        for (int i = 4; i < 7; i++)
+        for (int i = 4; i < 8; i++)
         {
             definitions.Add(CreateSkeletonArmy());
         }
-        for (int i = 7; i < 8; i++)
+        for (int i = 8; i < 9; i++)
         {
             definitions.Add(CreateStaticDefense());
         }

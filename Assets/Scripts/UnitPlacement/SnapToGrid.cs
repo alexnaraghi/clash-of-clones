@@ -31,9 +31,10 @@ public class SnapToGrid : MonoBehaviour
             bool isValidCell = false;
 
             // If the position is on the ground
-            // If the territory is NOT controlled by the enemy ie friendly or neutral
+            // If the territory is NOT controlled by the enemy ie friendly or neutral, except projectiles.
             if (Physics.Raycast(ray, out hit, int.MaxValue, _groundMask)
-                && !GameModel.Instance.EnemyPlayer.IsInTerritory(hit.point))
+                && _ghost.Card.IsProjectile 
+                || !GameModel.Instance.EnemyPlayer.IsInTerritory(hit.point))
             {
                 var position = hit.point;
 

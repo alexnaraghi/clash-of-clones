@@ -87,8 +87,8 @@ public class Entity : MonoBehaviour
     /// <returns>The created entity.</returns>
     public static Entity SpawnFromDefinition(PlayerModel owner, CardDefinition definition, Vector3 position)
     {
-        var prefab = Resources.Load<GameObject>(Consts.UnitsPath + definition.PrefabName);
-
+         var prefab = Resources.Load<GameObject>(Consts.UnitsPath + definition.PrefabName);
+                             
         // EARLY OUT! //
         if(prefab == null)
         {

@@ -29,4 +29,10 @@ public static class Consts
     /// The closer to 0, the more dead on we need to be before firing.
     /// </summary>
     public const float directionThreshholdForProjectileShot = 0.01f;
+
+    /// <summary>
+    /// For group spawners, there is a concept of spawning entities in groups of circles.
+    /// The number of entities in the smallest circles defines how dense the units will be packed.
+    /// </summary>
+    public const int SpawnerNumEntitiesInCircle = 3;
 }

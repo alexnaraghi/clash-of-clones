@@ -37,6 +37,8 @@ public class CardDefinition
     public bool IsBuilding;
     public bool AttacksUnits;
 
+    public bool IsProjectile;
+    
     /// <summary>
     /// Default constructor.
     /// </summary>
@@ -48,7 +50,7 @@ public class CardDefinition
     public CardDefinition(string prefabName, string ghostPrefabName, string cardImageName, int manaCost,
         int placementWidth, int placementHeight, int startHP, int attackSpeed, int movementSpeed, 
         int directAttackDamage, int areaAttackDamage, int aggroRange, int attackRange, bool isBuilding, 
-        bool attacksUnits)
+        bool attacksUnits, bool isProjectile)
     {
         PrefabName = prefabName;
         GhostPrefabName = ghostPrefabName;
@@ -65,5 +67,6 @@ public class CardDefinition
         AttackRange = attackRange;
         IsBuilding = isBuilding;
         AttacksUnits = attacksUnits;
+        IsProjectile = isProjectile;
     }
 }

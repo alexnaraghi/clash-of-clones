@@ -33,4 +33,13 @@ public static class Utils
     {
         behaviour.CancelInvoke(action.Method.Name);
     }
+
+    public static Vector3 GetPointOnCircle (Vector3 center, float radius, float angle)
+    {
+        Vector3 pos;
+        pos.x = center.x + radius * Mathf.Sin(angle * Mathf.Deg2Rad);
+        pos.y = center.y;
+        pos.z = center.z + radius * Mathf.Cos(angle * Mathf.Deg2Rad);
+        return pos;
+    }
 }
