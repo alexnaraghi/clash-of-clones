@@ -62,14 +62,27 @@ public class AIController : MonoBehaviour
         // If we don't have enough mana, just skip playing the card for now.
         if(_player.CanPlayCard(randomCard) && _player.Buildings.Length > 0)
         {
-            // Choose a position.  Let's just do right in front of a static friendly building at random.
-            int rand = Random.Range(0, _player.Buildings.Length);
-
-            var building = _player.Buildings[rand];
-
-            if(randomCard != null && building != null && building.Entity != null && building.Entity.HP >= 0)
+            if(randomCard.IsProjectile)
             {
-                _player.PlayCard(randomCard, building.Entity.transform.position + OffsetFromBuilding);
+                // Shoot at a random enemy building.
+                var enemy = GameModel.Instance.GetOppositePlayer(_player);
+                var randomBuilding = enemy.Buildings[Random.Range(0, enemy.Buildings.Length)];
+                if(randomBuilding.Entity != null)
+                {
+                    _player.PlayCard(randomCard, randomBuilding.Entity.transform.position);
+                }
+            }
+            else
+            {
+                // Choose a position.  Let's just do right in front of a static friendly building at random.
+                int rand = Random.Range(0, _player.Buildings.Length);
+
+                var building = _player.Buildings[rand];
+
+                if(randomCard != null && building != null && building.Entity != null && building.Entity.HP >= 0)
+                {
+                    _player.PlayCard(randomCard, building.Entity.transform.position + OffsetFromBuilding);
+                }
             }
         }
     }
