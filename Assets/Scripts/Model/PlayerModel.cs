@@ -145,11 +145,11 @@ public class PlayerModel : MonoBehaviour
         {
             if(this == GameModel.Instance.LeftPlayer)
             {
-                go.transform.Rotate(new Vector3(0f, -90f, 0f));
+                go.transform.rotation = Quaternion.Euler(0f, -90f, 0f);
             }
             else
             {
-                go.transform.Rotate(new Vector3(0f, 90f, 0f));
+                go.transform.rotation = Quaternion.Euler(0f, 90f, 0f);
             }
         }
     }

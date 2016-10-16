@@ -38,6 +38,11 @@ public class CardDefinition
     public bool AttacksUnits;
 
     public bool IsProjectile;
+
+    /// <summary>
+    /// If a spawner is attached, will use this to determine how often to spawn a new wave.
+    /// </summary>
+    public int SpawnSeconds;
     
     /// <summary>
     /// Default constructor.
@@ -50,7 +55,7 @@ public class CardDefinition
     public CardDefinition(string prefabName, string ghostPrefabName, string cardImageName, int manaCost,
         int placementWidth, int placementHeight, int startHP, int attackSpeed, int movementSpeed, 
         int directAttackDamage, int areaAttackDamage, int aggroRange, int attackRange, bool isBuilding, 
-        bool attacksUnits, bool isProjectile)
+        bool attacksUnits, bool isProjectile, int spawnSeconds)
     {
         PrefabName = prefabName;
         GhostPrefabName = ghostPrefabName;
@@ -68,5 +73,6 @@ public class CardDefinition
         IsBuilding = isBuilding;
         AttacksUnits = attacksUnits;
         IsProjectile = isProjectile;
+        SpawnSeconds = spawnSeconds;
     }
 }

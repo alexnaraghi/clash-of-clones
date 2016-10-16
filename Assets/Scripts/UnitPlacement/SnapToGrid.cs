@@ -31,28 +31,31 @@ public class SnapToGrid : MonoBehaviour
             bool isValidCell = false;
 
             // If the position is on the ground
-            // If the territory is NOT controlled by the enemy ie friendly or neutral, except projectiles.
-            if (Physics.Raycast(ray, out hit, int.MaxValue, _groundMask)
-                && _ghost.Card.IsProjectile 
-                || !GameModel.Instance.EnemyPlayer.IsInTerritory(hit.point))
+            if (Physics.Raycast(ray, out hit, int.MaxValue, _groundMask))
             {
-                var position = hit.point;
-
-                bool isInXBounds = Mathf.Abs(position.x / Consts.GridCellWidth) < (Consts.GridWidth / 2);
-                bool isInYBounds = Mathf.Abs(position.z / Consts.GridCellHeight) < (Consts.GridHeight / 2);
-
-                if(isInXBounds && isInYBounds)
+                // If the territory is NOT controlled by the enemy ie friendly or neutral, except projectiles.
+                bool isPlaceableTerritory = _ghost.Card.IsProjectile 
+                    || !GameModel.Instance.EnemyPlayer.IsInTerritory(hit.point);
+                    
+                if(isPlaceableTerritory)
                 {
-                    isValidCell = true;
+                    var position = hit.point;
 
-                    var snappedX = Mathf.RoundToInt(position.x / Consts.GridCellWidth) * Consts.GridCellWidth;
-                    var snappedZ = Mathf.RoundToInt(position.z / Consts.GridCellHeight) * Consts.GridCellHeight;
-                    var snappedPosition = new Vector3(snappedX, position.y, snappedZ);
+                    bool isInXBounds = Mathf.Abs(position.x / Consts.GridCellWidth) < (Consts.GridWidth / 2);
+                    bool isInYBounds = Mathf.Abs(position.z / Consts.GridCellHeight) < (Consts.GridHeight / 2);
 
-                    _ghost.Model.SetActive(true);
-                    _ghost.transform.position = snappedPosition;
+                    if(isInXBounds && isInYBounds)
+                    {
+                        isValidCell = true;
+
+                        var snappedX = Mathf.RoundToInt(position.x / Consts.GridCellWidth) * Consts.GridCellWidth;
+                        var snappedZ = Mathf.RoundToInt(position.z / Consts.GridCellHeight) * Consts.GridCellHeight;
+                        var snappedPosition = new Vector3(snappedX, position.y, snappedZ);
+
+                        _ghost.Model.SetActive(true);
+                        _ghost.transform.position = snappedPosition;
+                    }
                 }
-
 
             }
 

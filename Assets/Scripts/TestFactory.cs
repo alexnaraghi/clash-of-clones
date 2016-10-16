@@ -23,7 +23,8 @@ public static class TestFactory
             attackRange : 15,
             isBuilding : false,
             attacksUnits : true,
-            isProjectile : false
+            isProjectile : false,
+            spawnSeconds : 0
         );
         return card;
     }
@@ -46,7 +47,8 @@ public static class TestFactory
             attackRange : 20,
             isBuilding : false,
             attacksUnits : true,
-            isProjectile : false
+            isProjectile : false,
+            spawnSeconds : 0
         );
         return card;
     }
@@ -69,7 +71,8 @@ public static class TestFactory
             attackRange : 20,
             isBuilding : false,
             attacksUnits : true,
-            isProjectile : false
+            isProjectile : false,
+            spawnSeconds : 0
         );
         return card;
     }
@@ -95,7 +98,8 @@ public static class TestFactory
             attackRange : 25,
             isBuilding : true,
             attacksUnits : true,
-            isProjectile : false
+            isProjectile : false,
+            spawnSeconds : 0
         );
         return card;
     }
@@ -121,7 +125,8 @@ public static class TestFactory
             attackRange : 25,
             isBuilding : true,
             attacksUnits : true,
-            isProjectile : false
+            isProjectile : false,
+            spawnSeconds : 0
         );
         return card;
     }
@@ -147,14 +152,13 @@ public static class TestFactory
             attackRange : 20,
             isBuilding : true,
             attacksUnits : true,
-            isProjectile : false
+            isProjectile : false,
+            spawnSeconds : 0
+            
         );
         return card;
     }
 
-    /// <summary>
-    /// Special case for permanent building
-    /// </summary>
     public static CardDefinition CreateSkeletonArmy()    
     {
         var card = new CardDefinition(
@@ -173,14 +177,36 @@ public static class TestFactory
             attackRange : 0,
             isBuilding : false,
             attacksUnits : false,
-            isProjectile : false
+            isProjectile : false,
+            spawnSeconds : 0
         );
         return card;
     }
 
-    /// <summary>
-    /// Special case for permanent building
-    /// </summary>
+    public static CardDefinition CreateSkeletonHouse()    
+    {
+        var card = new CardDefinition(
+            prefabName : "SkellyHouse",
+            cardImageName : "SkellyHouse",
+            ghostPrefabName : "SkellyHouseGhost",
+            manaCost : 6,
+            startHP : 100,
+            placementWidth : 1,
+            placementHeight : 1,
+            attackSpeed : 0,
+            movementSpeed : 0,
+            areaAttackDamage : 0,
+            directAttackDamage : 0,
+            aggroRange : 0,
+            attackRange : 0,
+            isBuilding : false,
+            attacksUnits : false,
+            isProjectile : false,
+            spawnSeconds : 10
+        );
+        return card;
+    }
+
     public static CardDefinition CreateSkeleton()    
     {
         var card = new CardDefinition(
@@ -199,14 +225,12 @@ public static class TestFactory
             attackRange : 3,
             isBuilding : false,
             attacksUnits : true,
-            isProjectile : false 
+            isProjectile : false,
+            spawnSeconds : 0 
         );
         return card;
     }
 
-    /// <summary>
-    /// Special case for permanent building
-    /// </summary>
     public static CardDefinition CreateFireball()    
     {
         var card = new CardDefinition(
@@ -225,7 +249,8 @@ public static class TestFactory
             attackRange : 0,
             isBuilding : false,
             attacksUnits : false,
-            isProjectile : true
+            isProjectile : true,
+            spawnSeconds : 0
         );
         return card;
     }
@@ -243,9 +268,13 @@ public static class TestFactory
         {
             definitions.Add(CreateHeavyTank());
         }
-        for (int i = 4; i < 8; i++)
+        for (int i = 4; i < 6; i++)
         {
             definitions.Add(CreateSkeletonArmy());
+        }
+        for (int i = 6; i < 8; i++)
+        {
+            definitions.Add(CreateSkeletonHouse());
         }
         for (int i = 8; i < 9; i++)
         {

@@ -11,7 +11,7 @@ public class AIController : MonoBehaviour
     /// <summary>
     /// The player to control.
     /// </summary>
-    [SerializeField] private PlayerModel _player;
+    private PlayerModel _player;
 
     // AI PARAMETERS //
     private const float IntervalBetweenMoves = 2f;
