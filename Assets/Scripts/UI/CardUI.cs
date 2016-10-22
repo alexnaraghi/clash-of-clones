@@ -7,9 +7,16 @@ using UnityEngine.UI;
 /// </summary>
 public class CardUI : MonoBehaviour 
 {
+    [SerializeField] private Image _background;
     [SerializeField] private Image _image;
     [SerializeField] private Text _manaText;
+    [SerializeField] private Image _manaIcon;
     [SerializeField] private Toggle _toggle;
+    [SerializeField] private Color _disabledColor;
+
+    private Color _imageOriginalColor;
+    private Color _manaTextOriginalColor;
+    private Color _manaIconOriginalColor;
     
     private PlacementGhost _ghost;
 
@@ -21,6 +28,13 @@ public class CardUI : MonoBehaviour
         _ghost = GameObject.Find("PlacementGhost").GetComponent<PlacementGhost>();
 
         Assert.IsNotNull(_ghost);
+        Assert.IsNotNull(_image);
+        Assert.IsNotNull(_manaText);
+        Assert.IsNotNull(_manaIcon);
+
+        _imageOriginalColor = _image.color;
+        _manaTextOriginalColor = _manaText.color;
+        _manaIconOriginalColor = _manaIcon.color;
 
         if(_ghost != null)
         {
@@ -54,6 +68,25 @@ public class CardUI : MonoBehaviour
         else
         {
             _ghost.UnsetCard(Definition);
+        }
+    }
+
+    public void SetInteractable(bool isInteractable)
+    {
+        _toggle.interactable = isInteractable;
+
+        // We have lots of elements in a card, all of them have to be toggled.
+        if(isInteractable)
+        {
+            _image.color =      _imageOriginalColor;
+            _manaText.color =   _manaTextOriginalColor;
+            _manaIcon.color =   _manaIconOriginalColor;
+        }
+        else
+        {
+            _image.color =      _disabledColor;
+            _manaText.color =   _disabledColor;
+            _manaIcon.color =   _disabledColor;
         }
     }
 
