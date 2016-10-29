@@ -50,7 +50,7 @@ public class Bullet : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if(other.gameObject == _target.gameObject)
+        if(_target != null && other.gameObject == _target.gameObject)
         {
             hit();
         }

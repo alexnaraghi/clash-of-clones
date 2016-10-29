@@ -21,50 +21,29 @@ public class EntityAnimator : MonoBehaviour
             Debug.LogWarning("Requires entity, animator.");
             return;
         }
-
-        _entity.DamageTakenEvent.AddListener(onTakenDamage);
     }
 
     void Update()
     {
-        _velocity = transform.position - _lastPosition;
-        _lastPosition = transform.position;
+        if (_entity.HP > 0)
+        {
+            _velocity = transform.position - _lastPosition;
+            _lastPosition = transform.position;
 
-        SetFloat("Velocity", _velocity.magnitude);
+            SetFloat("Velocity", _velocity.magnitude);
+        }
     }
 
     public void Attack()
     {
-        SetTrigger("Attack");
-        if(_attackAudio != null)
-        {
-            _attackAudio.Play();
-        }
-    }
-
-    private void onTakenDamage()
-    {
         if(_entity.HP > 0)
         {
-            TakeDamage();
+            SetTrigger("Attack");
+            if(_attackAudio != null)
+            {
+                _attackAudio.Play();
+            }
         }
-        else
-        {
-            Die();
-        }
-    }
-
-    public void TakeDamage()
-    {
-        // Testing made it clear that the animations I have are far too exaggerated to make every time
-        // we take damage.  In addition, melee units need to prioritize attack animations over taking damage.
-        // Need to take a look at this again when the game is in a more polished state.
-        //SetTrigger("GetHit");
-    }
-
-    public void Die()
-    {
-        SetTrigger("Die");
     }
 
     private void SetTrigger(string name)

@@ -135,7 +135,7 @@ public class PlayerModel : MonoBehaviour
         //TODO: Remove units when out of HP.
         Units.Add(unit);
     }
-    
+
     /// <summary>
     /// Helper to rotate a model in the opposite player's direction.  Asumming facing down to start. 
     /// </summary>

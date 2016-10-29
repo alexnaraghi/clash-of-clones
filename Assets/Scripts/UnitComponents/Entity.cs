@@ -1,4 +1,6 @@
-﻿using UnityEngine;
+﻿using System;
+using System.Collections;
+using UnityEngine;
 using UnityEngine.Events;
 
 /// <summary>
@@ -18,10 +20,19 @@ public class Entity : MonoBehaviour
     public UnityEvent DamageTakenEvent;
 
     /// <summary>
+    /// Event when unit dies.
+    /// </summary>
+    public UnityEvent DiedEvent;
+
+    /// <summary>
     /// Event when entity is initialized.  All components relying on entity should initialize based off
     /// this event!
     /// </summary>
     public UnityEvent InitializedEvent;
+
+    [SerializeField]private GameObject _deathEffectPrefab;
+
+    private bool _isDead;
 
     // TODO: Hide the definition!
     public CardData Definition 
@@ -74,7 +85,30 @@ public class Entity : MonoBehaviour
             {
                 DamageTakenEvent.Invoke();
             }
+
+            if(!_isDead && _hp == 0)
+            {
+                _isDead = true;
+                die();
+            }
         }
+    }
+
+    private void die()
+    {
+        DiedEvent.Invoke();
+        _owner.Units.Remove(this);
+
+        if(_deathEffectPrefab != null)
+        {
+            var go = (GameObject)Instantiate(_deathEffectPrefab, transform.position, Quaternion.identity);
+            if(go != null)
+            {
+                Destroy(go, 1.5f);
+            }
+        }
+
+        Destroy(gameObject);
     }
 
     /// <summary>

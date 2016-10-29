@@ -111,8 +111,5 @@ public class HealthUI : MonoBehaviour
             // Play the tank explosion sound effect.
             _explosionAudio.Play();
         }
-
-        // Turn the tank off.
-        gameObject.SetActive(false);
     }
 }

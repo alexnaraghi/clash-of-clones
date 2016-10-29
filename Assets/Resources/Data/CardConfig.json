@@ -45,7 +45,7 @@
             "PrefabName": "FireballSpell",
             "GhostPrefabName": "FireballSpellGhost",
             "CardImageName": "Fireball",
-            "ManaCost": 23,
+            "ManaCost": 2,
             "PlacementWidth": 1,
             "PlacementHeight": 1,
             "StartHP": 0,
