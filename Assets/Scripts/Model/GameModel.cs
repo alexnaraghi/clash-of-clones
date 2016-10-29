@@ -89,15 +89,18 @@ public class GameModel : MonoBehaviour
         Players = new PlayerModel[2];
         Players[0] = LeftPlayer;
         Players[1] = RightPlayer;
+    }
 
+    void Start()
+    {
         // Just use default decks for now.
-        InitGame(TestFactory.CreateDeck(), TestFactory.CreateDeck());
+        InitGame(TestFactory.GetDeck1(), TestFactory.GetDeck1());
     }
 
     public void InitGame(List<CardData> leftDeck, List<CardData> rightDeck)
     {
         LeftPlayer.Init("Computer", leftDeck);
-        RightPlayer.Init("Alex", rightDeck);
+        RightPlayer.Init("You", rightDeck);
 
         SecondsLeft = Consts.MatchStartSeconds;
         IsPlaying = true;

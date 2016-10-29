@@ -45,22 +45,15 @@ public class HealthUI : MonoBehaviour
 
         _entity = GetComponent<Entity>();
         Assert.IsNotNull(_entity);
+
+        _entity.InitializedEvent.AddListener(init);
     }
 
-    void Start()
+    public void init()
     {
-        if (_entity != null)
-        {
-            Init(_entity);
-        }
-    }
-
-    public void Init(Entity entity)
-    {
-        _entity = entity;
         _entity.DamageTakenEvent.AddListener(onDamageTaken);
-        _slider.maxValue = entity.MaxHP;
-        _fillImage.color = entity.Owner.PlayerColor;
+        _slider.maxValue = _entity.MaxHP;
+        _fillImage.color = _entity.Owner.PlayerColor;
 
         SetHealthUI();
     }

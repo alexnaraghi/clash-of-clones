@@ -177,8 +177,8 @@ public class PlayerModel : MonoBehaviour
         // EARLY OUT! //
         if(TopOutpost == null || HQ == null || BottomOutpost == null) return;
 
-        TopOutpost.Init(    this, TestFactory.CreateOutpost());
-        BottomOutpost.Init( this, TestFactory.CreateOutpost());
-        HQ.Init(            this, TestFactory.CreateHQ());
+        TopOutpost.Init(    this, Config.Instance.GetCardByName("Outpost"));
+        BottomOutpost.Init( this, Config.Instance.GetCardByName("Outpost"));
+        HQ.Init(            this, Config.Instance.GetCardByName("HQ"));
     }
 }

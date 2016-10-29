@@ -1,4 +1,5 @@
-﻿using System;
+﻿using UnityEngine;
+using System;
 
 /// <summary>
 /// Definition of a card.  Intended to be the definition of a card in the deck of the player.  For how cards 
@@ -10,8 +11,10 @@
 /// unwieldy, for now it feels robust enough to keep using.
 /// </remarks>
 [Serializable]
-public class CardData 
+public class CardData
 {
+    public string Name;
+    
     // Prefab values.
     public string PrefabName;
     public string GhostPrefabName;
@@ -48,31 +51,4 @@ public class CardData
     /// Default constructor.
     /// </summary>
     public CardData() { }
-
-    /// <summary>
-    /// Constructor for test factory, ensures everything gets set on test objects.
-    /// </summary>
-    public CardData(string prefabName, string ghostPrefabName, string cardImageName, int manaCost,
-        int placementWidth, int placementHeight, int startHP, int attackSpeed, int movementSpeed, 
-        int directAttackDamage, int areaAttackDamage, int aggroRange, int attackRange, bool isBuilding, 
-        bool attacksUnits, bool isProjectile, int spawnSeconds)
-    {
-        PrefabName = prefabName;
-        GhostPrefabName = ghostPrefabName;
-        CardImageName = cardImageName;
-        ManaCost = manaCost;
-        PlacementWidth = placementWidth;
-        PlacementHeight = placementHeight;
-        StartHP = startHP;
-        AttackSpeed = attackSpeed;
-        MovementSpeed = movementSpeed;
-        DirectAttackDamage = directAttackDamage;
-        AreaAttackDamage = areaAttackDamage;
-        AggroRange = aggroRange;
-        AttackRange = attackRange;
-        IsBuilding = isBuilding;
-        AttacksUnits = attacksUnits;
-        IsProjectile = isProjectile;
-        SpawnSeconds = spawnSeconds;
-    }
 }

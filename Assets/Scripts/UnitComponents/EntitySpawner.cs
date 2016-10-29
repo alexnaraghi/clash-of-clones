@@ -61,7 +61,7 @@ public class EntitySpawner : MonoBehaviour
             float angle = (((float)i) / _numEntities) * 360f;
             Vector3 pos = Utils.GetPointOnCircle(transform.position, _spawnRadius, angle);
 
-            var unit = Entity.SpawnFromDefinition(_entity.Owner, TestFactory.CreateSkeleton(), pos);
+            var unit = Entity.SpawnFromDefinition(_entity.Owner, Config.Instance.GetCardByName("Skelly"), pos);
             _entity.Owner.RotateForPlayer(unit.gameObject);
 
             // TODO: Destroy this.
