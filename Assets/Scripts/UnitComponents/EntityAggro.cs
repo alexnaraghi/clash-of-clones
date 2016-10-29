@@ -43,17 +43,18 @@ public class EntityAggro : MonoBehaviour
                 {
                     if (enemy.HP > 0)
                     {
-                        float distance = Vector3.Distance(transform.position, enemy.transform.position);
-                        if (distance < closestDistance)
+                        // Only attack if the entity is a type that this unit attacks.
+                        if (_entity.Definition.AttacksUnits || enemy.Definition.IsBuilding)
                         {
-                            closestEnemy = enemy;
-                            closestDistance = distance;
+                            float distance = Vector3.Distance(transform.position, enemy.transform.position);
+                            if (distance < closestDistance)
+                            {
+                                closestEnemy = enemy;
+                                closestDistance = distance;
+                            }
                         }
                     }
                 }
-
-                // Enemy logically can't be null since the array was greater than 0 in size.
-                Assert.IsNotNull(closestEnemy);
 
                 _target = closestEnemy;
             }
@@ -114,7 +115,7 @@ public class EntityAggro : MonoBehaviour
 
     public Entity[] GetEnemiesInRange(PlayerModel enemyPlayer, float radius)
     {
-        // Collect all the colliders in a sphere from the shell's current position to a radius of the explosion radius.
+        // Collect all the colliders in a sphere from the current position in the given radius
         Collider[] colliders = Physics.OverlapSphere (transform.position, radius, CombatUtils.EntityMask);
 
         List<Entity> entities = new List<Entity>();

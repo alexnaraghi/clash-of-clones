@@ -5,7 +5,7 @@
 /// </summary>
 public static class TestFactory 
 {
-    public static List<CardData> GetDeck1()
+    public static List<CardData> GetDefaultDeck()
     {
         return Config.Instance.GetDeckByName("Deck1");
     }

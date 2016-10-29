@@ -16,7 +16,9 @@ public class MeleeAttack : MonoBehaviour
     /// </summary>
     [SerializeField] private float _attackRadius;
     [SerializeField] private bool _isDirectional;
-    [SerializeField] private AudioSource _attackAudio;
+
+    // Optional
+    [SerializeField] private EntityAnimator _animator;
 
     private float _cooldownSeconds;
     private Entity _entity;
@@ -26,6 +28,7 @@ public class MeleeAttack : MonoBehaviour
     {
         _entity = GetComponent<Entity>();
         _aggro = GetComponent<EntityAggro>();
+        _animator = GetComponent<EntityAnimator>();
 
         // EARLY OUT! //
         if(_entity == null || _aggro == null || GetComponent<Rigidbody>() == null)
@@ -60,8 +63,13 @@ public class MeleeAttack : MonoBehaviour
         if(!CombatUtils.IsEnemy(_entity.Owner, target)) return;
 
         bool didAttack = false;
-        didAttack = attemptDirectAttack(target);
-        didAttack |= attemptAreaAttack(target);
+        
+        // Only attack if the entity is a type that this unit attacks.
+        if(_entity.Definition.AttacksUnits || target.Definition.IsBuilding)
+        {
+            didAttack = attemptDirectAttack(target);
+            didAttack |= attemptAreaAttack(target);
+        }
 
         if(didAttack)
         {
@@ -69,9 +77,9 @@ public class MeleeAttack : MonoBehaviour
             _cooldownSeconds = _entity.Definition.AttackSpeed;
 
             // Play attack audio if we have any.
-            if(_attackAudio != null)
+            if(_animator != null)
             {
-                _attackAudio.Play();
+                _animator.Attack();
             }
         }
     }

@@ -12,6 +12,19 @@
                 "Goblin",
                 "Knight"
             ]
+        },
+        {
+            "Name": "Tester",
+            "CardList": [
+                "Knight",
+                "Knight",
+                "Knight",
+                "Knight",
+                "Knight",
+                "Knight",
+                "Knight",
+                "Knight"
+            ]
         }
     ]
 }

@@ -94,7 +94,7 @@ public class GameModel : MonoBehaviour
     void Start()
     {
         // Just use default decks for now.
-        InitGame(TestFactory.GetDeck1(), TestFactory.GetDeck1());
+        InitGame(TestFactory.GetDefaultDeck(), TestFactory.GetDefaultDeck());
     }
 
     public void InitGame(List<CardData> leftDeck, List<CardData> rightDeck)
