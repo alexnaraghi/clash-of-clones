@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.SceneManagement;
 
 /// <summary>
@@ -34,6 +35,8 @@ public class GameModel : MonoBehaviour
     /// TODO: Add state machine for lifecycle management.
     /// </summary>
     public bool IsPlaying;
+
+    public UnityEvent GameOverEvent;
 
     /// <summary>
     /// The human controlled player.
@@ -132,6 +135,7 @@ public class GameModel : MonoBehaviour
             if(LeftPlayer.HQ.HP <= 0 || RightPlayer.HQ.HP <= 0 || SecondsLeft <= 0f)
             {
                 IsPlaying = false;
+                GameOverEvent.Invoke();
                 PlayerModel winner = determineWinner();
 
                 // Print message.

@@ -42,6 +42,17 @@ public class CardUI : MonoBehaviour
         }
     }
 
+    void Start()
+    {
+        GameModel.Instance.GameOverEvent.AddListener(onGameEnded);
+    }
+
+    private void onGameEnded()
+    {
+        setToggle(false);
+    }
+
+
     /// <summary>
     /// Change the card's artwork and attributes to match the given definition.
     /// </summary>
@@ -92,9 +103,14 @@ public class CardUI : MonoBehaviour
 
     private void onUnitPlaced()
     {
+        setToggle(false);
+    }
+
+    private void setToggle(bool isEnabled)
+    {
         if(_toggle != null)
         {
-            _toggle.isOn = false;
+            _toggle.isOn = isEnabled;
         }
     }
 

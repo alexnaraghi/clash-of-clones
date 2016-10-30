@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
 /// <summary>
 /// Keeps the hand display up to date.
@@ -33,7 +34,7 @@ public class CardPanel : MonoBehaviour
                 Hand[i].Init(handCard);
             }
 
-            Hand[i].SetInteractable(handCard.ManaCost <= mana);
+            Hand[i].SetInteractable(GameModel.Instance.IsPlaying && handCard.ManaCost <= mana);
         }
 
         var peekCard = GameModel.Instance.MyPlayer.CardState.Peek();

@@ -45,25 +45,29 @@ public class CastProjectileSpell : MonoBehaviour
     {
         // EARLY OUT! //
         if(_entity == null) return;
-
+        
         var owner = _entity.Owner;
-        var fireTransform = owner.HQ.transform.Find("FireTransform");
+        
+        if(owner != null && owner.HQ != null) 
+        {
+            var fireTransform = owner.HQ.transform.Find("FireTransform");
 
-        // EARLY OUT! //
-        if(fireTransform == null) return;
+            if(fireTransform != null)
+            {
+                // Fire a projectile to this position.
+                CombatUtils.FireProjectile(_entity, 
+                    _projectile, 
+                    fireTransform, 
+                    transform.position, 
+                    _secondsToFlyHorizontalMeter);
 
-        // Fire a projectile to this position.
-        CombatUtils.FireProjectile(_entity, 
-            _projectile, 
-            fireTransform, 
-            transform.position, 
-            _secondsToFlyHorizontalMeter);
+                // Change the clip to the firing clip and play it.
+                _shootingAudio.clip = _fireClip;
+                _shootingAudio.Play ();
 
-        // Change the clip to the firing clip and play it.
-        _shootingAudio.clip = _fireClip;
-        _shootingAudio.Play ();
-
-        // The spell is complete.
-        // TODO: Destroy.
+                // The spell is complete.
+                // TODO: Destroy.
+            }
+        }
     }
 }

@@ -21,7 +21,7 @@ public class SnapToGrid : MonoBehaviour
 
     void Update()
     {
-        if(_ghost != null && _ghost.Model != null)
+        if(_ghost != null && _ghost.Model != null && _ghost.Card != null)
         {
             var inputPosition = Input.mousePosition;
 
