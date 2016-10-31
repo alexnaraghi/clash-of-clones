@@ -70,7 +70,7 @@ public class TerritoryUI : MonoBehaviour
                         if(numImagesUsed < _imagePool.Count)
                         {
                             var rectTransform = _imagePool[numImagesUsed];
-                            var rect = toWorldRect(territory);
+                            var rect = TerritoryData.ToWorldRect(territory);
                             rectTransform.gameObject.SetActive(true);
                             rectTransform.offsetMin = new Vector2(rect.xMin, rect.yMin);
                             rectTransform.offsetMax = new Vector2(rect.xMax, rect.yMax);
@@ -89,22 +89,5 @@ public class TerritoryUI : MonoBehaviour
                 _imagePool[i].gameObject.SetActive(false);
             }
         }
-    }
-    
-    /// <summary>
-    /// Converts a territory definition into world space.
-    /// </summary>
-    /// <param name="territory">The territory to convert.</param>
-    /// <returns>A rectangle in world space on the Y plane.</returns>
-    private Rect toWorldRect(TerritoryData territory)
-    {
-        Rect rect = new Rect(
-            territory.StartX * Consts.GridCellWidth - Consts.GridCellWidth / 2f,
-            territory.StartY * Consts.GridCellHeight - Consts.GridCellHeight / 2f,
-            territory.Width * Consts.GridCellWidth,
-            territory.Height * Consts.GridCellHeight
-        );
-        return rect;
-
     }   
 }

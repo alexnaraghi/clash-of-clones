@@ -41,16 +41,16 @@ public class SnapToGrid : MonoBehaviour
                 {
                     var position = hit.point;
 
-                    bool isInXBounds = Mathf.Abs(position.x / Consts.GridCellWidth) < (Consts.GridWidth / 2);
-                    bool isInYBounds = Mathf.Abs(position.z / Consts.GridCellHeight) < (Consts.GridHeight / 2);
+                    var gridPoint = TerritoryData.GetGridPosition(hit.point);
+                    bool isInXBounds = gridPoint.X >= 0 && gridPoint.X < Consts.GridWidth;
+                    bool isInYBounds = gridPoint.Y >= 0 && gridPoint.Y < Consts.GridHeight;
 
                     if(isInXBounds && isInYBounds)
                     {
                         isValidCell = true;
 
-                        var snappedX = Mathf.RoundToInt(position.x / Consts.GridCellWidth) * Consts.GridCellWidth;
-                        var snappedZ = Mathf.RoundToInt(position.z / Consts.GridCellHeight) * Consts.GridCellHeight;
-                        var snappedPosition = new Vector3(snappedX, position.y, snappedZ);
+                        var snappedPosition = TerritoryData.GetCenter(gridPoint.X, gridPoint.Y);
+                        snappedPosition = new Vector3(snappedPosition.x, position.y, snappedPosition.z);
 
                         _ghost.Model.SetActive(true);
                         _ghost.transform.position = snappedPosition;
