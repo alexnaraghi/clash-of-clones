@@ -10,20 +10,21 @@
                 "Tank2",
                 "Turret",
                 "Goblin",
-                "Knight"
+                "Knight",
+                "Necromancer"
             ]
         },
         {
             "Name": "Tester",
             "CardList": [
-                "Knight",
-                "Knight",
-                "Knight",
-                "Knight",
-                "Knight",
-                "Knight",
-                "Knight",
-                "Knight"
+                "Necromancer",
+                "Necromancer",
+                "Necromancer",
+                "Necromancer",
+                "Necromancer",
+                "Necromancer",
+                "Necromancer",
+                "Necromancer"
             ]
         }
     ]

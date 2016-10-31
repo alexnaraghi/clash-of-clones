@@ -240,6 +240,26 @@
             "AttacksUnits": false,
             "IsProjectile": false,
             "SpawnSeconds": 0
+        },
+        {
+            "Name": "Necromancer",
+            "PrefabName": "Necromancer",
+            "GhostPrefabName": "NecromancerGhost",
+            "CardImageName": "Necromancer",
+            "ManaCost": 5,
+            "PlacementWidth": 1,
+            "PlacementHeight": 1,
+            "StartHP": 100,
+            "AttackSpeed": 1,
+            "MovementSpeed": 3,
+            "DirectAttackDamage": 0,
+            "AreaAttackDamage": 30,
+            "AggroRange": 15,
+            "AttackRange": 15,
+            "IsBuilding": false,
+            "AttacksUnits": true,
+            "IsProjectile": false,
+            "SpawnSeconds": 8
         }
     ]
 }

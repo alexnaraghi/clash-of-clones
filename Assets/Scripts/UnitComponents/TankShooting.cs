@@ -91,9 +91,12 @@ public class TankShooting : MonoBehaviour
                         _rigidbody.AddForce(-transform.forward * _projectileRecoil, ForceMode.VelocityChange);
                     }
 
-                    // Change the clip to the firing clip and play it.
-                    _shootingAudio.clip = _fireClip;
-                    _shootingAudio.Play ();
+                    if(_shootingAudio != null)
+                    {
+                        // Change the clip to the firing clip and play it.
+                        _shootingAudio.clip = _fireClip;
+                        _shootingAudio.Play ();
+                    }
                 }
             }
         }
