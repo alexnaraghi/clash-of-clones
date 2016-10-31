@@ -128,9 +128,9 @@
             "ManaCost": 1,
             "PlacementWidth": 1,
             "PlacementHeight": 1,
-            "StartHP": 100,
+            "StartHP": 30,
             "AttackSpeed": 1,
-            "MovementSpeed": 5,
+            "MovementSpeed": 7,
             "DirectAttackDamage": 30,
             "AreaAttackDamage": 0,
             "AggroRange": 20,
@@ -251,7 +251,7 @@
             "PlacementHeight": 1,
             "StartHP": 100,
             "AttackSpeed": 1,
-            "MovementSpeed": 3,
+            "MovementSpeed": 2,
             "DirectAttackDamage": 0,
             "AreaAttackDamage": 30,
             "AggroRange": 15,
@@ -259,7 +259,7 @@
             "IsBuilding": false,
             "AttacksUnits": true,
             "IsProjectile": false,
-            "SpawnSeconds": 8
+            "SpawnSeconds": 4
         }
     ]
 }

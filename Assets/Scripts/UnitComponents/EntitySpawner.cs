@@ -8,7 +8,6 @@ public class EntitySpawner : MonoBehaviour
     [SerializeField] private int _numEntities;
     [SerializeField] private float _spawnRadius;
 
-    private float _spawnSeconds;
     private float _cooldownSeconds;
     private Entity _entity;
 
@@ -28,10 +27,10 @@ public class EntitySpawner : MonoBehaviour
 
     private void onInit()
     {
-        _spawnSeconds = _entity.Definition.SpawnSeconds;
-
+        _cooldownSeconds = _entity.Definition.SpawnSeconds;
+        
         // If the cooldown is 0, immediately spawn.
-        if(Mathf.Approximately(_spawnSeconds, 0f))
+        if(Mathf.Approximately(_entity.Definition.SpawnSeconds, 0f))
         {
             spawnUnits();
         }
@@ -42,7 +41,7 @@ public class EntitySpawner : MonoBehaviour
         // EARLY OUT! //
         // If this spawner doesn't have a cooldown, it's a one time spawner so we shouldnt continue
         // to spawn.
-        if(Mathf.Approximately(_spawnSeconds, 0f)) return;
+        if(_entity == null || Mathf.Approximately(_entity.Definition.SpawnSeconds, 0f)) return;
 
         // Our code which does simple shooting AI on cooldown if we have a target.
         _cooldownSeconds -= Time.deltaTime;
@@ -50,7 +49,7 @@ public class EntitySpawner : MonoBehaviour
         if(_cooldownSeconds <= 0f)
         {
             spawnUnits();
-            _cooldownSeconds = _spawnSeconds;
+            _cooldownSeconds = _entity.Definition.SpawnSeconds;
         }
     }
 
