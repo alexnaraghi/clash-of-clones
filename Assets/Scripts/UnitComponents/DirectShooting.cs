@@ -25,6 +25,8 @@ public class DirectShooting : MonoBehaviour
     /// </summary>
     [SerializeField] private AudioSource _shootingAudio;
 
+    [SerializeField] private float _speedMetersPerSecond = 100f;
+
     private float _cooldownSeconds;
     private Entity _entity;
     private EntityAggro _aggro;
@@ -73,7 +75,7 @@ public class DirectShooting : MonoBehaviour
 
             if(bullet != null)
             {
-                bullet.Init(target, 100, _entity.Definition.DirectAttackDamage);
+                bullet.Init(target, _speedMetersPerSecond, _entity.Definition.DirectAttackDamage);
 
                 // Play audio, if any.
                 if(_shootingAudio != null)

@@ -16,6 +16,8 @@ public class ShellExplosion : MonoBehaviour
     /// The maximum distance away from the explosion tanks can be and are still affected.
     /// </summary>
     [SerializeField] private float _explosionRadius = 5f;
+    
+    // Optional.
     [SerializeField] private ParticleSystem _explosionParticles;
     [SerializeField] private AudioSource _explosionAudio;            
 
@@ -26,8 +28,6 @@ public class ShellExplosion : MonoBehaviour
     private void Start ()
     {
         _rigidbody = GetComponent<Rigidbody>();
-        Assert.IsNotNull(_explosionParticles);
-        Assert.IsNotNull(_explosionAudio);
         Assert.IsNotNull(_rigidbody);
 
         // If it isn't destroyed by then, destroy the shell after it's lifetime.
@@ -73,17 +73,24 @@ public class ShellExplosion : MonoBehaviour
             }
         }
 
-        // Unparent the particles from the shell.
-        _explosionParticles.transform.parent = null;
+        if(_explosionParticles != null)
+        {
+            // Unparent the particles from the shell.
+            _explosionParticles.transform.parent = null;
 
-        // Play the particle system.
-        _explosionParticles.Play();
+            // Play the particle system.
+            _explosionParticles.Play();
+            
+            // Once the particles have finished, destroy the gameobject they are on.
+            Destroy (_explosionParticles.gameObject, _explosionParticles.duration);
+        }
 
-        // Play the explosion sound effect.
-        _explosionAudio.Play();
+        if(_explosionAudio != null)
+        {
+            // Play the explosion sound effect.
+            _explosionAudio.Play();
+        }
 
-        // Once the particles have finished, destroy the gameobject they are on.
-        Destroy (_explosionParticles.gameObject, _explosionParticles.duration);
 
         // Destroy the shell.
         Destroy (gameObject);
