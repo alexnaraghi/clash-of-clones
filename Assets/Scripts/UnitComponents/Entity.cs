@@ -130,7 +130,12 @@ public class Entity : MonoBehaviour
             return null;
         }
 
-        var go = (GameObject)Instantiate(prefab, position, Quaternion.identity);
+        var spawnPosition = position;
+        if(definition.IsAirUnit)
+        {
+            spawnPosition.y = Consts.AirUnitHeight;
+        }
+        var go = (GameObject)Instantiate(prefab, spawnPosition, Quaternion.identity);
         var entity = go.GetComponent<Entity>();
 
         // EARLY OUT! //

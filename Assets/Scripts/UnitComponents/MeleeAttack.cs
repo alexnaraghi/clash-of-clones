@@ -65,7 +65,7 @@ public class MeleeAttack : MonoBehaviour
         bool didAttack = false;
         
         // Only attack if the entity is a type that this unit attacks.
-        if(_entity.Definition.AttacksUnits || target.Definition.IsBuilding)
+        if(_entity.Definition.AttacksGroundUnits || target.Definition.IsBuilding)
         {
             didAttack = attemptDirectAttack(target);
             didAttack |= attemptAreaAttack(target);

@@ -44,9 +44,14 @@ public class EntityAggro : MonoBehaviour
                     if (enemy.HP > 0)
                     {
                         // Only attack if the entity is a type that this unit attacks.
-                        if (_entity.Definition.AttacksUnits || enemy.Definition.IsBuilding)
+                        if ((_entity.Definition.AttacksGroundUnits && !enemy.Definition.IsAirUnit)
+                            || (_entity.Definition.AttacksAirUnits && enemy.Definition.IsAirUnit)
+                            || enemy.Definition.IsBuilding)
                         {
-                            float distance = Vector3.Distance(transform.position, enemy.transform.position);
+                            var targetPositionIgnoreY = enemy.transform.position;
+                            targetPositionIgnoreY.y = transform.position.y;
+
+                            float distance = Vector3.Distance(transform.position, targetPositionIgnoreY);
                             if (distance < closestDistance)
                             {
                                 closestEnemy = enemy;
@@ -64,7 +69,10 @@ public class EntityAggro : MonoBehaviour
     // Question, will this be sufficient for flying enemies?  Or do we want a box check?
     private Entity[] getAllEnemiesInRange(float radius)
     {
-        Collider[] allColliders = Physics.OverlapSphere(transform.position, radius);
+        Vector3 bottom, top;
+        getCapsulePointsFromPosition(transform.position, out bottom, out top);
+
+        Collider[] allColliders = Physics.OverlapCapsule(bottom, top, radius);
         List<Entity> enemies = new List<Entity>();
         foreach(var collider in allColliders)
         {
@@ -102,7 +110,11 @@ public class EntityAggro : MonoBehaviour
         if(targetTansform != null)
         {
             var ourDirection = transform.forward.normalized;
-            var targetDirection = (targetTansform.position - transform.position).normalized;
+
+            var targetPositionIgnoreY = targetTansform.position;
+            targetPositionIgnoreY.y = transform.position.y;
+
+            var targetDirection = (targetPositionIgnoreY - transform.position).normalized;
             var dot = Vector3.Dot(ourDirection, targetDirection);
 
             isInSights = Mathf.Abs(dot) > (1f - Consts.directionThreshholdForProjectileShot);
@@ -116,7 +128,10 @@ public class EntityAggro : MonoBehaviour
     public Entity[] GetEnemiesInRange(PlayerModel enemyPlayer, float radius)
     {
         // Collect all the colliders in a sphere from the current position in the given radius
-        Collider[] colliders = Physics.OverlapSphere (transform.position, radius, CombatUtils.EntityMask);
+        Vector3 bottom, top;
+        getCapsulePointsFromPosition(transform.position, out bottom, out top);
+
+        Collider[] colliders = Physics.OverlapCapsule (bottom, top, radius, CombatUtils.EntityMask);
 
         List<Entity> entities = new List<Entity>();
         for (int i = 0; i < colliders.Length; i++)
@@ -135,5 +150,12 @@ public class EntityAggro : MonoBehaviour
         }
 
         return entities.ToArray();
+    }
+
+    // Gets a capsule at the specified position that is ... large... on the y axis.
+    private static void getCapsulePointsFromPosition(Vector3 position, out Vector3 point1, out Vector3 point2)
+    {
+        point1 = position + new Vector3(0f, -100f, 0f);
+        point2 = position + new Vector3(0f, 100f, 0f);
     }
 }

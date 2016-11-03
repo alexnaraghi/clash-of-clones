@@ -146,4 +146,76 @@ public static class CombatUtils
         }
         return isEnemy;
     }
+    
+    public static void MoveToAggroTarget(Entity entity, Entity target, INavigable navigator)
+    {
+        if(target == null)
+        {
+            var closestEnemyBuilding = GetClosestEnemyBuilding(entity);
+            if(closestEnemyBuilding != null)
+            {
+                navigator.MoveTo(closestEnemyBuilding.transform.position);
+            }
+            else
+            {
+                navigator.CancelMove();
+            }
+        }
+        else
+        {
+            var targetPositionIgnoreY = target.transform.position;
+            targetPositionIgnoreY.y = entity.transform.position.y;
+
+            // At this point, if we have an aggro target, move to attack it.
+            var distance = Vector3.Distance(entity.transform.position, targetPositionIgnoreY);
+            if(distance < entity.Definition.AttackRange)
+            {
+                navigator.CancelMove();
+                // Attack!
+            }
+            else
+            {
+                navigator.MoveTo(target.transform.position);
+            }
+        }
+    }
+
+    public static Entity GetClosestEnemyBuilding(Entity entity)
+    {
+        var enemy = GameModel.Instance.GetOppositePlayer(entity.Owner);
+
+        // EARLY OUT! //
+        if(enemy == null) return null;
+
+        Entity closestEnemyBuilding = null;
+        float closestDist = float.MaxValue;
+
+        // Find the closest structure.
+        foreach(var building in enemy.Buildings)
+        {
+            var buildingEntity = building.Entity;
+            if(buildingEntity != null && buildingEntity.HP > 0)
+            {
+                var dist = Vector3.Distance(entity.transform.position, buildingEntity.transform.position);
+                if (dist < closestDist)
+                {
+                    closestEnemyBuilding = buildingEntity;
+                    closestDist = dist;
+                }
+            }
+        }
+
+        return closestEnemyBuilding;
+    }
+
+    public static void RotateTowards(Transform transform, Transform target)
+    {
+        float rotationSpeed = 2f;
+
+        Vector3 direction = (target.position - transform.position).normalized;
+
+        // flatten the vector3
+        Quaternion lookRotation = Quaternion.LookRotation(new Vector3(direction.x, 0, direction.z));
+        transform.rotation = Quaternion.Slerp(transform.rotation, lookRotation, Time.fixedDeltaTime * rotationSpeed);
+    }
 }

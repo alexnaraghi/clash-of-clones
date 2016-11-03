@@ -11,16 +11,17 @@
                 "Turret",
                 "Goblin",
                 "Knight",
-                "Necromancer"
+                "Necromancer",
+                "Balloon"
             ]
         },
         {
             "Name": "Tester",
             "CardList": [
-                "Necromancer",
-                "Necromancer",
-                "Necromancer",
-                "Necromancer",
+                "Balloon",
+                "Balloon",
+                "Balloon",
+                "Balloon",
                 "Necromancer",
                 "Necromancer",
                 "Necromancer",

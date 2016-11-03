@@ -1,44 +1,45 @@
 ﻿using UnityEngine;
 
 /// <summary>
-/// For moveable entities, controls their movement using aggro to determine where to move next.
+/// For flying entities, controls their movement using aggro to determine where to move next.
 /// </summary>
 [RequireComponent(typeof(Entity))]
 [RequireComponent(typeof(EntityAggro))]
-[RequireComponent(typeof(NavMeshAgent))]
-public class Navigator : MonoBehaviour, INavigable
+public class FlyingNavigator : MonoBehaviour, INavigable 
 {
     [SerializeField] private bool _isNavigating;
     [SerializeField] private Vector3 _destination;
 
-    private NavMeshAgent _agent;
     private Entity _entity;
     private EntityAggro _aggro;
 
     void Awake()
     {
         _entity = GetComponent<Entity>();
-        _agent = GetComponent<NavMeshAgent>();
         _aggro = GetComponent<EntityAggro>();
 
         // EARLY OUT! //
-        if(_entity == null || _agent == null || _aggro == null)
+        if(_entity == null || _aggro == null)
         {
             Debug.LogWarning("Navigator requires entity, agent, and aggro");
             return;
         }
-
-        _entity.InitializedEvent.AddListener(init);
-    }
-
-    private void init()
-    {
-        _agent.speed = _entity.Definition.MovementSpeed;
     }
 
     void Update()
     {
         CombatUtils.MoveToAggroTarget(_entity, _aggro.Target, this);
+
+        if(_isNavigating)
+        {
+            Vector3 dir = (_destination - transform.position).normalized;
+            Vector3 velocity = dir * _entity.Definition.MovementSpeed * Time.deltaTime;
+
+            // Ignore Y position for flying units.
+            velocity.y = 0f;
+            
+            transform.position += velocity;
+        }
     }
 
     void FixedUpdate()
@@ -59,9 +60,6 @@ public class Navigator : MonoBehaviour, INavigable
     {
         _isNavigating = true;
         _destination = destination;
-
-        _agent.SetDestination(_destination);
-        _agent.Resume();
     }
 
     /// <summary>
@@ -70,6 +68,5 @@ public class Navigator : MonoBehaviour, INavigable
     public void CancelMove()
     {
         _isNavigating = false;
-        _agent.Stop();
     }
 }

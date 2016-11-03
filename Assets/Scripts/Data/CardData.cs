@@ -37,8 +37,10 @@ public class CardData
     public int AggroRange;
     public int AttackRange;
 
+    public bool IsAirUnit;
     public bool IsBuilding;
-    public bool AttacksUnits;
+    public bool AttacksGroundUnits;
+    public bool AttacksAirUnits;
 
     public bool IsProjectile;
 

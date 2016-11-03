@@ -54,8 +54,11 @@ public class DirectShooting : MonoBehaviour
         var aggroTarget = _aggro.Target;
         if(aggroTarget != null && _cooldownSeconds <= 0f)
         {
+            var targetPositionIgnoreY = aggroTarget.transform.position;
+            targetPositionIgnoreY.y = transform.position.y;
+
             // Fire a shot if we are close enough and pointing approximately at the target.
-            var distance = Vector3.Distance(transform.position, aggroTarget.transform.position);
+            var distance = Vector3.Distance(transform.position, targetPositionIgnoreY);
 
             bool isInSights = _aggro.IsInSights(aggroTarget.transform, _isDirectional);
             if (distance < _entity.Definition.AttackRange && isInSights)

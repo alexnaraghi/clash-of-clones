@@ -35,4 +35,6 @@ public static class Consts
     /// The number of entities in the smallest circles defines how dense the units will be packed.
     /// </summary>
     public const int SpawnerNumEntitiesInCircle = 3;
+
+    public const float AirUnitHeight = 15f;
 }
