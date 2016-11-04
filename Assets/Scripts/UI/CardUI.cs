@@ -50,6 +50,7 @@ public class CardUI : MonoBehaviour
     private void onGameEnded()
     {
         setToggle(false);
+        SetInteractable(false);
     }
 
 
@@ -84,20 +85,23 @@ public class CardUI : MonoBehaviour
 
     public void SetInteractable(bool isInteractable)
     {
-        _toggle.interactable = isInteractable;
+        if(_toggle != null)
+        {
+            _toggle.interactable = isInteractable;
 
-        // We have lots of elements in a card, all of them have to be toggled.
-        if(isInteractable)
-        {
-            _image.color =      _imageOriginalColor;
-            _manaText.color =   _manaTextOriginalColor;
-            _manaIcon.color =   _manaIconOriginalColor;
-        }
-        else
-        {
-            _image.color =      _disabledColor;
-            _manaText.color =   _disabledColor;
-            _manaIcon.color =   _disabledColor;
+            // We have lots of elements in a card, all of them have to be toggled.
+            if(isInteractable)
+            {
+                _image.color =      _imageOriginalColor;
+                _manaText.color =   _manaTextOriginalColor;
+                _manaIcon.color =   _manaIconOriginalColor;
+            }
+            else
+            {
+                _image.color =      _disabledColor;
+                _manaText.color =   _disabledColor;
+                _manaIcon.color =   _disabledColor;
+            }
         }
     }
 

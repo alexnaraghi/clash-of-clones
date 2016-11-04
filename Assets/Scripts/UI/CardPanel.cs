@@ -11,36 +11,39 @@ public class CardPanel : MonoBehaviour
 
     void Update()
     {
-        var handState = GameModel.Instance.MyPlayer.CardState.Hand;
-        int mana = Mathf.FloorToInt(GameModel.Instance.MyPlayer.Mana);
-
-        // EARLY OUT! //
-        if(handState.Length != Hand.Length)
+        if(GameModel.Instance.IsPlaying)
         {
-            Debug.LogWarning("Hand length and card UI are not the same length!: " + handState.Length + "-" + Hand.Length);
-            return;
-        }
+            var handState = GameModel.Instance.MyPlayer.CardState.Hand;
+            int mana = Mathf.FloorToInt(GameModel.Instance.MyPlayer.Mana);
 
-
-        // Hmm maybe convert this to something more event driven?
-        for(int i = 0; i < Hand.Length; i++)
-        {
-            var visibleCard = Hand[i].Definition;
-            var handCard = handState[i];
-
-            if(visibleCard != handCard)
+            // EARLY OUT! //
+            if(handState.Length != Hand.Length)
             {
-                //Change card.
-                Hand[i].Init(handCard);
+                Debug.LogWarning("Hand length and card UI are not the same length!: " + handState.Length + "-" + Hand.Length);
+                return;
             }
 
-            Hand[i].SetInteractable(GameModel.Instance.IsPlaying && handCard.ManaCost <= mana);
-        }
 
-        var peekCard = GameModel.Instance.MyPlayer.CardState.Peek();
-        if(peekCard != null)
-        {
-            PeekCard.Init(peekCard);
+            // Hmm maybe convert this to something more event driven?
+            for(int i = 0; i < Hand.Length; i++)
+            {
+                var visibleCard = Hand[i].Definition;
+                var handCard = handState[i];
+
+                if(visibleCard != handCard)
+                {
+                    //Change card.
+                    Hand[i].Init(handCard);
+                }
+
+                Hand[i].SetInteractable(handCard.ManaCost <= mana);
+            }
+
+            var peekCard = GameModel.Instance.MyPlayer.CardState.Peek();
+            if(peekCard != null)
+            {
+                PeekCard.Init(peekCard);
+            }
         }
     }
 }

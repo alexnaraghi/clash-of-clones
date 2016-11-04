@@ -17,7 +17,9 @@ public class AIController : MonoBehaviour
     private const float IntervalBetweenMoves = 2f;
     private readonly Vector3 OffsetFromBuilding = new Vector3(-15f, 0f, 0f);
     /////////////////// 
-    
+
+    private float _intervalSeconds;
+
     void Awake()
     {
         _player = GetComponent<PlayerModel>();
@@ -26,8 +28,7 @@ public class AIController : MonoBehaviour
 
     void OnEnable()
     {
-        // every couple seconds, try to throw down a card.
-        this.InvokeRepeating(tryPlaceUnit, IntervalBetweenMoves, IntervalBetweenMoves);
+        _intervalSeconds = IntervalBetweenMoves;
     }
 
     void OnDisable()
@@ -38,11 +39,14 @@ public class AIController : MonoBehaviour
     void Update()
     {
         // EARLY OUT! //
-        if(_player == null) return;
+        if(_player == null || !GameModel.Instance.IsPlaying) return;
 
-        // If the AI is at max mana, throw down a card.
-        if(Mathf.Approximately(_player.Mana, Consts.MaxMana))
+        _intervalSeconds -= Time.deltaTime;
+
+        // If the timer runs out, or the AI is at max mana, throw down a card.
+        if(_intervalSeconds <= 0f || Mathf.Approximately(_player.Mana, Consts.MaxMana))
         {
+            _intervalSeconds = IntervalBetweenMoves;
             tryPlaceUnit();
         }
     }

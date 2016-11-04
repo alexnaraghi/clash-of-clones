@@ -97,8 +97,11 @@ public class PlayerModel : MonoBehaviour
 
     void Update()
     {
-        float unclampedMana = Mana + Consts.ManaRechargePerSecond * Time.deltaTime;
-        Mana = Mathf.Clamp(unclampedMana, 0f, Consts.MaxMana);
+        if(GameModel.Instance.IsPlaying)
+        {
+            float unclampedMana = Mana + Consts.ManaRechargePerSecond * Time.deltaTime;
+            Mana = Mathf.Clamp(unclampedMana, 0f, Consts.MaxMana);
+        }
     }
 
     public bool CanPlayCard(CardData card)

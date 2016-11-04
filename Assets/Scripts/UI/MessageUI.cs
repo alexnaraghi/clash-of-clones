@@ -25,11 +25,13 @@ public class MessageUI : MonoBehaviour
         _text.enabled = true;
         _text.text = message;
 
-        this.Invoke(hideMessage, _displaySeconds);
+        this.Invoke(HideMessage, _displaySeconds);
     }
 
-    void hideMessage()
+    public void HideMessage()
     {
+        this.CancelInvoke();
+        
         // EARLY OUT! //
         if(_text == null) return;
 

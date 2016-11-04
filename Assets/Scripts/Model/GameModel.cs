@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
@@ -14,8 +15,6 @@ public class GameModel : MonoBehaviour
     // Singletons suck, consider something more robust.  Can we have multiple game-states at a time?
     // Might be possible if we implement hosted multiplayer.
     public static GameModel Instance;
-
-    [SerializeField] private MessageUI _messagePrinter;
  
     [Range(0, 1)] 
     public int LocalPlayerNum;
@@ -32,10 +31,10 @@ public class GameModel : MonoBehaviour
 
     /// <summary>
     /// If the game currently in progress?
-    /// TODO: Add state machine for lifecycle management.
     /// </summary>
     public bool IsPlaying;
 
+    public UnityEvent GameStartedEvent;
     public UnityEvent GameOverEvent;
 
     /// <summary>
@@ -79,25 +78,9 @@ public class GameModel : MonoBehaviour
             return;
         }
 
-        var messageObj = GameObject.Find("CenterMessage");
-        if(messageObj != null)
-        {
-            _messagePrinter = messageObj.GetComponent<MessageUI>();
-            if(_messagePrinter != null)
-            {
-                _messagePrinter.PrintMessage("Clash of Clones");
-            }
-        }
-
         Players = new PlayerModel[2];
         Players[0] = LeftPlayer;
         Players[1] = RightPlayer;
-    }
-
-    void Start()
-    {
-        // Just use default decks for now.
-        InitGame(TestFactory.GetDefaultDeck(), TestFactory.GetDefaultDeck());
     }
 
     public void InitGame(List<CardData> leftDeck, List<CardData> rightDeck)
@@ -124,81 +107,5 @@ public class GameModel : MonoBehaviour
             opposite = MyPlayer;
         }
         return opposite;
-    }
-
-    void Update()
-    {
-        if(IsPlaying)
-        {
-            SecondsLeft -= Time.deltaTime;
-
-            if(LeftPlayer.HQ.HP <= 0 || RightPlayer.HQ.HP <= 0 || SecondsLeft <= 0f)
-            {
-                IsPlaying = false;
-                GameOverEvent.Invoke();
-                PlayerModel winner = determineWinner();
-
-                // Print message.
-                if(_messagePrinter != null)
-                {
-                    if(winner != null)
-                    {
-                        _messagePrinter.PrintMessage(winner.Name + " won!");
-                    }
-                    else
-                    {
-                        _messagePrinter.PrintMessage("Tie game!");
-                    }
-
-                    this.Invoke(restart, 3f);
-                }
-            }
-        }
-    }
-
-    /// <summary>
-    /// Return the winner.  If tie, returns null.
-    /// </summary>
-    private PlayerModel determineWinner()
-    {
-        int[] scores = new int[2];
-
-        for(int i = 0; i < 2; i++)
-        {
-            var player = Players[i];
-            if(player.HQ.HP > 0)
-            {
-                scores[i]++;
-
-                if(player.TopOutpost.HP > 0)
-                {
-                    scores[i]++;
-                }
-
-                if(player.BottomOutpost.HP> 0)
-                {
-                    scores[i]++;
-                }
-            }
-        }
-
-        PlayerModel winner = null;
-
-        if(scores[0] > scores[1])
-        {
-            winner = Players[0];
-        }
-        else if(scores[0] < scores[1])
-        {
-            winner = Players[1];
-        }
-
-        return winner;
-    }
-
-    // TODO: Play again? button
-    private void restart()
-    {
-        SceneManager.LoadScene("ClashScene", LoadSceneMode.Single);
     }
 }
