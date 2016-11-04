@@ -214,7 +214,7 @@
             "AggroRange": 20,
             "AttackRange": 20,
             "IsAirUnit": false,
-            "AttacksAirUnits": false,
+            "AttacksAirUnits": true,
             "IsBuilding": true,
             "AttacksGroundUnits": true,
             "IsProjectile": false,
