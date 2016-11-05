@@ -9,6 +9,9 @@ public class EntitySpawner : MonoBehaviour
     [SerializeField] private float _spawnRadius;
     [SerializeField] private string _entityToSpawn;
 
+    // do we destroy this entity after the first spawn activates?
+    [SerializeField] private bool _destroyAfterFirstSpawn;
+
     // Should a spawned object spawn instantly?  If false it uses its default spawn timer.
     [SerializeField] private bool _shouldInstaSpawnChildren;
 
@@ -86,7 +89,10 @@ public class EntitySpawner : MonoBehaviour
                 Debug.LogWarning("Can't find card: " + card.Name);
             }
 
-            // TODO: Destroy this.
+            if(_destroyAfterFirstSpawn)
+            {
+                Destroy(gameObject);
+            }
         }
     }
 
