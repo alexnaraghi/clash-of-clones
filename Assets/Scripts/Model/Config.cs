@@ -69,6 +69,13 @@ public class Config : MonoBehaviour
         {
             Debug.Log("Card not found: " + name);
         }
-        return card.Clone();
+
+        // If the card exists, return a modifiable clone of it.
+        if(card != null)
+        {
+            card = card.Clone();
+        }
+        
+        return card;
     }
 }

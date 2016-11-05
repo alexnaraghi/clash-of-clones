@@ -42,4 +42,14 @@ public static class Utils
         pos.z = center.z + radius * Mathf.Cos(angle * Mathf.Deg2Rad);
         return pos;
     }
+
+    public static T GetInterface<T>(this MonoBehaviour src) where T : class
+    {
+        return src.GetComponent(typeof(T)) as T;
+    }
+
+    public static T GetInterface<T>(this GameObject src) where T : class
+    {
+        return src.GetComponent(typeof(T)) as T;
+    }
 }

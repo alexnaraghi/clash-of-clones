@@ -3,7 +3,7 @@
 /// <summary>
 /// Shoots a projectile from the owner's HQ to the position of this spell.
 /// </summary>
-public class CastProjectileSpell : MonoBehaviour 
+public class CastProjectileSpell : MonoBehaviour
 {
     /// <summary>
     /// The speed at which the projectile should be fired (in terms of the horizontal distance it will travel).

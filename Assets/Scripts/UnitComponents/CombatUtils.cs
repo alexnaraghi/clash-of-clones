@@ -62,10 +62,10 @@ public static class CombatUtils
 
         projectileRigidbody.AddForce(velocity, ForceMode.VelocityChange);
 
-        var projectile = projectileRigidbody.GetComponent<ShellExplosion>();
+        var projectile = projectileRigidbody.gameObject.GetInterface<IProjectile>();
         if(projectile != null)
         {
-            projectile.Init(creator.Owner, creator.Definition.AreaAttackDamage);
+            projectile.Init(creator);
         }
         else
         {

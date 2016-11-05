@@ -5,7 +5,7 @@ using UnityEngine.Assertions;
 /// Represents a projectile explosion.  Damages enemy entities with an area effect.
 /// </summary>
 [RequireComponent(typeof(Rigidbody))]
-public class ShellExplosion : MonoBehaviour
+public class ShellExplosion : MonoBehaviour, IProjectile
 {
     /// <summary>
     /// The time in seconds before the shell is removed.
@@ -34,10 +34,13 @@ public class ShellExplosion : MonoBehaviour
         Destroy (gameObject, _maxLifeTime);
     }
 
-    public void Init(PlayerModel owner, int damage)
+    public void Init(Entity creator)
     {
-        _owner = owner;
-        _areaDamage = damage;
+        // EARLY OUT ! //
+        if(creator == null) return;
+
+        _owner = creator.Owner;
+        _areaDamage = creator.Definition.AreaAttackDamage;
     }
 
     void Update()

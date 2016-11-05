@@ -3,7 +3,8 @@
         {
             "Name": "Deck1",
             "CardList": [
-                "FireballSpell",
+                "SkellyFlyersSpell",
+                "Fireball",
                 "SkellyArmy",
                 "SkellyHouse",
                 "Tank",
@@ -18,14 +19,14 @@
         {
             "Name": "Tester",
             "CardList": [
-                "Balloon",
-                "Balloon",
-                "Balloon",
-                "Balloon",
-                "Necromancer",
-                "Necromancer",
-                "Necromancer",
-                "Necromancer"
+                "SkellyFlyersSpell",
+                "SkellyFlyersSpell",
+                "SkellyFlyersSpell",
+                "SkellyFlyersSpell",
+                "SkellyFlyersSpell",
+                "SkellyFlyersSpell",
+                "SkellyFlyersSpell",
+                "SkellyFlyersSpell"
             ]
         }
     ]

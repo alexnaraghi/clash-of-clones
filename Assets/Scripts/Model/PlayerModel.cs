@@ -131,12 +131,14 @@ public class PlayerModel : MonoBehaviour
         Mana -= card.ManaCost;
 
         var unit = Entity.SpawnFromDefinition(this, card, position, isFromPlayersHand: true);
-
-        // Rotate the unit to face the enemy bases.
-        RotateForPlayer(unit.gameObject);
-        
-        //TODO: Remove units when out of HP.
-        Units.Add(unit);
+        if(unit != null)
+        {
+            // Rotate the unit to face the enemy bases.
+            RotateForPlayer(unit.gameObject);
+            
+            //TODO: Remove units when out of HP.
+            Units.Add(unit);
+        }
     }
 
     /// <summary>

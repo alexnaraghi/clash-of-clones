@@ -177,7 +177,7 @@ public class Entity : MonoBehaviour
         // EARLY OUT! //
         if(prefab == null)
         {
-            Debug.LogWarning("Prefab not found: " + definition);
+            Debug.LogWarning("Prefab not found: " + definition.Name);
             return null;
         }
 
@@ -192,7 +192,7 @@ public class Entity : MonoBehaviour
         // EARLY OUT! //
         if(entity == null)
         {
-            Debug.LogWarning("Unit component not found on prefab: " + definition);
+            Debug.LogWarning("Unit component not found on prefab: " + definition.Name);
             return null;
         }
 
