@@ -30,9 +30,27 @@ public class Entity : MonoBehaviour
     /// </summary>
     public UnityEvent InitializedEvent;
 
-    [SerializeField]private GameObject _deathEffectPrefab;
+    /// <summary>
+    /// The entity has been spawned.
+    /// </summary>
+    public UnityEvent SpawnedEvent;
+
+    [SerializeField] private GameObject _deathEffectPrefab;
 
     private bool _isDead;
+
+    /// <summary>
+    /// The seconds we have been spawning for.
+    /// </summary>
+    private float _spawnSeconds;
+
+    private readonly Vector3 _spawnClockPositionRelative = new Vector3(0f, 12f, 0f);
+
+    public bool IsSpawned
+    {
+        get;
+        private set;
+    }
 
     // TODO: Hide the definition!
     public CardData Definition 
@@ -58,7 +76,7 @@ public class Entity : MonoBehaviour
         get { return Definition.StartHP; } 
     }
 
-    public void Init(PlayerModel owner, CardData definition)
+    public void Init(PlayerModel owner, CardData definition, bool isFromPlayersHand)
     {
         // EARLY OUT! //
         if(owner == null || definition == null)
@@ -66,12 +84,43 @@ public class Entity : MonoBehaviour
             Debug.LogWarning("Need an owner and card to initialize an entity.");
             return;
         }
-        
+
+        _spawnSeconds = 0f;
         _owner = owner;
         _definition = definition;
         _hp = definition.StartHP;
 
+        if(isFromPlayersHand && definition.SpawnChargeSeconds > 0)
+        {
+            var clockPrefab = Resources.Load<GameObject>(Consts.SpawnClockPrefabPath);
+            if(clockPrefab != null)
+            {
+                var go = Instantiate(clockPrefab);
+                if(go != null)
+                {
+                    var clock = go.GetComponent<SpawnClock>();
+                    if(clock != null)
+                    {
+                        clock.Init(transform.position + _spawnClockPositionRelative, _definition.SpawnChargeSeconds);
+                    }
+                }
+            }
+        }
+
         InitializedEvent.Invoke();
+    }
+
+    void Update()
+    {
+        if(!IsSpawned)
+        {
+            _spawnSeconds += Time.deltaTime;
+            if(!_definition.WillWaitForSpawnCharge || _spawnSeconds > Definition.SpawnChargeSeconds)
+            {
+                IsSpawned = true;
+                SpawnedEvent.Invoke();
+            }
+        }
     }
 
     public void TakeDamage(int damage)
@@ -118,8 +167,10 @@ public class Entity : MonoBehaviour
     /// to let <see cref="GameModel"/> be authoritative.</param>
     /// <param name="definition">The card's definition.</param>
     /// <param name="position">The spawn position.</param>
+    /// <param name="isFromPlayersHand">Was the card played from the player's hand?  If not, it was spawned
+    /// by some other entity/effect in the game.</param>
     /// <returns>The created entity.</returns>
-    public static Entity SpawnFromDefinition(PlayerModel owner, CardData definition, Vector3 position)
+    public static Entity SpawnFromDefinition(PlayerModel owner, CardData definition, Vector3 position, bool isFromPlayersHand)
     {
          var prefab = Resources.Load<GameObject>(Consts.UnitsPath + definition.PrefabName);
                              
@@ -145,7 +196,7 @@ public class Entity : MonoBehaviour
             return null;
         }
 
-        entity.Init(owner, definition);
+        entity.Init(owner, definition, isFromPlayersHand);
         return entity;
     }
 }

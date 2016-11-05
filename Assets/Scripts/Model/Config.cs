@@ -69,6 +69,6 @@ public class Config : MonoBehaviour
         {
             Debug.Log("Card not found: " + name);
         }
-        return card;
+        return card.Clone();
     }
 }

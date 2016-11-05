@@ -21,6 +21,13 @@ public class EntityAnimator : MonoBehaviour
             Debug.LogWarning("Requires entity, animator.");
             return;
         }
+
+        _entity.SpawnedEvent.AddListener(onSpawned);
+    }
+
+    private void onSpawned()
+    {
+        this.enabled = true;
     }
 
     void Update()

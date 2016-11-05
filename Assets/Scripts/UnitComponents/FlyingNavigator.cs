@@ -24,6 +24,13 @@ public class FlyingNavigator : MonoBehaviour, INavigable
             Debug.LogWarning("Navigator requires entity, agent, and aggro");
             return;
         }
+
+        _entity.SpawnedEvent.AddListener(onSpawned);
+    }
+
+    private void onSpawned()
+    {
+        this.enabled = true;
     }
 
     void Update()

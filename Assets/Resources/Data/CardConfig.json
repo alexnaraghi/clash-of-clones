@@ -20,7 +20,9 @@
             "IsBuilding": false,
             "AttacksGroundUnits": true,
             "IsProjectile": false,
-            "SpawnSeconds": 0
+            "ChildEntitySpawnSeconds": 0,
+            "SpawnChargeSeconds": 1,
+            "WillWaitForSpawnCharge": true
         },
         {
             "Name": "CheatTank",
@@ -42,7 +44,9 @@
             "IsBuilding": false,
             "AttacksGroundUnits": true,
             "IsProjectile": false,
-            "SpawnSeconds": 0
+            "ChildEntitySpawnSeconds": 0,
+            "SpawnChargeSeconds": 1,
+            "WillWaitForSpawnCharge": true
         },
         {
             "Name": "FireballSpell",
@@ -64,7 +68,9 @@
             "IsBuilding": false,
             "AttacksGroundUnits": false,
             "IsProjectile": true,
-            "SpawnSeconds": 0
+            "ChildEntitySpawnSeconds": 0,
+            "SpawnChargeSeconds": 0,
+            "WillWaitForSpawnCharge": false
         },
         {
             "Name": "Tank2",
@@ -86,7 +92,9 @@
             "IsBuilding": false,
             "AttacksGroundUnits": true,
             "IsProjectile": false,
-            "SpawnSeconds": 0
+            "ChildEntitySpawnSeconds": 0,
+            "SpawnChargeSeconds": 1,
+            "WillWaitForSpawnCharge": true
         },
         {
             "Name": "HQ",
@@ -108,7 +116,9 @@
             "IsBuilding": true,
             "AttacksGroundUnits": true,
             "IsProjectile": false,
-            "SpawnSeconds": 0
+            "ChildEntitySpawnSeconds": 0,
+            "SpawnChargeSeconds": 0,
+            "WillWaitForSpawnCharge": false
         },
         {
             "Name": "Outpost",
@@ -130,7 +140,9 @@
             "IsBuilding": true,
             "AttacksGroundUnits": true,
             "IsProjectile": false,
-            "SpawnSeconds": 0
+            "ChildEntitySpawnSeconds": 0,
+            "SpawnChargeSeconds": 0,
+            "WillWaitForSpawnCharge": false
         },
         {
             "Name": "Skelly",
@@ -152,7 +164,9 @@
             "IsBuilding": false,
             "AttacksGroundUnits": true,
             "IsProjectile": false,
-            "SpawnSeconds": 0
+            "ChildEntitySpawnSeconds": 0,
+            "SpawnChargeSeconds": 1,
+            "WillWaitForSpawnCharge": true
         },
         {
             "Name": "SkellyArmy",
@@ -174,7 +188,9 @@
             "IsBuilding": false,
             "AttacksGroundUnits": false,
             "IsProjectile": false,
-            "SpawnSeconds": 0
+            "ChildEntitySpawnSeconds": 0,
+            "SpawnChargeSeconds": 1,
+            "WillWaitForSpawnCharge": false
         },
         {
             "Name": "SkellyHouse",
@@ -196,7 +212,9 @@
             "IsBuilding": false,
             "AttacksGroundUnits": false,
             "IsProjectile": false,
-            "SpawnSeconds": 10
+            "ChildEntitySpawnSeconds": 10,
+            "SpawnChargeSeconds": 1,
+            "WillWaitForSpawnCharge": true
         },
         {
             "Name": "Turret",
@@ -218,7 +236,9 @@
             "IsBuilding": true,
             "AttacksGroundUnits": true,
             "IsProjectile": false,
-            "SpawnSeconds": 0
+            "ChildEntitySpawnSeconds": 0,
+            "SpawnChargeSeconds": 1,
+            "WillWaitForSpawnCharge": true
         },
         {
             "Name": "Goblin",
@@ -240,7 +260,9 @@
             "IsBuilding": false,
             "AttacksGroundUnits": true,
             "IsProjectile": false,
-            "SpawnSeconds": 0
+            "ChildEntitySpawnSeconds": 0,
+            "SpawnChargeSeconds": 1,
+            "WillWaitForSpawnCharge": true
         },
         
         {
@@ -263,7 +285,9 @@
             "IsBuilding": false,
             "AttacksGroundUnits": false,
             "IsProjectile": false,
-            "SpawnSeconds": 0
+            "ChildEntitySpawnSeconds": 0,
+            "SpawnChargeSeconds": 1,
+            "WillWaitForSpawnCharge": true
         },
         {
             "Name": "Necromancer",
@@ -285,7 +309,9 @@
             "IsBuilding": false,
             "AttacksGroundUnits": true,
             "IsProjectile": false,
-            "SpawnSeconds": 4
+            "ChildEntitySpawnSeconds": 4,
+            "SpawnChargeSeconds": 1,
+            "WillWaitForSpawnCharge": true
         },
         {
             "Name": "Balloon",
@@ -307,7 +333,10 @@
             "IsBuilding": false,
             "AttacksGroundUnits": true,
             "IsProjectile": false,
-            "SpawnSeconds": 4
+            "ChildEntitySpawnSeconds": 4,
+            "SpawnChargeSeconds": 1,
+            "WillWaitForSpawnCharge": true
+            
         }
     ]
 }

@@ -61,6 +61,13 @@ public class TankShooting : MonoBehaviour
             Debug.LogWarning("TankShooting requires entity, aggro, and rigidbody.");
             return;
         }
+
+        _entity.SpawnedEvent.AddListener(onSpawned);
+    }
+
+    private void onSpawned()
+    {
+        this.enabled = true;
     }
 
     private void Update ()

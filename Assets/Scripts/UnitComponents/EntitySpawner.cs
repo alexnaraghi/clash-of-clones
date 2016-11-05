@@ -7,6 +7,10 @@ public class EntitySpawner : MonoBehaviour
 {
     [SerializeField] private int _numEntities;
     [SerializeField] private float _spawnRadius;
+    [SerializeField] private string _entityToSpawn;
+
+    // Should a spawned object spawn instantly?  If false it uses its default spawn timer.
+    [SerializeField] private bool _shouldInstaSpawnChildren;
 
     private float _cooldownSeconds;
     private Entity _entity;
@@ -23,17 +27,23 @@ public class EntitySpawner : MonoBehaviour
         }
 
         _entity.InitializedEvent.AddListener(onInit);
+        _entity.SpawnedEvent.AddListener(onSpawned);
     }
 
     private void onInit()
     {
-        _cooldownSeconds = _entity.Definition.SpawnSeconds;
+        _cooldownSeconds = _entity.Definition.ChildEntitySpawnSeconds;
         
         // If the cooldown is 0, immediately spawn.
-        if(Mathf.Approximately(_entity.Definition.SpawnSeconds, 0f))
+        if(Mathf.Approximately(_entity.Definition.ChildEntitySpawnSeconds, 0f))
         {
             spawnUnits();
         }
+    }
+
+    private void onSpawned()
+    {
+        this.enabled = true;
     }
 
     void Update()
@@ -41,7 +51,7 @@ public class EntitySpawner : MonoBehaviour
         // EARLY OUT! //
         // If this spawner doesn't have a cooldown, it's a one time spawner so we shouldnt continue
         // to spawn.
-        if(_entity == null || Mathf.Approximately(_entity.Definition.SpawnSeconds, 0f)) return;
+        if(_entity == null || Mathf.Approximately(_entity.Definition.ChildEntitySpawnSeconds, 0f)) return;
 
         // Our code which does simple shooting AI on cooldown if we have a target.
         _cooldownSeconds -= Time.deltaTime;
@@ -49,7 +59,7 @@ public class EntitySpawner : MonoBehaviour
         if(_cooldownSeconds <= 0f)
         {
             spawnUnits();
-            _cooldownSeconds = _entity.Definition.SpawnSeconds;
+            _cooldownSeconds = _entity.Definition.ChildEntitySpawnSeconds;
         }
     }
 
@@ -60,8 +70,21 @@ public class EntitySpawner : MonoBehaviour
             float angle = (((float)i) / _numEntities) * 360f;
             Vector3 pos = Utils.GetPointOnCircle(transform.position, _spawnRadius, angle);
 
-            var unit = Entity.SpawnFromDefinition(_entity.Owner, Config.Instance.GetCardByName("Skelly"), pos);
-            _entity.Owner.RotateForPlayer(unit.gameObject);
+            var card = Config.Instance.GetCardByName(_entityToSpawn);
+            if(_shouldInstaSpawnChildren)
+            {
+                card.SpawnChargeSeconds = 0;
+            }
+
+            if(card != null)
+            {
+                var unit = Entity.SpawnFromDefinition(_entity.Owner, card, pos, isFromPlayersHand: false);
+                _entity.Owner.RotateForPlayer(unit.gameObject);
+            }
+            else
+            {
+                Debug.LogWarning("Can't find card: " + card.Name);
+            }
 
             // TODO: Destroy this.
         }

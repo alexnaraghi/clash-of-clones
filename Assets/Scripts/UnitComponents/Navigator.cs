@@ -29,6 +29,12 @@ public class Navigator : MonoBehaviour, INavigable
         }
 
         _entity.InitializedEvent.AddListener(init);
+        _entity.SpawnedEvent.AddListener(onSpawned);
+    }
+
+    private void onSpawned()
+    {
+        this.enabled = true;
     }
 
     private void init()

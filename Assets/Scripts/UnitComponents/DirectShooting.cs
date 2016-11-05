@@ -42,6 +42,13 @@ public class DirectShooting : MonoBehaviour
             Debug.LogWarning("Requires entity, aggro, bulletPrefab, fireTransform.");
             return;
         }
+
+        _entity.SpawnedEvent.AddListener(onSpawned);
+    }
+
+    private void onSpawned()
+    {
+        this.enabled = true;
     }
 
     // This looks a whole lot like tank shooting.

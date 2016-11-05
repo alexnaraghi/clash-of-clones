@@ -20,7 +20,18 @@ public class EntityAggro : MonoBehaviour
     void Awake()
     {
         _entity = GetComponent<Entity>();
-        Assert.IsNotNull(_entity);
+        
+        if(_entity == null)
+        {
+            Debug.LogWarning("Requires an entity.");
+        }
+
+        _entity.SpawnedEvent.AddListener(onSpawned);
+    }
+
+    private void onSpawned()
+    {
+        this.enabled = true;
     }
 
     void Update()

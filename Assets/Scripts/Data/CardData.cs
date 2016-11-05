@@ -47,10 +47,25 @@ public class CardData
     /// <summary>
     /// If a spawner is attached, will use this to determine how often to spawn a new wave.
     /// </summary>
-    public int SpawnSeconds;
-    
+    public int ChildEntitySpawnSeconds;
+
+    /// <summary>
+    /// The number of seconds it takes for a unit to activate once placed.  Units can be hurt while charging.
+    /// </summary>
+    public int SpawnChargeSeconds;
+
+    /// <summary>
+    /// Will the entity wait for the spawn timer before activating?
+    /// </summary>
+    public bool WillWaitForSpawnCharge;
+
     /// <summary>
     /// Default constructor.
     /// </summary>
     public CardData() { }
+
+    public CardData Clone()
+    {
+        return (CardData)MemberwiseClone();
+    }
 }

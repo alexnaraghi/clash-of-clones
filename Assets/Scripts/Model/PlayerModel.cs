@@ -130,7 +130,7 @@ public class PlayerModel : MonoBehaviour
         CardState.PlayCard(card);
         Mana -= card.ManaCost;
 
-        var unit = Entity.SpawnFromDefinition(this, card, position);
+        var unit = Entity.SpawnFromDefinition(this, card, position, isFromPlayersHand: true);
 
         // Rotate the unit to face the enemy bases.
         RotateForPlayer(unit.gameObject);
@@ -180,8 +180,8 @@ public class PlayerModel : MonoBehaviour
         // EARLY OUT! //
         if(TopOutpost == null || HQ == null || BottomOutpost == null) return;
 
-        TopOutpost.Init(    this, Config.Instance.GetCardByName("Outpost"));
-        BottomOutpost.Init( this, Config.Instance.GetCardByName("Outpost"));
-        HQ.Init(            this, Config.Instance.GetCardByName("HQ"));
+        TopOutpost.Init(    this, Config.Instance.GetCardByName("Outpost"), false);
+        BottomOutpost.Init( this, Config.Instance.GetCardByName("Outpost"), false);
+        HQ.Init(            this, Config.Instance.GetCardByName("HQ"), false);
     }
 }

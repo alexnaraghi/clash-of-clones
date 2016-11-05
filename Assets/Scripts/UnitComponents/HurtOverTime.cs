@@ -28,6 +28,12 @@ public class HurtOverTime : MonoBehaviour
         }
 
         _entity.InitializedEvent.AddListener(onInit);
+        _entity.SpawnedEvent.AddListener(onSpawned);
+    }
+
+    private void onSpawned()
+    {
+        this.enabled = true;
     }
 
     private void onInit()

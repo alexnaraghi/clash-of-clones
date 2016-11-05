@@ -36,6 +36,13 @@ public class MeleeAttack : MonoBehaviour
             Debug.LogWarning("Requires entity, aggro, rigidbody.");
             return;
         }
+
+        _entity.SpawnedEvent.AddListener(onSpawned);
+    }
+
+    private void onSpawned()
+    {
+        this.enabled = true;
     }
 
     private void Update()
@@ -51,7 +58,7 @@ public class MeleeAttack : MonoBehaviour
     {
         // EARLY OUT! //
         // If on cooldown don't attack.
-        if(_cooldownSeconds > 0f) return;
+        if(!this.enabled || _cooldownSeconds > 0f) return;
             
         // EARLY OUT! //
         // If the trigger isn't an entity, ignore it.
