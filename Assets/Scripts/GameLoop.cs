@@ -12,6 +12,7 @@ public class GameLoop : MonoBehaviour
     [SerializeField] private GameObject _gameOverMenu;
     [SerializeField] private Camera _camera;
     [SerializeField] private Animation _cardPanelAnimation;
+    [SerializeField] private Animation _timerAnimation;
 
     // The scene name to load when the game ends.
     [SerializeField] private string _sceneToLoad = "ClashScene";
@@ -73,6 +74,7 @@ public class GameLoop : MonoBehaviour
         }
 
         _cardPanelAnimation.Play();
+        _timerAnimation.Play();
         yield return _cardPanelAnimation.isPlaying;
 
         _messagePrinter.HideMessage();
