@@ -44,8 +44,6 @@ public class Entity : MonoBehaviour
     /// </summary>
     private float _spawnSeconds;
 
-    private readonly Vector3 _spawnClockPositionRelative = new Vector3(0f, 12f, 0f);
-
     public bool IsSpawned
     {
         get;
@@ -101,7 +99,7 @@ public class Entity : MonoBehaviour
                     var clock = go.GetComponent<SpawnClock>();
                     if(clock != null)
                     {
-                        clock.Init(transform.position + _spawnClockPositionRelative, _definition.SpawnChargeSeconds);
+                        clock.Init(transform.position + Consts.SpawnClockOffset, _definition.SpawnChargeSeconds);
                     }
                 }
             }

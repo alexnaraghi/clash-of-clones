@@ -1,4 +1,6 @@
-﻿/// <summary>
+﻿using UnityEngine;
+
+/// <summary>
 /// Constants.
 /// </summary>
 public static class Consts
@@ -25,6 +27,8 @@ public static class Consts
     public const int OutpostStartHealth = 1000;
     public const int HQStartHealth = 1700;
     public const float MatchStartSeconds = 60f * 3f;
+
+    public static readonly Vector3 SpawnClockOffset = new Vector3(0f, 12f, 0f);
 
     /// <summary>
     /// Threshhold on a dot product of our direction and the target direction, 
