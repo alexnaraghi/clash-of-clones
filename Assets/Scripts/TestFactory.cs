@@ -7,6 +7,6 @@ public static class TestFactory
 {
     public static List<CardData> GetDefaultDeck()
     {
-        return Config.Instance.GetDeckByName("Deck1");
+        return Config.Instance.GetDeckByName("Tester");
     }
 }

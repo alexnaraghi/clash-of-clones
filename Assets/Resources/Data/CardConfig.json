@@ -384,7 +384,30 @@
             "ChildEntitySpawnSeconds": 4,
             "SpawnChargeSeconds": 1,
             "WillWaitForSpawnCharge": true
-            
+        },
+        {
+            "Name": "FireSpell",
+            "PrefabName": "FireSpell",
+            "GhostPrefabName": "",
+            "CardImageName": "",
+            "ManaCost": 0,
+            "PlacementWidth": 0,
+            "PlacementHeight": 0,
+            "StartHP": 0,
+            "AttackSpeed": 1,
+            "MovementSpeed": 0,
+            "DirectAttackDamage": 0,
+            "AreaAttackDamage": 100,
+            "AggroRange": 0,
+            "AttackRange": 0,
+            "IsAirUnit": false,
+            "AttacksAirUnits": false,
+            "IsBuilding": false,
+            "AttacksGroundUnits": false,
+            "IsProjectile": false,
+            "ChildEntitySpawnSeconds": 0,
+            "SpawnChargeSeconds": 0,
+            "WillWaitForSpawnCharge": false
         }
     ]
 }

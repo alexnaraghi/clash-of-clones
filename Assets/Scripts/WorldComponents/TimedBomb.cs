@@ -4,7 +4,7 @@ using UnityEngine;
 /// <summary>
 /// A bomb that explodes after a certain amount of time.
 /// </summary>
-public class TimedBomb : MonoBehaviour, IProjectile
+public class TimedBomb : MonoBehaviour
 {
     /// <summary>
     /// The time in seconds before the bomb goes off.

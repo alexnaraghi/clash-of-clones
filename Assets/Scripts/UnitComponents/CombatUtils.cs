@@ -146,7 +146,7 @@ public static class CombatUtils
         }
         return isEnemy;
     }
-    
+
     public static void MoveToAggroTarget(Entity entity, Entity target, INavigable navigator)
     {
         if(target == null)

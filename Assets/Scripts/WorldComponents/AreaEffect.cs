@@ -1,0 +1,112 @@
+﻿using System.Collections;
+using UnityEngine;
+
+/// <summary>
+/// A spell that has an area of effect and disappears at the end of its lifetime.
+/// </summary>
+[RequireComponent(typeof(Entity))]
+public class AreaEffect : MonoBehaviour
+{
+    /// <summary>
+    /// The time in seconds before the area of effect disappears.
+    /// </summary>
+    [SerializeField] private float _lifetimeSeconds = 12f;
+
+    /// <summary>
+    /// The maximum distance away from the explosion tanks can be and are still affected.
+    /// </summary>
+    [SerializeField] private float _effectRadius = 5f;
+
+    // Do we need this?
+    [SerializeField] private bool _hasSpawnClock;
+
+    /// <summary>
+    /// If true, this effect works on friendlies.  If false, it affects enemies.
+    /// </summary>
+    [SerializeField] private bool _isAffectingFriendlies;
+
+    private Entity _entity;
+
+    void Awake()
+    {
+        _entity = GetComponent<Entity>();
+
+        // EARLY OUT! //
+        if(_entity == null )
+        {
+            Debug.LogWarning("Requires entity.");
+            return;
+        }
+
+        _entity.SpawnedEvent.AddListener(onSpawned);
+    }
+
+    private void onSpawned()
+    {
+        this.enabled = true;
+
+        Destroy(gameObject, _lifetimeSeconds);
+        StartCoroutine(loop());
+    }
+
+    void Start()
+    {
+        if(_hasSpawnClock)
+        {
+            var clockPrefab = Resources.Load<GameObject>(Consts.SpawnClockPrefabPath);
+            if(clockPrefab != null)
+            {
+                var go = Instantiate(clockPrefab);
+                if(go != null)
+                {
+                    var clock = go.GetComponent<SpawnClock>();
+                    if(clock != null)
+                    {
+                        clock.Init(transform.position + Consts.SpawnClockOffset, _lifetimeSeconds);
+                    }
+                }
+            }
+        }
+    }
+
+    private IEnumerator loop()
+    {
+        while(true)
+        {
+            yield return new WaitForSeconds(_entity.Definition.AttackSpeed);
+            triggerEffect();
+        }
+    }
+
+    private void triggerEffect()
+    {
+        // Collect all the colliders in a sphere from the shell's current position to a radius of the explosion radius.
+        Collider[] colliders = Physics.OverlapSphere (transform.position, _effectRadius, CombatUtils.EntityMask);
+
+        for (int i = 0; i < colliders.Length; i++)
+        {
+            Entity targetEntity = colliders[i].GetComponent<Entity> ();
+            
+            // If it's an enemy unit, do damage to it.
+            if(isAffectedEntity(_entity.Owner, targetEntity))
+            {
+                targetEntity.TakeDamage(_entity.Definition.AreaAttackDamage);
+            }
+        }
+    }
+
+    /// <summary>
+    /// Should this unit be affected by this spell?
+    /// </summary>
+    private bool isAffectedEntity(PlayerModel friendly, Entity target)
+    {
+        if(_isAffectingFriendlies)
+        {
+            return !CombatUtils.IsEnemy(friendly, target);
+        }
+        else
+        {
+            return CombatUtils.IsEnemy(friendly, target);
+        }
+    }
+}

@@ -19,14 +19,14 @@
         {
             "Name": "Tester",
             "CardList": [
-                "SkellyArmy",
-                "SkellyArmy",
-                "SkellyArmy",
-                "SkellyArmy",
-                "SkellyArmy",
-                "SkellyArmy",
-                "SkellyArmy",
-                "SkellyArmy"
+                "SkellyFlyersSpell",
+                "SkellyFlyersSpell",
+                "SkellyFlyersSpell",
+                "SkellyFlyersSpell",
+                "SkellyFlyersSpell",
+                "SkellyFlyersSpell",
+                "SkellyFlyersSpell",
+                "SkellyFlyersSpell"
             ]
         }
     ]
