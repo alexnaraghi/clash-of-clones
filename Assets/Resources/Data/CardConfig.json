@@ -195,7 +195,7 @@
         {
             "Name": "SkellyArmy",
             "PrefabName": "SkellyArmy",
-            "GhostPrefabName": "SkellyGhost",
+            "GhostPrefabName": "SkellyArmyGhost",
             "CardImageName": "SkellyArmy",
             "ManaCost": 7,
             "PlacementWidth": 1,
