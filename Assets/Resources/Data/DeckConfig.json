@@ -13,20 +13,34 @@
                 "Goblin",
                 "Knight",
                 "Necromancer",
-                "Balloon"
+                "Balloon",
+                "PoisonSpell"
+            ]
+        },
+        {
+            "Name": "Deck2",
+            "CardList": [
+                "SkellyArmy",
+                "SkellyHouse",
+                "Tank",
+                "Turret",
+                "Knight",
+                "Necromancer",
+                "Balloon",
+                "PoisonSpell"
             ]
         },
         {
             "Name": "Tester",
             "CardList": [
-                "SkellyFlyersSpell",
-                "SkellyFlyersSpell",
-                "SkellyFlyersSpell",
-                "SkellyFlyersSpell",
-                "SkellyFlyersSpell",
-                "SkellyFlyersSpell",
-                "SkellyFlyersSpell",
-                "SkellyFlyersSpell"
+                "PoisonSpell",
+                "PoisonSpell",
+                "PoisonSpell",
+                "PoisonSpell",
+                "PoisonSpell",
+                "PoisonSpell",
+                "PoisonSpell",
+                "PoisonSpell"
             ]
         }
     ]

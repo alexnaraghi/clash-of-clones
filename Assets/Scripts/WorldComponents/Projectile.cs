@@ -54,11 +54,11 @@ public class Projectile: MonoBehaviour, IProjectile
         _isCollided = true;
 
         var card = Config.Instance.GetCardByName(_entityToSpawn);
-        card.SpawnChargeSeconds = 0;
 
         if(card != null)
         {
-            var unit = Entity.SpawnFromDefinition(_creator.Owner, card, transform.position, isFromPlayersHand: false);
+            card.SpawnChargeSeconds = 0;
+            var unit = Entity.SpawnFromDefinition(_creator.Owner, card, transform.position.ZeroY(), isFromPlayersHand: false);
             _creator.Owner.RotateForPlayer(unit.gameObject);
         }
         else

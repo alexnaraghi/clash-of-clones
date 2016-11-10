@@ -52,4 +52,12 @@ public static class Utils
     {
         return src.GetComponent(typeof(T)) as T;
     }
+
+    /// <summary>
+    /// Zeroes out the y component of the vector.
+    /// </summary>
+    public static Vector3 ZeroY(this Vector3 src)
+    {
+        return new Vector3(src.x, 0f, src.z);
+    }
 }
