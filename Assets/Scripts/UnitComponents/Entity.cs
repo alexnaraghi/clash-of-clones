@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -39,6 +40,8 @@ public class Entity : MonoBehaviour
 
     private bool _isDead;
 
+    private List<Effect> _activeEffects = new List<Effect>();
+
     /// <summary>
     /// The seconds we have been spawning for.
     /// </summary>
@@ -51,7 +54,7 @@ public class Entity : MonoBehaviour
     }
 
     // TODO: Hide the definition!
-    public CardData Definition 
+    private CardData Definition 
     { 
         get { return _definition; } 
     }
@@ -72,6 +75,83 @@ public class Entity : MonoBehaviour
     public int MaxHP 
     { 
         get { return Definition.StartHP; } 
+    }
+
+    public float MovementSpeed
+    {
+        get
+        {
+            float baseSpeed = _definition.MovementSpeed;
+            float accumulatedSpeed = baseSpeed;
+            foreach(var effect in _activeEffects)
+            {
+                if(effect.Attribute == AttributeModifier.MovementSpeed)
+                {
+                    var modifier = baseSpeed * effect.Multiplier;
+                    accumulatedSpeed += modifier;
+                }
+            }
+
+            return accumulatedSpeed;
+        }
+    }
+
+    public float AttackSpeed
+    {
+        get
+        {
+            float baseSpeed = _definition.AttackSpeed;
+            float accumulatedSpeed = baseSpeed;
+            foreach(var effect in _activeEffects)
+            {
+                if(effect.Attribute == AttributeModifier.AttackSpeed)
+                {
+                    var modifier = baseSpeed * effect.Multiplier;
+                    accumulatedSpeed += modifier;
+                }
+            }
+
+            return accumulatedSpeed;
+        }
+    }
+
+    public bool AttacksGroundUnits      { get { return _definition.AttacksGroundUnits; } }
+    public bool AttacksAirUnits         { get { return _definition.AttacksAirUnits; } }
+    public bool IsAirUnit               { get { return _definition.IsAirUnit; } }
+    public bool IsBuilding              { get { return _definition.IsBuilding; } }
+    public bool IsProjectile            { get { return _definition.IsProjectile; } }
+    public int  ChildEntitySpawnSeconds  { get { return _definition.ChildEntitySpawnSeconds; } }
+
+    public int AggroRange
+    {
+        get
+        {
+            return _definition.AggroRange;
+        }
+    }
+
+    public int DirectAttackDamage
+    {
+        get
+        {
+            return _definition.DirectAttackDamage;
+        }
+    }
+
+    public int AreaAttackDamage
+    {
+        get
+        {
+            return _definition.AreaAttackDamage;
+        }
+    }
+
+    public int AttackRange
+    {
+        get
+        {
+            return _definition.AttackRange;
+        }
     }
 
     public void Init(PlayerModel owner, CardData definition, bool isFromPlayersHand)
@@ -139,6 +219,22 @@ public class Entity : MonoBehaviour
                 die();
             }
         }
+    }
+
+    /// <summary>
+    /// If the given effect is not applied to this entity already, apply it.
+    /// </summary>
+    public void ApplyEffect(Effect effect)
+    {
+        if(!_activeEffects.Contains(effect))
+        {
+            _activeEffects.Add(effect);
+        }
+    }
+
+    public void RemoveEffect(Effect effect)
+    {
+        _activeEffects.Remove(effect);
     }
 
     private void die()

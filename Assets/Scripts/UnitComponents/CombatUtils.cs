@@ -168,7 +168,7 @@ public static class CombatUtils
 
             // At this point, if we have an aggro target, move to attack it.
             var distance = Vector3.Distance(entity.transform.position, targetPositionIgnoreY);
-            if(distance < entity.Definition.AttackRange)
+            if(distance < entity.AttackRange)
             {
                 navigator.CancelMove();
                 // Attack!
@@ -217,5 +217,12 @@ public static class CombatUtils
         // flatten the vector3
         Quaternion lookRotation = Quaternion.LookRotation(new Vector3(direction.x, 0, direction.z));
         transform.rotation = Quaternion.Slerp(transform.rotation, lookRotation, Time.fixedDeltaTime * rotationSpeed);
+    }
+
+    // Gets a capsule at the specified position that is ... large... on the y axis.
+    public static void GetCapsulePointsFromPosition(Vector3 position, out Vector3 point1, out Vector3 point2)
+    {
+        point1 = position + new Vector3(0f, -100f, 0f);
+        point2 = position + new Vector3(0f, 100f, 0f);
     }
 }

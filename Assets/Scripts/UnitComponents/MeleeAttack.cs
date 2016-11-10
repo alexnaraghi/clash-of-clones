@@ -72,7 +72,7 @@ public class MeleeAttack : MonoBehaviour
         bool didAttack = false;
         
         // Only attack if the entity is a type that this unit attacks.
-        if(_entity.Definition.AttacksGroundUnits || target.Definition.IsBuilding)
+        if(_entity.AttacksGroundUnits || target.IsBuilding)
         {
             didAttack = attemptDirectAttack(target);
             didAttack |= attemptAreaAttack(target);
@@ -81,7 +81,7 @@ public class MeleeAttack : MonoBehaviour
         if(didAttack)
         {
             // Reset cooldown.
-            _cooldownSeconds = _entity.Definition.AttackSpeed;
+            _cooldownSeconds = _entity.AttackSpeed;
 
             // Play attack audio if we have any.
             if(_animator != null)
@@ -94,7 +94,7 @@ public class MeleeAttack : MonoBehaviour
     private bool attemptDirectAttack(Entity target)
     {
         bool didAttack = false;
-        if(target != null && _entity.Definition.DirectAttackDamage > 0)
+        if(target != null && _entity.DirectAttackDamage > 0)
         {
             if(target != null)
             {
@@ -102,7 +102,7 @@ public class MeleeAttack : MonoBehaviour
                 // If the direction doesn't matter, we should be ready to fire.
                 if (_aggro.IsInSights(target.transform, _isDirectional))
                 {
-                    attack(target, _entity.Definition.DirectAttackDamage);
+                    attack(target, _entity.DirectAttackDamage);
                     didAttack = true;
                 }
             }
@@ -115,7 +115,7 @@ public class MeleeAttack : MonoBehaviour
         bool didAttack = true;
 
         // Trigger enter only applies to area attacks.
-        if(target != null && _entity.Definition.AreaAttackDamage > 0)
+        if(target != null && _entity.AreaAttackDamage > 0)
         {
             Collider[] colliders = Physics.OverlapSphere (transform.position, _attackRadius, CombatUtils.EntityMask);
 
@@ -124,7 +124,7 @@ public class MeleeAttack : MonoBehaviour
                 var areaTarget = colliders[i].GetComponent<Entity>();
                 if(CombatUtils.IsEnemy(_entity.Owner, areaTarget))
                 {
-                    attack(areaTarget, _entity.Definition.AreaAttackDamage);
+                    attack(areaTarget, _entity.AreaAttackDamage);
                     didAttack = true;
                 }
             }

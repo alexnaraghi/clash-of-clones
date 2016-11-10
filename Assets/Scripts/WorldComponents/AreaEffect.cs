@@ -1,4 +1,5 @@
 ﻿using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
@@ -24,6 +25,11 @@ public class AreaEffect : MonoBehaviour
     /// If true, this effect works on friendlies.  If false, it affects enemies.
     /// </summary>
     [SerializeField] private bool _isAffectingFriendlies;
+
+    [SerializeField] private Effect[] _effects;
+
+    private List<Entity> _affectedEntities = new List<Entity>();
+    private HashSet<Entity> _workingSet = new HashSet<Entity>();
 
     private Entity _entity;
 
@@ -73,15 +79,19 @@ public class AreaEffect : MonoBehaviour
     {
         while(true)
         {
-            yield return new WaitForSeconds(_entity.Definition.AttackSpeed);
+            yield return new WaitForSeconds(_entity.AttackSpeed);
             triggerEffect();
         }
     }
 
     private void triggerEffect()
     {
+        Vector3 bottom, top;
+        CombatUtils.GetCapsulePointsFromPosition(transform.position, out bottom, out top);
+
         // Collect all the colliders in a sphere from the shell's current position to a radius of the explosion radius.
-        Collider[] colliders = Physics.OverlapSphere (transform.position, _effectRadius, CombatUtils.EntityMask);
+        Collider[] colliders = Physics.OverlapCapsule (bottom, top, _effectRadius, CombatUtils.EntityMask);
+        _workingSet.Clear();
 
         for (int i = 0; i < colliders.Length; i++)
         {
@@ -90,7 +100,35 @@ public class AreaEffect : MonoBehaviour
             // If it's an enemy unit, do damage to it.
             if(isAffectedEntity(_entity.Owner, targetEntity))
             {
-                targetEntity.TakeDamage(_entity.Definition.AreaAttackDamage);
+                targetEntity.TakeDamage(_entity.AreaAttackDamage);
+
+                if(!_affectedEntities.Contains(targetEntity))
+                {
+                    foreach(var effect in _effects)
+                    {
+                        _affectedEntities.Add(targetEntity);
+                        targetEntity.ApplyEffect(effect);
+                    }
+                }
+
+                _workingSet.Add(targetEntity);
+            }
+        }
+
+        var oldList = _affectedEntities;
+        _affectedEntities = new List<Entity>();
+        foreach(var entity in oldList)
+        {
+            if(!_workingSet.Contains(entity))
+            {
+                foreach(var effect in _effects)
+                {
+                    entity.RemoveEffect(effect);
+                }
+            }
+            else if(entity != null)
+            {
+                _affectedEntities.Add(entity);
             }
         }
     }
@@ -108,5 +146,20 @@ public class AreaEffect : MonoBehaviour
         {
             return CombatUtils.IsEnemy(friendly, target);
         }
+    }
+
+    void OnDestroy()
+    {
+        foreach(var entity in _affectedEntities)
+        {
+            if(entity != null)
+            {
+                foreach(var effect in _effects)
+                {
+                    entity.RemoveEffect(effect);
+                }
+            }
+        }
+        _affectedEntities.Clear();
     }
 }

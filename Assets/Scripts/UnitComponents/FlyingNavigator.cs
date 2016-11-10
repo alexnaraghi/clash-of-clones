@@ -40,7 +40,7 @@ public class FlyingNavigator : MonoBehaviour, INavigable
         if(_isNavigating)
         {
             Vector3 dir = (_destination - transform.position).normalized;
-            Vector3 velocity = dir * _entity.Definition.MovementSpeed * Time.deltaTime;
+            Vector3 velocity = dir * _entity.MovementSpeed * Time.deltaTime;
 
             // Ignore Y position for flying units.
             velocity.y = 0f;

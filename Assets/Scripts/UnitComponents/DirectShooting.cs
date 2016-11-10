@@ -68,9 +68,9 @@ public class DirectShooting : MonoBehaviour
             var distance = Vector3.Distance(transform.position, targetPositionIgnoreY);
 
             bool isInSights = _aggro.IsInSights(aggroTarget.transform, _isDirectional);
-            if (distance < _entity.Definition.AttackRange && isInSights)
+            if (distance < _entity.AttackRange && isInSights)
             {
-                _cooldownSeconds = _entity.Definition.AttackSpeed;
+                _cooldownSeconds = _entity.AttackSpeed;
                 fire(aggroTarget);
             }
         }
@@ -85,7 +85,7 @@ public class DirectShooting : MonoBehaviour
 
             if(bullet != null)
             {
-                bullet.Init(target, _speedMetersPerSecond, _entity.Definition.DirectAttackDamage);
+                bullet.Init(target, _speedMetersPerSecond, _entity.DirectAttackDamage);
 
                 // Play audio, if any.
                 if(_shootingAudio != null)

@@ -45,7 +45,7 @@ public class EntityAggro : MonoBehaviour
         // If no aggro target, find one.
         if (_target == null)
         {
-            var enemies = getAllEnemiesInRange(_entity.Definition.AggroRange);
+            var enemies = getAllEnemiesInRange(_entity.AggroRange);
             if (enemies.Length > 0)
             {
                 Entity closestEnemy = null;
@@ -55,9 +55,9 @@ public class EntityAggro : MonoBehaviour
                     if (enemy.HP > 0)
                     {
                         // Only attack if the entity is a type that this unit attacks.
-                        if ((_entity.Definition.AttacksGroundUnits && !enemy.Definition.IsAirUnit)
-                            || (_entity.Definition.AttacksAirUnits && enemy.Definition.IsAirUnit)
-                            || enemy.Definition.IsBuilding)
+                        if ((_entity.AttacksGroundUnits && !enemy.IsAirUnit)
+                            || (_entity.AttacksAirUnits && enemy.IsAirUnit)
+                            || enemy.IsBuilding)
                         {
                             var targetPositionIgnoreY = enemy.transform.position;
                             targetPositionIgnoreY.y = transform.position.y;
@@ -81,7 +81,7 @@ public class EntityAggro : MonoBehaviour
     private Entity[] getAllEnemiesInRange(float radius)
     {
         Vector3 bottom, top;
-        getCapsulePointsFromPosition(transform.position, out bottom, out top);
+        CombatUtils.GetCapsulePointsFromPosition(transform.position, out bottom, out top);
 
         Collider[] allColliders = Physics.OverlapCapsule(bottom, top, radius);
         List<Entity> enemies = new List<Entity>();
@@ -138,9 +138,9 @@ public class EntityAggro : MonoBehaviour
 
     public Entity[] GetEnemiesInRange(PlayerModel enemyPlayer, float radius)
     {
-        // Collect all the colliders in a sphere from the current position in the given radius
+        // Collect all the colliders in a capsule of the given radius covering all units on the y axis.
         Vector3 bottom, top;
-        getCapsulePointsFromPosition(transform.position, out bottom, out top);
+        CombatUtils.GetCapsulePointsFromPosition(transform.position, out bottom, out top);
 
         Collider[] colliders = Physics.OverlapCapsule (bottom, top, radius, CombatUtils.EntityMask);
 
@@ -161,12 +161,5 @@ public class EntityAggro : MonoBehaviour
         }
 
         return entities.ToArray();
-    }
-
-    // Gets a capsule at the specified position that is ... large... on the y axis.
-    private static void getCapsulePointsFromPosition(Vector3 position, out Vector3 point1, out Vector3 point2)
-    {
-        point1 = position + new Vector3(0f, -100f, 0f);
-        point2 = position + new Vector3(0f, 100f, 0f);
     }
 }

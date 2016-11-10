@@ -35,10 +35,10 @@ public class EntitySpawner : MonoBehaviour
 
     private void onInit()
     {
-        _cooldownSeconds = _entity.Definition.ChildEntitySpawnSeconds;
+        _cooldownSeconds = _entity.ChildEntitySpawnSeconds;
         
         // If the cooldown is 0, immediately spawn.
-        if(Mathf.Approximately(_entity.Definition.ChildEntitySpawnSeconds, 0f))
+        if(Mathf.Approximately(_entity.ChildEntitySpawnSeconds, 0f))
         {
             spawnUnits();
         }
@@ -54,7 +54,7 @@ public class EntitySpawner : MonoBehaviour
         // EARLY OUT! //
         // If this spawner doesn't have a cooldown, it's a one time spawner so we shouldnt continue
         // to spawn.
-        if(_entity == null || Mathf.Approximately(_entity.Definition.ChildEntitySpawnSeconds, 0f)) return;
+        if(_entity == null || Mathf.Approximately(_entity.ChildEntitySpawnSeconds, 0f)) return;
 
         // Our code which does simple shooting AI on cooldown if we have a target.
         _cooldownSeconds -= Time.deltaTime;
@@ -62,7 +62,7 @@ public class EntitySpawner : MonoBehaviour
         if(_cooldownSeconds <= 0f)
         {
             spawnUnits();
-            _cooldownSeconds = _entity.Definition.ChildEntitySpawnSeconds;
+            _cooldownSeconds = _entity.ChildEntitySpawnSeconds;
         }
     }
 

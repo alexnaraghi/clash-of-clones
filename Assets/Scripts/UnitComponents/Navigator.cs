@@ -39,12 +39,16 @@ public class Navigator : MonoBehaviour, INavigable
 
     private void init()
     {
-        _agent.speed = _entity.Definition.MovementSpeed;
+        _agent.speed = _entity.MovementSpeed;
     }
 
     void Update()
     {
-        CombatUtils.MoveToAggroTarget(_entity, _aggro.Target, this);
+        if(_entity.IsSpawned)
+        {
+            _agent.speed = _entity.MovementSpeed;
+            CombatUtils.MoveToAggroTarget(_entity, _aggro.Target, this);
+        }
     }
 
     void FixedUpdate()

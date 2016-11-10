@@ -40,7 +40,7 @@ public class ShellExplosion : MonoBehaviour, IProjectile
         if(creator == null) return;
 
         _owner = creator.Owner;
-        _areaDamage = creator.Definition.AreaAttackDamage;
+        _areaDamage = creator.AreaAttackDamage;
     }
 
     void Update()

@@ -80,11 +80,11 @@ public class TankShooting : MonoBehaviour
         {
             float distance = Vector3.Distance(transform.position, aggroTarget.transform.position);
 
-            if (distance < _entity.Definition.AttackRange)
+            if (distance < _entity.AttackRange)
             {
                 if (_aggro.IsInSights(aggroTarget.transform, _isDirectional))
                 {
-                    _cooldownSeconds = _entity.Definition.AttackSpeed;
+                    _cooldownSeconds = _entity.AttackSpeed;
 
                     CombatUtils.FireProjectile(_entity, 
                         _shell,

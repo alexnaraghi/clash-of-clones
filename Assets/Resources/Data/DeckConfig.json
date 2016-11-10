@@ -27,20 +27,20 @@
                 "Knight",
                 "Necromancer",
                 "Balloon",
-                "PoisonSpell"
+                "RageEffect"
             ]
         },
         {
             "Name": "Tester",
             "CardList": [
-                "PoisonSpell",
-                "PoisonSpell",
-                "PoisonSpell",
-                "PoisonSpell",
-                "PoisonSpell",
-                "PoisonSpell",
-                "PoisonSpell",
-                "PoisonSpell"
+                "RageEffect",
+                "RageEffect",
+                "RageEffect",
+                "RageEffect",
+                "Goblin",
+                "Goblin",
+                "Goblin",
+                "Goblin"
             ]
         }
     ]
