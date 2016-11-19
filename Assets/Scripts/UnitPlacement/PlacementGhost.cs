@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using UnityEngine.Events;
+using VRStandardAssets.Utils;
 
 /// <summary>
 /// Display to allow the human player to place a unit.
@@ -16,6 +17,8 @@ public class PlacementGhost : MonoBehaviour
     /// </summary>
     [SerializeField] private TerritoryUI _territoryGui;
 
+    [SerializeField] private VRInput _vrInput;
+    
     /// <summary>
     /// The card that is being placed.
     /// </summary>
@@ -25,7 +28,9 @@ public class PlacementGhost : MonoBehaviour
     /// The ghost's model.
     /// </summary>
     public GameObject Model;
-    
+
+    public bool IsValidPlacementPosition;
+
     /// <summary>
     /// Triggered on successful placement of a card.
     /// </summary>
@@ -36,16 +41,28 @@ public class PlacementGhost : MonoBehaviour
         get { return _card; }
     }
 
-    void Update()
+    void OnEnable()
     {
-        // If the model is active, it is in a placeable location.
-        if(Input.GetMouseButtonDown(0) && Model != null && Model.activeSelf)
+        _vrInput.OnClick.AddListener(onClick);
+    }
+
+    void OnDisable()
+    {
+        _vrInput.OnClick.RemoveListener(onClick);
+    }
+
+    private void onClick()
+    {
+        // If we have something to place.
+        if(Model != null)
         {
-            if(GameModel.Instance.MyPlayer.CanPlayCard(_card))
+            // If the model is active, it is in a placeable location.
+            if(IsValidPlacementPosition && GameModel.Instance.MyPlayer.CanPlayCard(_card))
             {
                 GameModel.Instance.MyPlayer.PlayCard(_card, transform.position);
                 PlacedEvent.Invoke();
                 clear();
+                IsValidPlacementPosition = false;
             }
             else
             {

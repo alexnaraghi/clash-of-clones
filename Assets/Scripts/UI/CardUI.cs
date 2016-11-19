@@ -1,6 +1,8 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 using UnityEngine.Assertions;
 using UnityEngine.UI;
+using VRStandardAssets.Utils;
 
 /// <summary>
 /// The display of a card in our hand.
@@ -13,6 +15,7 @@ public class CardUI : MonoBehaviour
     [SerializeField] private Image _manaIcon;
     [SerializeField] private Toggle _toggle;
     [SerializeField] private Color _disabledColor;
+    [SerializeField] private VRInteractiveItem _interactiveItem;
 
     private Color _imageOriginalColor;
     private Color _manaTextOriginalColor;
@@ -39,6 +42,19 @@ public class CardUI : MonoBehaviour
         if(_ghost != null)
         {
             _ghost.PlacedEvent.AddListener(onUnitPlaced);
+        }
+
+        if(_interactiveItem != null)
+        {
+            _interactiveItem.OnClick.AddListener(onClick);
+        }
+    }
+
+    private void onClick()
+    {
+        if(_toggle.interactable)
+        {
+            setToggle(isEnabled: true);
         }
     }
 
