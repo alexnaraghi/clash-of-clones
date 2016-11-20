@@ -4,15 +4,11 @@
             "Name": "Deck1",
             "CardList": [
                 "SkellyFlyersSpell",
-                "FireballSpell",
                 "SkellyArmy",
                 "SkellyHouse",
-                "Tank",
                 "Tank2",
-                "Turret",
                 "Goblin",
                 "Knight",
-                "Necromancer",
                 "Balloon",
                 "PoisonSpell"
             ]
@@ -20,14 +16,14 @@
         {
             "Name": "Deck2",
             "CardList": [
-                "SkellyArmy",
                 "SkellyHouse",
                 "Tank",
                 "Turret",
-                "Knight",
                 "Necromancer",
                 "Balloon",
-                "RageEffect"
+                "GiantSkeleton",
+                "RageSpell",
+                "FireballSpell"
             ]
         },
         {
