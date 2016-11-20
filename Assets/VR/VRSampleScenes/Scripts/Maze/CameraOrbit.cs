@@ -58,11 +58,11 @@ namespace VRStandardAssets.Maze
             switch (swipeDirection)
             {
                 case SwipeDirection.LEFT:
-                    StartCoroutine(RotateCamera(m_RotationIncrement));
+                    StartCoroutine(RotateCamera(-m_RotationIncrement));
                     break;
 
                 case SwipeDirection.RIGHT:
-                    StartCoroutine(RotateCamera(-m_RotationIncrement));
+                    StartCoroutine(RotateCamera(m_RotationIncrement));
                     break;
             }
         }
