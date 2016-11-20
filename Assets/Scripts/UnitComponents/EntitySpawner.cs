@@ -72,29 +72,31 @@ public class EntitySpawner : MonoBehaviour
         {
             float angle = (((float)i) / _numEntities) * 360f;
             Vector3 pos = Utils.GetPointOnCircle(transform.position, _spawnRadius, angle);
+            spawnUnitAtPosition(pos);
+        }
 
-            var card = Config.Instance.GetCardByName(_entityToSpawn);
-            if(_shouldInstaSpawnChildren)
-            {
-                card.SpawnChargeSeconds = 0;
-            }
-
-            if(card != null)
-            {
-                var unit = Entity.SpawnFromDefinition(_entity.Owner, card, pos, isFromPlayersHand: false);
-                _entity.Owner.RotateForPlayer(unit.gameObject);
-            }
-            else
-            {
-                Debug.LogWarning("Can't find card: " + card.Name);
-            }
-
-            if(_destroyAfterFirstSpawn)
-            {
-                Destroy(gameObject);
-            }
+        if(_destroyAfterFirstSpawn)
+        {
+            Destroy(gameObject);
         }
     }
 
-    
+    private void spawnUnitAtPosition(Vector3 position)
+    {
+        var card = Config.Instance.GetCardByName(_entityToSpawn);
+        if(_shouldInstaSpawnChildren)
+        {
+            card.SpawnChargeSeconds = 0;
+        }
+
+        if(card != null)
+        {
+            var unit = Entity.SpawnFromDefinition(_entity.Owner, card, position, isFromPlayersHand: false);
+            _entity.Owner.RotateForPlayer(unit.gameObject);
+        }
+        else
+        {
+            Debug.LogWarning("Can't find card: " + card.Name);
+        }
+    }
 }
