@@ -82,7 +82,7 @@ public class CardUI : MonoBehaviour
         Definition = definition;
 
         _manaText.text = definition.ManaCost.ToString();
-        _image.sprite = Resources.Load<Sprite>(Consts.ImagePath + definition.CardImageName);
+        _image.sprite = ResourceManager.Instance.Load<Sprite>(Consts.ImagePath + definition.CardImageName);
     }
 
     public void OnToggled(bool isOn)

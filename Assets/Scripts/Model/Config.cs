@@ -74,6 +74,24 @@ public class Config : MonoBehaviour
         if(card != null)
         {
             card = card.Clone();
+
+            // Should the config be doing this?  It's doesn't seem like exactly the right place, but works
+            // for now.
+            // Pre-load all card prefabs to avoid performance hitches during gameplay.
+            if(!string.IsNullOrEmpty(card.PrefabName))
+            {
+                ResourceManager.Instance.Load<GameObject>(Consts.UnitsPath + card.PrefabName);
+            }
+
+            if(!string.IsNullOrEmpty(card.GhostPrefabName))
+            {
+                ResourceManager.Instance.Load<GameObject>(Consts.UnitGhostsPath + card.GhostPrefabName);
+            }
+
+            if(!string.IsNullOrEmpty(card.CardImageName))
+            {
+                ResourceManager.Instance.Load<Sprite>(Consts.ImagePath + card.CardImageName);
+            }
         }
         
         return card;
