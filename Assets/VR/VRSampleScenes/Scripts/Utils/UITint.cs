@@ -15,7 +15,17 @@ namespace VRStandardAssets.Utils
         [SerializeField] private Color m_Tint;                                  // The colour to tint the Images.
         [Range (0f, 1f)] [SerializeField] private float m_TintPercent = 0.5f;   // How much the colour should be used.
         [SerializeField] private Image[] m_ImagesToTint;                        // References to the images which will be tinted.
+        [SerializeField] private Color[] _originalColors;                        // References to the images which will be tinted.
         [SerializeField] private VRInteractiveItem m_InteractiveItem;           // Reference to the VRInteractiveItem which must be looked at to tint the images.
+
+        void Awake()
+        {
+            _originalColors = new Color[m_ImagesToTint.Length];
+            for(int i = 0; i < m_ImagesToTint.Length; i++)
+            {
+                _originalColors[i] = m_ImagesToTint[i].color;
+            }
+        }
 
 
         private void OnEnable ()
@@ -49,7 +59,7 @@ namespace VRStandardAssets.Utils
             for (int i = 0; i < m_ImagesToTint.Length; i++)
             {
                 // ...and subtract the same amount.
-                m_ImagesToTint[i].color -= m_Tint * m_TintPercent;
+                m_ImagesToTint[i].color = _originalColors[i];
             }
         }
     }

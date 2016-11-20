@@ -16,6 +16,7 @@ public class CardUI : MonoBehaviour
     [SerializeField] private Toggle _toggle;
     [SerializeField] private Color _disabledColor;
     [SerializeField] private VRInteractiveItem _interactiveItem;
+    [SerializeField] private UITint _tint;
 
     private Color _imageOriginalColor;
     private Color _manaTextOriginalColor;
@@ -54,7 +55,7 @@ public class CardUI : MonoBehaviour
     {
         if(_toggle.interactable)
         {
-            setToggle(isEnabled: true);
+            setToggle(true);
         }
     }
 
@@ -111,12 +112,14 @@ public class CardUI : MonoBehaviour
                 _image.color =      _imageOriginalColor;
                 _manaText.color =   _manaTextOriginalColor;
                 _manaIcon.color =   _manaIconOriginalColor;
+                _tint.enabled = true;
             }
             else
             {
                 _image.color =      _disabledColor;
                 _manaText.color =   _disabledColor;
                 _manaIcon.color =   _disabledColor;
+                _tint.enabled = false;
             }
         }
     }

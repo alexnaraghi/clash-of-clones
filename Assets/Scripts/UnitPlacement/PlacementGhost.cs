@@ -71,7 +71,8 @@ public class PlacementGhost : MonoBehaviour
                 // Otherwise, let the user know the placement is invalid.
                 if(_errorSound != null)
                 {
-                    _errorSound.Play();
+                    // This is too annoying for now.
+                    //_errorSound.Play();
                 }
             }
         }

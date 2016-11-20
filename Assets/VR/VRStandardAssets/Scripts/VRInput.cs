@@ -84,7 +84,6 @@ namespace VRStandardAssets.Utils
             // This if statement is to trigger events based on the information gathered before.
             if(Input.GetButtonUp ("Fire1"))
             {
-                Debug.Log("Fire1");
                 // If anything has subscribed to OnUp call it.
                     OnUp.Invoke();
 
