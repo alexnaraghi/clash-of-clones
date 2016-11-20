@@ -18,6 +18,8 @@ public class PlacementGhost : MonoBehaviour
     [SerializeField] private TerritoryUI _territoryGui;
 
     [SerializeField] private VRInput _vrInput;
+    [SerializeField] private Reticle _reticle;
+
     
     /// <summary>
     /// The card that is being placed.
@@ -111,6 +113,11 @@ public class PlacementGhost : MonoBehaviour
         {
             Debug.LogWarning("Cannot set card to null.  Did you mean to unset card?");
         }
+
+        if(_reticle != null)
+        {
+            _reticle.IsRaycasting = false;
+        }
     }
 
     /// <summary>
@@ -122,6 +129,11 @@ public class PlacementGhost : MonoBehaviour
         if(card != null && _card == card)
         {
             clear();
+        }
+
+        if(_reticle != null)
+        {
+            _reticle.IsRaycasting = true;
         }
     }
 
