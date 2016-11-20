@@ -84,6 +84,7 @@ public class GameLoop : MonoBehaviour
             }
         }
 
+/*
         _camera.orthographicSize = INITIAL_ZOOM;
 
         // Do some camera zoom in effect.
@@ -93,7 +94,7 @@ public class GameLoop : MonoBehaviour
             _camera.orthographicSize -= zoomPerSecond * Time.deltaTime;
             yield return null;
         }
-
+*/
         _cardPanelAnimation.gameObject.SetActive(true);
         _cardPanelAnimation.Play();
         _timerAnimation.Play();
@@ -142,13 +143,17 @@ public class GameLoop : MonoBehaviour
             }
         }
 
-        // Do some camera zoom out effect.
-        while(_camera.orthographicSize < INITIAL_ZOOM)
-        {
-            const float zoomPerSecond = 3f;
-            _camera.orthographicSize += zoomPerSecond * Time.deltaTime;
-            yield return null;
-        }
+        /*
+                // Do some camera zoom out effect.
+                while(_camera.orthographicSize < INITIAL_ZOOM)
+                {
+                    const float zoomPerSecond = 3f;
+                    _camera.orthographicSize += zoomPerSecond * Time.deltaTime;
+                    yield return null;
+                }
+        */
+
+        yield return new WaitForSeconds(3f);
 
         if(_messagePrinter != null)
         {

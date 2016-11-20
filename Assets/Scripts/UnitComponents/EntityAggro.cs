@@ -16,6 +16,7 @@ public class EntityAggro : MonoBehaviour
     [SerializeField]private Entity _target;
 
     private Entity _entity;
+    private Entity[] _enemiesInRange;
 
     void Awake()
     {
@@ -45,12 +46,11 @@ public class EntityAggro : MonoBehaviour
         // If no aggro target, find one.
         if (_target == null)
         {
-            var enemies = getAllEnemiesInRange(_entity.AggroRange);
-            if (enemies.Length > 0)
+            if (_enemiesInRange != null && _enemiesInRange.Length > 0)
             {
                 Entity closestEnemy = null;
                 float closestDistance = float.MaxValue;
-                foreach (var enemy in enemies)
+                foreach (var enemy in _enemiesInRange)
                 {
                     if (enemy.HP > 0)
                     {
@@ -77,13 +77,22 @@ public class EntityAggro : MonoBehaviour
         }
     }
 
+    void FixedUpdate()
+    {
+        // If no aggro target, find one.
+        if (_target == null)
+        {
+            _enemiesInRange = getAllEnemiesInRange(_entity.AggroRange);
+        }
+    }
+
     // Question, will this be sufficient for flying enemies?  Or do we want a box check?
     private Entity[] getAllEnemiesInRange(float radius)
     {
         Vector3 bottom, top;
         CombatUtils.GetCapsulePointsFromPosition(transform.position, out bottom, out top);
 
-        Collider[] allColliders = Physics.OverlapCapsule(bottom, top, radius);
+        Collider[] allColliders = Physics.OverlapCapsule(bottom, top, radius, CombatUtils.EntityMask);
         List<Entity> enemies = new List<Entity>();
         foreach(var collider in allColliders)
         {
