@@ -10,12 +10,12 @@ namespace VRStandardAssets.Utils
     // need to know about input specifics to this gameobject.
     public class VRInteractiveItem : MonoBehaviour
     {
-        public readonly UnityEvent OnOver = new UnityEvent();             // Called when the gaze moves over this object
-        public readonly UnityEvent OnOut = new UnityEvent();              // Called when the gaze leaves this object
-        public readonly UnityEvent OnClick = new UnityEvent();            // Called when click input is detected whilst the gaze is over this object.
-        public readonly UnityEvent OnDoubleClick = new UnityEvent();      // Called when double click input is detected whilst the gaze is over this object.
-        public readonly UnityEvent OnUp = new UnityEvent();               // Called when Fire1 is released whilst the gaze is over this object.
-        public readonly UnityEvent OnDown = new UnityEvent();             // Called when Fire1 is pressed whilst the gaze is over this object.
+        public UnityEvent OnOver = new UnityEvent();             // Called when the gaze moves over this object
+        public UnityEvent OnOut = new UnityEvent();              // Called when the gaze leaves this object
+        public UnityEvent OnClick = new UnityEvent();            // Called when click input is detected whilst the gaze is over this object.
+        public UnityEvent OnDoubleClick = new UnityEvent();      // Called when double click input is detected whilst the gaze is over this object.
+        public UnityEvent OnUp = new UnityEvent();               // Called when Fire1 is released whilst the gaze is over this object.
+        public UnityEvent OnDown = new UnityEvent();             // Called when Fire1 is pressed whilst the gaze is over this object.
 
 
         protected bool m_IsOver;

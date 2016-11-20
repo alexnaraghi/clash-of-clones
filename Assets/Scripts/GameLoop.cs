@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using VRStandardAssets.Utils;
 
 /// <summary>
 /// Controls the core game loop/lifecycle.
@@ -13,6 +14,7 @@ public class GameLoop : MonoBehaviour
     [SerializeField] private Camera _camera;
     [SerializeField] private Animation _cardPanelAnimation;
     [SerializeField] private Animation _timerAnimation;
+    [SerializeField] private VRCameraFade _cameraFade;
 
     // The scene name to load when the game ends.
     [SerializeField] private string _sceneToLoad = "ClashScene";
@@ -22,9 +24,11 @@ public class GameLoop : MonoBehaviour
 
     private GameModel _model;
 
+    private bool _isFadingOut;
+
     public void RestartGame()
     {
-        SceneManager.LoadScene(_sceneToLoad, LoadSceneMode.Single);
+        StartCoroutine(endGame());
     }
 
     void Awake()
@@ -42,6 +46,23 @@ public class GameLoop : MonoBehaviour
         }
 
         StartCoroutine(Loop());
+    }
+
+    private IEnumerator endGame()
+    {
+        // EARLY OUT //
+        if(_isFadingOut)
+        {
+            yield break;
+        }
+
+        _isFadingOut = true;
+
+        // Wait for the camera to fade out.
+        yield return StartCoroutine(_cameraFade.BeginFadeOut(true));
+
+        SceneManager.LoadScene(_sceneToLoad, LoadSceneMode.Single);
+
     }
 
     private IEnumerator Loop()
@@ -73,6 +94,7 @@ public class GameLoop : MonoBehaviour
             yield return null;
         }
 
+        _cardPanelAnimation.gameObject.SetActive(true);
         _cardPanelAnimation.Play();
         _timerAnimation.Play();
         yield return _cardPanelAnimation.isPlaying;
