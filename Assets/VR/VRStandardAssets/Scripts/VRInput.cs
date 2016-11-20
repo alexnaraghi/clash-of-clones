@@ -33,6 +33,30 @@ namespace VRStandardAssets.Utils
         [SerializeField] private float m_DoubleClickTime = 0.3f;    //The max time allowed between double clicks
         [SerializeField] private float m_SwipeWidth = 0.3f;         //The width of a swipe
 
+        // Minimum threshhold to consider a move a swipe.
+        // Bounds are strange, see this forum comment:
+        /*
+            reading raw Input.mousePosition.x and Input.mousePosition.y
+
+            A simple tap, or a tap and hold, returns static coordinates,
+            no matter where on the pad the tap occurs:
+            x: 1280, y: 720
+            (note that these map to an exact midpoint of the reported screen resolution of 2560x1440)
+
+            swiping FORWARD (from ear towards visorplate) on the pad spans a range of values from roughly
+            1280 on the far back to ~1000 on the far front (-280)
+
+            swiping BACK (from faceplate towards ear) on the pad spans a range of values:
+            1280 on the front to ~1600 on the far back (+320)
+
+            swiping DOWN on the pad gives a range of
+            720 on the top to ~440 on the bottom (-280)
+
+            swiping UP on the pad gives a range of
+            720 on the bottom to ~1040 at the top (+320)
+        */
+        [SerializeField] private float _minimumSwipeLength = 100f;  
+
         
         private Vector2 m_MouseDownPosition;                        // The screen position of the mouse when Fire1 is pressed.
         private Vector2 m_MouseUpPosition;                          // The screen position of the mouse when Fire1 is released.
@@ -115,30 +139,35 @@ namespace VRStandardAssets.Utils
 
         private SwipeDirection DetectSwipe ()
         {
+            Vector2 velocity = m_MouseUpPosition - m_MouseDownPosition;
+
             // Get the direction from the mouse position when Fire1 is pressed to when it is released.
-            Vector2 swipeData = (m_MouseUpPosition - m_MouseDownPosition).normalized;
+            Vector2 swipeData = velocity.normalized;
 
-            // If the direction of the swipe has a small width it is vertical.
-            bool swipeIsVertical = Mathf.Abs (swipeData.x) < m_SwipeWidth;
+            if(velocity.magnitude > _minimumSwipeLength)
+            {
+                // If the direction of the swipe has a small width it is vertical.
+                bool swipeIsVertical = Mathf.Abs (swipeData.x) < m_SwipeWidth;
 
-            // If the direction of the swipe has a small height it is horizontal.
-            bool swipeIsHorizontal = Mathf.Abs(swipeData.y) < m_SwipeWidth;
+                // If the direction of the swipe has a small height it is horizontal.
+                bool swipeIsHorizontal = Mathf.Abs(swipeData.y) < m_SwipeWidth;
 
-            // If the swipe has a positive y component and is vertical the swipe is up.
-            if (swipeData.y > 0f && swipeIsVertical)
-                return SwipeDirection.UP;
+                // If the swipe has a positive y component and is vertical the swipe is up.
+                if (swipeData.y > 0f && swipeIsVertical)
+                    return SwipeDirection.UP;
 
-            // If the swipe has a negative y component and is vertical the swipe is down.
-            if (swipeData.y < 0f && swipeIsVertical)
-                return SwipeDirection.DOWN;
+                // If the swipe has a negative y component and is vertical the swipe is down.
+                if (swipeData.y < 0f && swipeIsVertical)
+                    return SwipeDirection.DOWN;
 
-            // If the swipe has a positive x component and is horizontal the swipe is right.
-            if (swipeData.x > 0f && swipeIsHorizontal)
-                return SwipeDirection.RIGHT;
+                // If the swipe has a positive x component and is horizontal the swipe is right.
+                if (swipeData.x > 0f && swipeIsHorizontal)
+                    return SwipeDirection.RIGHT;
 
-            // If the swipe has a negative x component and is vertical the swipe is left.
-            if (swipeData.x < 0f && swipeIsHorizontal)
-                return SwipeDirection.LEFT;
+                // If the swipe has a negative x component and is vertical the swipe is left.
+                if (swipeData.x < 0f && swipeIsHorizontal)
+                    return SwipeDirection.LEFT;
+            }
 
             // If the swipe meets none of these requirements there is no swipe.
             return SwipeDirection.NONE;
@@ -151,29 +180,32 @@ namespace VRStandardAssets.Utils
             float horizontal = Input.GetAxis ("Horizontal");
             float vertical = Input.GetAxis ("Vertical");
 
-            // Store whether there was horizontal or vertical input before.
-            bool noHorizontalInputPreviously = Mathf.Abs (m_LastHorizontalValue) < float.Epsilon;
-            bool noVerticalInputPreviously = Mathf.Abs(m_LastVerticalValue) < float.Epsilon;
+            if (new Vector2(horizontal, vertical).magnitude > _minimumSwipeLength)
+            {
+                // Store whether there was horizontal or vertical input before.
+                bool noHorizontalInputPreviously = Mathf.Abs(m_LastHorizontalValue) < float.Epsilon;
+                bool noVerticalInputPreviously = Mathf.Abs(m_LastVerticalValue) < float.Epsilon;
 
-            // The last horizontal values are now the current ones.
-            m_LastHorizontalValue = horizontal;
-            m_LastVerticalValue = vertical;
+                // The last horizontal values are now the current ones.
+                m_LastHorizontalValue = horizontal;
+                m_LastVerticalValue = vertical;
 
-            // If there is positive vertical input now and previously there wasn't the swipe is up.
-            if (vertical > 0f && noVerticalInputPreviously)
-                return SwipeDirection.UP;
+                // If there is positive vertical input now and previously there wasn't the swipe is up.
+                if (vertical > 0f && noVerticalInputPreviously)
+                    return SwipeDirection.UP;
 
-            // If there is negative vertical input now and previously there wasn't the swipe is down.
-            if (vertical < 0f && noVerticalInputPreviously)
-                return SwipeDirection.DOWN;
+                // If there is negative vertical input now and previously there wasn't the swipe is down.
+                if (vertical < 0f && noVerticalInputPreviously)
+                    return SwipeDirection.DOWN;
 
-            // If there is positive horizontal input now and previously there wasn't the swipe is right.
-            if (horizontal > 0f && noHorizontalInputPreviously)
-                return SwipeDirection.RIGHT;
+                // If there is positive horizontal input now and previously there wasn't the swipe is right.
+                if (horizontal > 0f && noHorizontalInputPreviously)
+                    return SwipeDirection.RIGHT;
 
-            // If there is negative horizontal input now and previously there wasn't the swipe is left.
-            if (horizontal < 0f && noHorizontalInputPreviously)
-                return SwipeDirection.LEFT;
+                // If there is negative horizontal input now and previously there wasn't the swipe is left.
+                if (horizontal < 0f && noHorizontalInputPreviously)
+                    return SwipeDirection.LEFT;
+            }
 
             // If the swipe meets none of these requirements there is no swipe.
             return SwipeDirection.NONE;
