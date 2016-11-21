@@ -9,6 +9,8 @@ public class ManaUI : MonoBehaviour
     [SerializeField] private Slider _slider;
     [SerializeField] private Text _countText;
 
+    private int _lastUpdatedMana;
+
     void Start()
     {
         // EARLY OUT! //
@@ -25,6 +27,12 @@ public class ManaUI : MonoBehaviour
     void Update()
     {
         _slider.value = GameModel.Instance.MyPlayer.Mana;
-        _countText.text = Mathf.FloorToInt(_slider.value).ToString();
+        int mana = Mathf.FloorToInt(GameModel.Instance.MyPlayer.Mana);
+
+        if(_lastUpdatedMana != mana)
+        {
+            _countText.text = mana.ToString();
+            _lastUpdatedMana = mana;
+        }
     }
 }

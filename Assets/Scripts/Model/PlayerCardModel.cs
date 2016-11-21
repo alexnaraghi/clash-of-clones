@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.Events;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -7,6 +8,8 @@ using System.Linq;
 /// </summary>
 public class PlayerCardModel : MonoBehaviour 
 {
+    public UnityEvent HandChangedEvent;
+
     public List<CardData> Deck;
     public List<CardData> Discard;
     public CardData[] Hand;
@@ -89,6 +92,8 @@ public class PlayerCardModel : MonoBehaviour
 
             Hand[i] = drawCard();
         }
+
+        HandChangedEvent.Invoke();
     }
 
     private void replaceInHand(int handIndex, CardData newCard)
@@ -98,6 +103,8 @@ public class PlayerCardModel : MonoBehaviour
             Discard.Add(newCard);
         }
         Hand[handIndex] = drawCard();
+
+        HandChangedEvent.Invoke();
     }
 
     private CardData drawCard()

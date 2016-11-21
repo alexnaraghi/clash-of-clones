@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.Assertions;
 using System.Collections.Generic;
 
@@ -7,6 +8,9 @@ using System.Collections.Generic;
 /// </summary>
 public class PlayerModel : MonoBehaviour
 {
+    // Mana changed in integer value.
+    public UnityEvent ManaChangedEvent;
+
     // Differentiate units and buildings per player.
     public Material PlayerMaterial;
     public Color PlayerColor;
@@ -88,6 +92,8 @@ public class PlayerModel : MonoBehaviour
         Name = name;
         Mana = Consts.StartMana;
 
+        ManaChangedEvent.Invoke();
+
         // Don't we duplicate some cards to form a full deck?
         AllCards = deck;
         CardState.Init(deck);
@@ -99,8 +105,14 @@ public class PlayerModel : MonoBehaviour
     {
         if(GameModel.Instance.IsPlaying)
         {
+            float previousMana = Mana;
             float unclampedMana = Mana + Consts.ManaRechargePerSecond * Time.deltaTime;
             Mana = Mathf.Clamp(unclampedMana, 0f, Consts.MaxMana);
+
+            if(Mathf.FloorToInt(previousMana) != Mathf.FloorToInt(Mana))
+            {
+                ManaChangedEvent.Invoke();
+            }
         }
     }
 
@@ -129,6 +141,7 @@ public class PlayerModel : MonoBehaviour
 
         CardState.PlayCard(card);
         Mana -= card.ManaCost;
+        ManaChangedEvent.Invoke();
 
         var unit = Entity.SpawnFromDefinition(this, card, position, isFromPlayersHand: true);
         if(unit != null)

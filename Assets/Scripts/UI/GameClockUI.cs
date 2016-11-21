@@ -7,6 +7,7 @@ using UnityEngine.UI;
 public class GameClockUI : MonoBehaviour 
 {
     [SerializeField] private Text _timer;
+    private int _lastUpdatedTime;
 
     void Update()
     {
@@ -19,10 +20,14 @@ public class GameClockUI : MonoBehaviour
 
         int secondsLeft = Mathf.RoundToInt(GameModel.Instance.SecondsLeft);
 
-        int minutes = secondsLeft / 60;
-        secondsLeft -= minutes * 60;
-        int seconds = secondsLeft;
-
-        _timer.text = string.Format("{0}:{1:D2}", minutes, seconds);
+        if(_lastUpdatedTime != secondsLeft)
+        {
+            int minutes = secondsLeft / 60;
+            secondsLeft -= minutes * 60;
+            int seconds = secondsLeft;
+        
+            _timer.text = string.Format("{0}:{1:D2}", minutes, seconds);
+            _lastUpdatedTime = secondsLeft;
+        }
     }
 }

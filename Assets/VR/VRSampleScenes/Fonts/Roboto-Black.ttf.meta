@@ -3,16 +3,23 @@ guid: edf3e7e4758434d4c897e06e8548fbf0
 timeCreated: 1444382442
 licenseType: Store
 TrueTypeFontImporter:
-  serializedVersion: 2
+  serializedVersion: 4
   fontSize: 16
-  forceTextureCase: -2
-  characterSpacing: 1
-  characterPadding: 0
+  forceTextureCase: -1
+  characterSpacing: 0
+  characterPadding: 1
   includeFontData: 1
-  use2xBehaviour: 0
-  fontNames: []
+  fontNames:
+  - Roboto
+  fallbackFontReferences:
+  - {fileID: 12800000, guid: 221212c0e0cb92d4b9e684203b5a18fd, type: 3}
+  - {fileID: 12800000, guid: 8c740fb154a0e534aa1c489395c538fb, type: 3}
+  - {fileID: 12800000, guid: 29aefb354c7bf5f44bdb6724d5d2bf04, type: 3}
+  - {fileID: 12800000, guid: 6241ecbe561b53d49a3044af4d4af290, type: 3}
+  - {fileID: 12800000, guid: 1ab4740f034baf2488e984a82e190cb3, type: 3}
   customCharacters: 
   fontRenderingMode: 0
+  ascentCalculationMode: 1
   userData: 
   assetBundleName: 
   assetBundleVariant: 

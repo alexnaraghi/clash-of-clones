@@ -9,40 +9,53 @@ public class CardPanel : MonoBehaviour
     public CardUI[] Hand;
     public CardUI PeekCard;
 
-    void Update()
+    void Start()
     {
-        if(GameModel.Instance.IsPlaying)
+        GameModel.Instance.MyPlayer.CardState.HandChangedEvent.AddListener(onHandChanged);
+        GameModel.Instance.MyPlayer.ManaChangedEvent.AddListener(onManaChanged);
+    }
+
+    private void onHandChanged()
+    {
+        var handState = GameModel.Instance.MyPlayer.CardState.Hand;
+
+        // EARLY OUT! //
+        if(handState.Length != Hand.Length)
         {
-            var handState = GameModel.Instance.MyPlayer.CardState.Hand;
-            int mana = Mathf.FloorToInt(GameModel.Instance.MyPlayer.Mana);
+            Debug.LogWarning("Hand length and card UI are not the same length!: " + handState.Length + "-" + Hand.Length);
+            return;
+        }
 
-            // EARLY OUT! //
-            if(handState.Length != Hand.Length)
+        for(int i = 0; i < Hand.Length; i++)
+        {
+            var visibleCard = Hand[i].Definition;
+            var handCard = handState[i];
+
+            if(visibleCard != handCard)
             {
-                Debug.LogWarning("Hand length and card UI are not the same length!: " + handState.Length + "-" + Hand.Length);
-                return;
+                //Change card.
+                Hand[i].Init(handCard);
             }
+        }
 
+        var peekCard = GameModel.Instance.MyPlayer.CardState.Peek();
+        if(peekCard != null)
+        {
+            PeekCard.Init(peekCard);
+        }
+    }
 
-            // Hmm maybe convert this to something more event driven?
-            for(int i = 0; i < Hand.Length; i++)
+    private void onManaChanged()
+    {
+        var handState = GameModel.Instance.MyPlayer.CardState.Hand;
+        int mana = Mathf.FloorToInt(GameModel.Instance.MyPlayer.Mana);
+
+        for(int i = 0; i < Hand.Length; i++)
+        {
+            var handCard = handState[i];
+            if(handCard != null)
             {
-                var visibleCard = Hand[i].Definition;
-                var handCard = handState[i];
-
-                if(visibleCard != handCard)
-                {
-                    //Change card.
-                    Hand[i].Init(handCard);
-                }
-
                 Hand[i].SetInteractable(handCard.ManaCost <= mana);
-            }
-
-            var peekCard = GameModel.Instance.MyPlayer.CardState.Peek();
-            if(peekCard != null)
-            {
-                PeekCard.Init(peekCard);
             }
         }
     }

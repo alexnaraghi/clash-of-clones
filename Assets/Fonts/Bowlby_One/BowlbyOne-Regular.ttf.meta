@@ -3,16 +3,18 @@ guid: 3d7fe0a26ba72d949874021dc3d6995e
 timeCreated: 1432116480
 licenseType: Store
 TrueTypeFontImporter:
-  serializedVersion: 2
+  serializedVersion: 4
   fontSize: 16
-  forceTextureCase: -2
-  characterSpacing: 1
-  characterPadding: 0
+  forceTextureCase: -1
+  characterSpacing: 0
+  characterPadding: 1
   includeFontData: 1
-  use2xBehaviour: 0
-  fontNames: []
+  fontNames:
+  - Bowlby One
+  fallbackFontReferences: []
   customCharacters: 
   fontRenderingMode: 0
+  ascentCalculationMode: 1
   userData: 
   assetBundleName: 
   assetBundleVariant: 

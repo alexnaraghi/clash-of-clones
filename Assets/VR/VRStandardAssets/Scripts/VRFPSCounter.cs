@@ -1,42 +1,62 @@
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace VRStandardAssets.Utils
+// Display FPS on a Unity UGUI Text Panel
+// To use: Drag onto a game object with Text component
+//         Press 'F' key to toggle show/hide
+public class VRFPSCounter : MonoBehaviour 
 {
-    // This script should be placed on a gameobject with a Text component.
-    // It will change the text to show the frames per second the scene
-    // is currently running at.  Note that it is displayed with smoothing.
-    public class VRFPSCounter : MonoBehaviour
+    public Text text;
+    public bool show = true;
+
+    private const int targetFPS = 60;
+    private const float updateInterval = 0.5f;
+
+    private int framesCount; 
+    private float framesTime; 
+
+    void Start()
+    { 
+        // no text object set? see if our gameobject has one to use
+        if (text == null) 
+        { 
+            text = GetComponent<Text>(); 
+        }
+    }
+    
+    void Update()
     {
-        private float m_DeltaTime;                      // This is the smoothed out time between frames.
-        private Text m_Text;                            // Reference to the component that displays the fps.
-
-
-        private const float k_SmoothingCoef = 0.1f;     // This is used to smooth out the displayed fps.
-
-
-        private void Start ()
+        if (Input.GetKeyDown(KeyCode.F))
         {
-            m_Text = GetComponent<Text> ();
+            show = !show;
         }
 
+        // monitoring frame counter and the total time
+        framesCount++;
+        framesTime += Time.unscaledDeltaTime; 
 
-        private void Update ()
+        // measuring interval ended, so calculate FPS and display on Text
+        if (framesTime > updateInterval)
         {
-            // This line has the effect of smoothing out delta time.
-            m_DeltaTime += (Time.deltaTime - m_DeltaTime) * k_SmoothingCoef;
-            
-            // The frames per second is the number of frames this frame (one) divided by the time for this frame (delta time).
-            float fps = 1.0f / m_DeltaTime;
-
-            // Set the displayed value of the fps to be an integer.
-            m_Text.text = Mathf.FloorToInt (fps) + " fps";
-
-            // Turn the fps display on and off using the F key.
-            if (Input.GetKeyDown (KeyCode.F))
+            if (text != null)
             {
-                m_Text.enabled = !m_Text.enabled;
+                if (show)
+                {
+                    float fps = framesCount/framesTime;
+                    text.text = System.String.Format("{0:F2} FPS", fps);
+                    text.color = (fps > (targetFPS-5) ? Color.green :
+                                 (fps > (targetFPS-30) ?  Color.yellow : 
+                                  Color.red));
+                }
+                else
+                {
+                    text.text = "";
+                }
             }
+            // reset for the next interval to measure
+            framesCount = 0;
+            framesTime = 0;
         }
+        
     }
 }
