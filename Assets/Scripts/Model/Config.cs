@@ -9,9 +9,11 @@ public class Config : MonoBehaviour
 
     public CardDataList Cards;
     public DeckDataList Decks;
+    public DeckSelectionData DeckSelections;
 
     private const string CARD_PATH = "Data/CardConfig";
     private const string DECK_PATH = "Data/DeckConfig";
+    private const string DECK_SELECTION_PATH = "Data/DeckSelectionConfig";
 
     void Awake()
     {
@@ -30,6 +32,7 @@ public class Config : MonoBehaviour
     {
         Cards = IO.LoadFromJson<CardDataList>(CARD_PATH);
         Decks = IO.LoadFromJson<DeckDataList>(DECK_PATH);
+        DeckSelections = IO.LoadFromJson<DeckSelectionData>(DECK_SELECTION_PATH);
     }
 
     public List<CardData> GetDeckByName(string name)

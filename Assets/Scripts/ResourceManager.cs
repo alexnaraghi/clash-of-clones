@@ -8,6 +8,8 @@ public class ResourceManager : MonoBehaviour
 {
     public static ResourceManager Instance;
 
+    public List<Sprite> PreloadedSprites = new List<Sprite>();
+
     private Dictionary<string, UnityEngine.Object> _prefabs = new Dictionary<string, UnityEngine.Object>();
 
     void Awake()
@@ -20,6 +22,15 @@ public class ResourceManager : MonoBehaviour
         }
 
         Instance = this;
+
+        // Load all preloaded sprites into the dictionary.
+        foreach(var sprite in PreloadedSprites)
+        {
+            if(sprite != null)
+            {
+                _prefabs.Add(Consts.ImagePath + sprite.name, sprite);
+            }
+        }
     }
 
     public T Load<T>(string prefabPath, bool ignoreCache = false) where T : UnityEngine.Object

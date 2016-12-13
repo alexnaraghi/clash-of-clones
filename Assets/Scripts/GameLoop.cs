@@ -102,8 +102,8 @@ public class GameLoop : MonoBehaviour
 
         _messagePrinter.HideMessage();
 
-        // Just use default decks for now.
-        _model.InitGame(TestFactory.GetDefaultEnemyDeck(), TestFactory.GetDefaultPlayerDeck());
+        _model.InitGame(GameSessionData.Instance.EnemyDeck, GameSessionData.Instance.PlayerDeck);
+
         _model.GameStartedEvent.Invoke();
     }
 

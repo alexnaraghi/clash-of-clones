@@ -11,6 +11,7 @@ public static class Consts
 
     public const string SpawnClockPrefabPath = "UI/SpawnClock";
 
+    public const int DeckSize = 8;
     public const int HandSize = 4;
     public const float MaxMana = 10f;
     public const float StartMana = 6f;
