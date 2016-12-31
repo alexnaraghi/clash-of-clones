@@ -121,7 +121,11 @@ public class GameLoop : MonoBehaviour
 
             yield return null;
         }
-        _messagePrinter.HideMessage();
+
+        if(_messagePrinter != null)
+        {
+            _messagePrinter.HideMessage();
+        }
 
         _model.IsPlaying = false;
     }

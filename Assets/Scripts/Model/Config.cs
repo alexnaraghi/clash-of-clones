@@ -11,9 +11,9 @@ public class Config : MonoBehaviour
     public DeckDataList Decks;
     public DeckSelectionData DeckSelections;
 
-    private const string CARD_PATH = "Data/CardConfig";
-    private const string DECK_PATH = "Data/DeckConfig";
-    private const string DECK_SELECTION_PATH = "Data/DeckSelectionConfig";
+    private const string CARD_PATH = "CardConfig";
+    private const string DECK_PATH = "DeckConfig";
+    private const string DECK_SELECTION_PATH = "DeckSelectionConfig";
 
     void Awake()
     {
