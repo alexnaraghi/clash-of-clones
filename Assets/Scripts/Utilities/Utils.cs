@@ -60,4 +60,16 @@ public static class Utils
     {
         return new Vector3(src.x, 0f, src.z);
     }
+
+    public static T Instantiate<T>(T original, Transform parent) where T : UnityEngine.Object
+    {
+        return (T)UnityEngine.Object.Instantiate(original, parent);
+    }
+
+    public static T Instantiate<T>(T original, Vector3 position, Quaternion rotation) where T : UnityEngine.Object
+    {
+        return (T)UnityEngine.Object.Instantiate(original, Vector3.zero, Quaternion.identity);
+    }
+
+    
 }

@@ -100,7 +100,7 @@ public class GameLoop : MonoBehaviour
         _timerAnimation.Play();
         yield return _cardPanelAnimation.isPlaying;
 
-        _messagePrinter.HideMessage();
+        //_messagePrinter.HideMessage();
 
         _model.InitGame(TestFactory.GetDefaultPlayerDeck(), TestFactory.GetDefaultEnemyDeck());
         //_model.InitGame(GameSessionData.Instance.EnemyDeck, GameSessionData.Instance.PlayerDeck);

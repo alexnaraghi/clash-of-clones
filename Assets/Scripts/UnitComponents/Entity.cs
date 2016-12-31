@@ -173,7 +173,7 @@ public class Entity : MonoBehaviour
             var clockPrefab = Resources.Load<GameObject>(Consts.SpawnClockPrefabPath);
             if(clockPrefab != null)
             {
-                var go = Instantiate(clockPrefab);
+                var go = Utils.Instantiate(clockPrefab, GameModel.Instance.BoardRoot.transform);
                 if(go != null)
                 {
                     var clock = go.GetComponent<SpawnClock>();
@@ -244,7 +244,9 @@ public class Entity : MonoBehaviour
 
         if(_deathEffectPrefab != null)
         {
-            var go = (GameObject)Instantiate(_deathEffectPrefab, transform.position, Quaternion.identity);
+            var go = Utils.Instantiate(_deathEffectPrefab, GameModel.Instance.BoardRoot.transform);
+            go.transform.position = transform.position;
+
             if(go != null)
             {
                 Destroy(go, 1.5f);
@@ -280,7 +282,9 @@ public class Entity : MonoBehaviour
         {
             spawnPosition.y = Consts.AirUnitHeight;
         }
-        var go = (GameObject)Instantiate(prefab, spawnPosition, Quaternion.identity);
+        var go = Utils.Instantiate(prefab, GameModel.Instance.BoardRoot.transform);
+        go.transform.position = spawnPosition;
+
         var entity = go.GetComponent<Entity>();
 
         // EARLY OUT! //

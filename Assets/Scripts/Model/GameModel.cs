@@ -15,7 +15,10 @@ public class GameModel : MonoBehaviour
     // Singletons suck, consider something more robust.  Can we have multiple game-states at a time?
     // Might be possible if we implement hosted multiplayer.
     public static GameModel Instance;
- 
+
+    // The parent of all board objects
+    public GameObject BoardRoot;
+
     [Range(0, 1)] 
     public int LocalPlayerNum;
 
@@ -75,6 +78,13 @@ public class GameModel : MonoBehaviour
         if (LeftPlayer == null || RightPlayer == null)
         {
             Debug.LogWarning("Need two players to have a working game state.");
+            return;
+        }
+
+        // EARLY OUT! //
+        if(BoardRoot == null)
+        {
+            Debug.LogWarning("Need board root to have a working game state.");
             return;
         }
 

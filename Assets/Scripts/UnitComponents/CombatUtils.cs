@@ -53,7 +53,9 @@ public static class CombatUtils
 
         // Create an instance of the shell and store a reference to it's rigidbody.
         Rigidbody projectileRigidbody =
-            GameObject.Instantiate (projectilePrefab, fireTransform.position, fireTransform.rotation) as Rigidbody;
+            Utils.Instantiate (projectilePrefab, GameModel.Instance.BoardRoot.transform);
+        projectileRigidbody.transform.position = fireTransform.position;
+        projectileRigidbody.transform.rotation = fireTransform.rotation;
 
         Vector3 velocity = CombatUtils.CalculateVelocityToHit(
             fireTransform.position, 

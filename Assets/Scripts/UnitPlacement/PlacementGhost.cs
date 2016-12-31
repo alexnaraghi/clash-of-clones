@@ -93,7 +93,7 @@ public class PlacementGhost : MonoBehaviour
 
             if(prefab != null)
             {
-                Model = (GameObject)Instantiate(prefab, Vector3.zero, Quaternion.identity);
+                Model = Utils.Instantiate(prefab, Vector3.zero, Quaternion.identity);
                 if(Model != null)
                 {
                     Model.transform.SetParent(transform, false);

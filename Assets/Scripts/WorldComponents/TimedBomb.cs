@@ -31,7 +31,7 @@ public class TimedBomb : MonoBehaviour
             var clockPrefab = Resources.Load<GameObject>(Consts.SpawnClockPrefabPath);
             if(clockPrefab != null)
             {
-                var go = Instantiate(clockPrefab);
+                var go = Utils.Instantiate(clockPrefab, GameModel.Instance.BoardRoot.transform);
                 if(go != null)
                 {
                     var clock = go.GetComponent<SpawnClock>();
