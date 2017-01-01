@@ -19,16 +19,6 @@ public class TerritoryUI : MonoBehaviour
     private List<RectTransform> _imagePool;
     private int _numberOfTerritoriesToPool = 6;
 
-    /// <summary>
-    /// Is the territory display showing?
-    /// </summary>
-    public bool IsShowingEnemyTerritory
-    {
-        get { return _isShowingEnemyTerritory;}
-        set { _isShowingEnemyTerritory = value; }
-    }
-    private bool _isShowingEnemyTerritory;
-
     void OnEnable()
     {
         // EARLY OUT! //
@@ -49,7 +39,6 @@ public class TerritoryUI : MonoBehaviour
                 rectTransform.SetParent(transform, false);
                 rectTransform.localPosition = Vector3.zero;
                 rectTransform.localRotation = Quaternion.identity;
-                rectTransform.gameObject.SetActive(false);
                 _imagePool.Add(rectTransform);
             }
         }
@@ -58,25 +47,22 @@ public class TerritoryUI : MonoBehaviour
     void Update()
     {
         int numImagesUsed = 0;
-        if(_isShowingEnemyTerritory)
+        var player = GameModel.Instance.EnemyPlayer;
+        foreach(var building in player.Buildings)
         {
-            var player = GameModel.Instance.EnemyPlayer;
-            foreach(var building in player.Buildings)
+            if(building.Entity != null && building.Entity.HP > 0)
             {
-                if(building.Entity != null && building.Entity.HP > 0)
+                foreach(var territory in building.Territory.Territories)
                 {
-                    foreach(var territory in building.Territory.Territories)
+                    if(numImagesUsed < _imagePool.Count)
                     {
-                        if(numImagesUsed < _imagePool.Count)
-                        {
-                            var rectTransform = _imagePool[numImagesUsed];
-                            var rect = TerritoryData.ToWorldRect(territory);
-                            rectTransform.gameObject.SetActive(true);
-                            rectTransform.offsetMin = new Vector2(rect.xMin, rect.yMin);
-                            rectTransform.offsetMax = new Vector2(rect.xMax, rect.yMax);
-                            
-                            numImagesUsed++;
-                        }
+                        var rectTransform = _imagePool[numImagesUsed];
+                        var rect = TerritoryData.ToWorldRect(territory);
+                        rectTransform.gameObject.SetActive(true);
+                        rectTransform.offsetMin = new Vector2(rect.xMin, rect.yMin);
+                        rectTransform.offsetMax = new Vector2(rect.xMax, rect.yMax);
+                        
+                        numImagesUsed++;
                     }
                 }
             }

@@ -101,7 +101,7 @@ public class PlacementGhost : MonoBehaviour
 
                     if(!_card.IsProjectile)
                     {
-                        _territoryGui.IsShowingEnemyTerritory = true;
+                        _territoryGui.gameObject.SetActive(true);
                     }
                 }
             }
@@ -150,6 +150,6 @@ public class PlacementGhost : MonoBehaviour
         }
         _card = null;
 
-        _territoryGui.IsShowingEnemyTerritory = false;
+        _territoryGui.gameObject.SetActive(false);
     }
 }

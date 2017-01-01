@@ -3,11 +3,15 @@ using UnityEngine.Events;
 using System.Collections.Generic;
 using System.Linq;
 
+[System.Serializable]
+public class CardChangedEvent : UnityEvent<int> {}
+
 /// <summary>
 /// Represents the state of the game with respect to the players' cards.
 /// </summary>
 public class PlayerCardModel : MonoBehaviour 
 {
+    public CardChangedEvent CardChangedEvent;
     public UnityEvent HandChangedEvent;
 
     public List<CardData> Deck;
@@ -91,6 +95,7 @@ public class PlayerCardModel : MonoBehaviour
             }
 
             Hand[i] = drawCard();
+            CardChangedEvent.Invoke(i);
         }
 
         HandChangedEvent.Invoke();
@@ -104,6 +109,7 @@ public class PlayerCardModel : MonoBehaviour
         }
         Hand[handIndex] = drawCard();
 
+        CardChangedEvent.Invoke(handIndex);
         HandChangedEvent.Invoke();
     }
 
