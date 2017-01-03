@@ -13,7 +13,9 @@ It's a working prototype, keep that in mind but feel free to use it.
 ## History
 
 12/29/16 Branched to Vive.
+
 11/12/16 Branched to GearVR
+
 10/10/16 Initial Prototype
 
 ## Credits
