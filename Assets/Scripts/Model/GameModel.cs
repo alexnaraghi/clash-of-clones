@@ -19,6 +19,10 @@ public class GameModel : MonoBehaviour
     // The parent of all board objects
     public GameObject BoardRoot;
 
+    // Some global gameplay UI access.  Consider moving this somewhere else?
+    public TerritoryUI TerritoryCanvas;
+    public GridSquareHighlight GridHighlight;
+
     [Range(0, 1)] 
     public int LocalPlayerNum;
 

@@ -33,8 +33,8 @@ public class CardFigurineSlot : MonoBehaviour
             GameModel.Instance.MyPlayer.CardState.CardChangedEvent.AddListener(onCardChanged);
         }
 
-        _placementHighlighter = GameObject.Find("BoardHighlight");
-        _territoryUI = GameObject.Find("TerritoryCanvas");
+        _placementHighlighter = GameModel.Instance.GridHighlight.gameObject;
+        _territoryUI = GameModel.Instance.TerritoryCanvas.gameObject;
     }
 
     private void OnEnable()

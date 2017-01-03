@@ -1,0 +1,7 @@
+Benchmarks
+
+~140 - 200 draw calls per frame
+120k - 200k verts
+24-26 ms GPU render
+batches: 127
+Saved by batching: 8

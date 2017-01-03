@@ -1,0 +1,10 @@
+Unoptomized about 200 draw calls
+
+just scene + ui
+100 draw calls, 25 setpass
+
+just ui
+43 draw calls, 13 setpass
+
+nothing
+19 draw calls, 13 setpass, 17 batches
