@@ -34,3 +34,16 @@ Assets/VSCode.meta
 Assets/Plugins/Android/Assets/
 Assets/Scenes/ClashScene/LightingData.asset
 Assets/Scenes/ClashScene/LightingData.asset.meta
+Assets/Scenes/ClashScene/Lightmap-0_comp_dir.exr.meta
+Assets/Scenes/ClashScene/Lightmap-0_comp_light.exr.meta
+Assets/Scenes/ClashScene/Lightmap-1_comp_dir.exr.meta
+Assets/Scenes/ClashScene/Lightmap-1_comp_light.exr.meta
+Assets/Scenes/ClashScene/Lightmap-2_comp_dir.exr.meta
+Assets/Scenes/ClashScene/Lightmap-2_comp_light.exr.meta
+Assets/Scenes/ClashScene/Lightmap-3_comp_dir.exr.meta
+Assets/Scenes/ClashScene/Lightmap-3_comp_light.exr.meta
+Assets/Scenes/ClashScene/Lightmap-4_comp_dir.exr.meta
+Assets/Scenes/ClashScene/Lightmap-4_comp_light.exr.meta
+Assets/Scenes/ClashScene/Lightmap-5_comp_dir.exr.meta
+Assets/Scenes/ClashScene/Lightmap-5_comp_light.exr.meta
+Assets/Scenes/ClashScene/ReflectionProbe-0.exr.meta
