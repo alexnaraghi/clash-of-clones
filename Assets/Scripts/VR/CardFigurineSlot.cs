@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using UnityEngine;
+using UnityEngine.Events;
 using VRTK;
 
 // TODO:  This script does quite a few unrelated things.  I should break this up into several scripts for each
@@ -25,6 +26,16 @@ public class CardFigurineSlot : MonoBehaviour
 
     private float _elapsedSpawnSeconds;
     private const float _spawnMetersPerSecond = 150f;
+
+    public UnityEvent CardChangedEvent;
+
+    public CardFigurine Figurine
+    {
+        get
+        {
+            return _figurine;
+        }
+    }
 
     private void Awake()
     {
@@ -79,6 +90,8 @@ public class CardFigurineSlot : MonoBehaviour
                 _figurine.Init(data);
                 registerFigurine();
             }
+
+            CardChangedEvent.Invoke();
         }
     }
 
