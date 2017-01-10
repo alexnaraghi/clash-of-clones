@@ -223,7 +223,8 @@ public class GridSquareHighlight : MonoBehaviour
         }
     }
 
-    public void OnEnable()
+    // For our game we assume a constant grid size, so only generate the mesh once at runtime.
+    public void Start()
     {
         if (Application.isPlaying)
         {

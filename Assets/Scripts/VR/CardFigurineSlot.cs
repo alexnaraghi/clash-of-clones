@@ -224,7 +224,8 @@ public class CardFigurineSlot : MonoBehaviour
 
             if(isHighlightActive)
             {
-                var snappedPos = new Vector3(_snapper.WorldPosition.x, 1f, _snapper.WorldPosition.z);
+                var center = TerritoryData.GetCenter(_snapper.GridPoint.X, _snapper.GridPoint.Y);
+                var snappedPos = new Vector3(center.x, 1f, center.z);
                 _placementHighlighter.transform.position = snappedPos;
             }
         }
