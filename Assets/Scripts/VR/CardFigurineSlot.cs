@@ -162,7 +162,7 @@ public class CardFigurineSlot : MonoBehaviour
                 }
                 _snapper.GridSquareChangedEvent.AddListener(OnFigurineGridSquareChanged);
 
-                if(_territoryUI != null)
+                if(_territoryUI != null && !_figurine.Data.IsProjectile)
                 {
                     _territoryUI.SetActive(true);
                 }

@@ -19,7 +19,7 @@ public class TerritoryUI : MonoBehaviour
     private List<RectTransform> _imagePool;
     private int _numberOfTerritoriesToPool = 6;
 
-    void OnEnable()
+    void Start()
     {
         // EARLY OUT! //
         if(_imagePrefab == null)
