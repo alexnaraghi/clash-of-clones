@@ -502,6 +502,7 @@ public class ValveCamera : MonoBehaviour
 				m_adaptiveQualityDebugQuad = new GameObject( "AdaptiveQualityDebugQuad" );
 				m_adaptiveQualityDebugQuad.transform.parent = transform;
 				m_adaptiveQualityDebugQuad.transform.localPosition = Vector3.forward * 1.0f;
+				m_adaptiveQualityDebugQuad.transform.localScale = Vector3.one; //ALEX N
 				m_adaptiveQualityDebugQuad.transform.localRotation = Quaternion.Euler( 0.0f, 0.0f, 0.0f );
 				m_adaptiveQualityDebugQuad.AddComponent<MeshFilter>().mesh = mesh;
 				if ( Resources.Load( "adaptive_quality_debug" ) as Material )
