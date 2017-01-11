@@ -6,23 +6,16 @@ using VRStandardAssets.Utils;
 /// <summary>
 /// Controls the core game loop/lifecycle.
 /// </summary>
-[RequireComponent(typeof(GameModel))]
 public class GameLoop : MonoBehaviour 
 {
     [SerializeField] private MessageUI _messagePrinter;
     [SerializeField] private GameObject _gameOverMenu;
-    [SerializeField] private Camera _camera;
-    [SerializeField] private Animation _cardPanelAnimation;
-    [SerializeField] private Animation _timerAnimation;
-    [SerializeField] private VRCameraFade _cameraFade;
 
     // The scene name to load when the game ends.
     [SerializeField] private string _sceneToLoad = "ClashScene";
 
     private const float INITIAL_ZOOM = 50f;
     private const float GAMEPLAY_ZOOM = 44.51f;
-
-    private GameModel _model;
 
     private bool _isFadingOut;
 
@@ -31,35 +24,16 @@ public class GameLoop : MonoBehaviour
         StartCoroutine(endGame());
     }
 
-    void Awake()
-    {
-        _model = GetComponent<GameModel>();
-    }
-
     void Start()
     {
-        // EARLY OUT! //
-        if(_model == null)
-        {
-            Debug.LogWarning("Game loop requires game model");
-            return;
-        }
-
         StartCoroutine(Loop());
     }
 
     private IEnumerator endGame()
     {
-        // EARLY OUT //
-        if(_isFadingOut)
-        {
-            yield break;
-        }
-
-        _isFadingOut = true;
-
-        // Wait for the camera to fade out.
-        yield return StartCoroutine(_cameraFade.BeginFadeOut(true));
+        // Do something when game ends.
+        
+        yield return null;
 
         SceneManager.LoadScene(_sceneToLoad, LoadSceneMode.Single);
 
@@ -84,39 +58,27 @@ public class GameLoop : MonoBehaviour
             }
         }
 
-/*
-        _camera.orthographicSize = INITIAL_ZOOM;
+        // Do a cool effect.
 
-        // Do some camera zoom in effect.
-        while(_camera.orthographicSize > GAMEPLAY_ZOOM)
-        {
-            const float zoomPerSecond = 3f;
-            _camera.orthographicSize -= zoomPerSecond * Time.deltaTime;
-            yield return null;
-        }
-*/
-        _cardPanelAnimation.gameObject.SetActive(true);
-        _cardPanelAnimation.Play();
-        _timerAnimation.Play();
-        yield return _cardPanelAnimation.isPlaying;
+        yield return new WaitForSeconds(2f);
 
         //_messagePrinter.HideMessage();
 
-        _model.InitGame(TestFactory.GetDefaultPlayerDeck(), TestFactory.GetDefaultEnemyDeck());
+        SL.Get<GameModel>().InitGame(TestFactory.GetDefaultPlayerDeck(), TestFactory.GetDefaultEnemyDeck());
         //_model.InitGame(GameSessionData.Instance.EnemyDeck, GameSessionData.Instance.PlayerDeck);
 
-        _model.GameStartedEvent.Invoke();
+        SL.Get<GameModel>().GameStartedEvent.Invoke();
     }
 
     private IEnumerator RoundInProgress()
     {
         while(!isGameOver())
         {
-            _model.SecondsLeft -= Time.deltaTime;
+            SL.Get<GameModel>().SecondsLeft -= Time.deltaTime;
 
-            if(_model.SecondsLeft <= 10f)
+            if(SL.Get<GameModel>().SecondsLeft <= 10f)
             {
-                _messagePrinter.PrintMessage(Mathf.Max(1f, Mathf.RoundToInt(_model.SecondsLeft)).ToString());
+                _messagePrinter.PrintMessage(Mathf.Max(1f, Mathf.RoundToInt(SL.Get<GameModel>().SecondsLeft)).ToString());
             }
 
             yield return null;
@@ -127,12 +89,12 @@ public class GameLoop : MonoBehaviour
             _messagePrinter.HideMessage();
         }
 
-        _model.IsPlaying = false;
+        SL.Get<GameModel>().IsPlaying = false;
     }
 
     private IEnumerator RoundEnding()
     {
-        _model.GameOverEvent.Invoke();
+        SL.Get<GameModel>().GameOverEvent.Invoke();
         PlayerModel winner = determineWinner();
 
         // Print message.
@@ -148,15 +110,7 @@ public class GameLoop : MonoBehaviour
             }
         }
 
-        /*
-                // Do some camera zoom out effect.
-                while(_camera.orthographicSize < INITIAL_ZOOM)
-                {
-                    const float zoomPerSecond = 3f;
-                    _camera.orthographicSize += zoomPerSecond * Time.deltaTime;
-                    yield return null;
-                }
-        */
+        // Do a cool effect.
 
         yield return new WaitForSeconds(3f);
 
@@ -173,7 +127,9 @@ public class GameLoop : MonoBehaviour
 
     private bool isGameOver()
     {
-        return _model.LeftPlayer.HQ.HP <= 0 || _model.RightPlayer.HQ.HP <= 0 || _model.SecondsLeft <= 0f;
+        return SL.Get<GameModel>().LeftPlayer.HQ.HP <= 0 
+            || SL.Get<GameModel>().RightPlayer.HQ.HP <= 0 
+            || SL.Get<GameModel>().SecondsLeft <= 0f;
     }
 
     /// <summary>
@@ -185,7 +141,7 @@ public class GameLoop : MonoBehaviour
 
         for(int i = 0; i < 2; i++)
         {
-            var player = _model.Players[i];
+            var player = SL.Get<GameModel>().Players[i];
             if(player.HQ.HP > 0)
             {
                 scores[i]++;
@@ -206,11 +162,11 @@ public class GameLoop : MonoBehaviour
 
         if(scores[0] > scores[1])
         {
-            winner = _model.Players[0];
+            winner = SL.Get<GameModel>().Players[0];
         }
         else if(scores[0] < scores[1])
         {
-            winner = _model.Players[1];
+            winner = SL.Get<GameModel>().Players[1];
         }
 
         return winner;

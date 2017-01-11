@@ -10,8 +10,8 @@ public class StartGame : MonoBehaviour
         if(Selection != null && Selection.IsDeckComplete())
         {
             var deck = Selection.GetDeckList();
-            GameSessionData.Instance.PlayerDeck = deck;
-            GameSessionData.Instance.EnemyDeck = TestFactory.GetDefaultEnemyDeck();
+            SL.Get<GameSessionData>().PlayerDeck = deck;
+            SL.Get<GameSessionData>().EnemyDeck = TestFactory.GetDefaultEnemyDeck();
             SceneManager.LoadScene("ClashScene");
         }
         else
