@@ -47,10 +47,12 @@ public class DeckSelection : MonoBehaviour
 
     public void PopulateDeck(DeckData deck)
     {
+        /*
         foreach(var card in deck.CardList)
         {
             // Do something to select the cards.
         }
+        */
     }
 
     public void Toggle(DeckSelectionElement element)

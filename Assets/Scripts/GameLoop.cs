@@ -1,7 +1,6 @@
 ﻿using System.Collections;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using VRStandardAssets.Utils;
 
 /// <summary>
 /// Controls the core game loop/lifecycle.
@@ -32,7 +31,7 @@ public class GameLoop : MonoBehaviour
     private IEnumerator endGame()
     {
         // Do something when game ends.
-        
+
         yield return null;
 
         SceneManager.LoadScene(_sceneToLoad, LoadSceneMode.Single);
