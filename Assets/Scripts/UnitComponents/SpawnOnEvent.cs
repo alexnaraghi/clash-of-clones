@@ -51,7 +51,7 @@ public class SpawnOnEvent : MonoBehaviour
     {
         if(_prefabToSpawn != null)
         {
-            var go = Utils.Instantiate(_prefabToSpawn, GameModel.Instance.BoardRoot.transform);
+            var go = Utils.Instantiate(_prefabToSpawn, SL.Get<GameModel>().BoardRoot.transform);
             go.transform.position = transform.position;
             go.Init(_entity);
         }

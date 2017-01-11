@@ -83,7 +83,7 @@ public class EntitySpawner : MonoBehaviour
 
     private void spawnUnitAtPosition(Vector3 position)
     {
-        var card = Config.Instance.GetCardByName(_entityToSpawn);
+        var card = SL.Get<Config>().GetCardByName(_entityToSpawn);
         if(_shouldInstaSpawnChildren)
         {
             card.SpawnChargeSeconds = 0;

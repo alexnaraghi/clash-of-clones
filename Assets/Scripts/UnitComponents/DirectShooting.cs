@@ -80,7 +80,7 @@ public class DirectShooting : MonoBehaviour
     {
         if(target != null)
         {
-            var bullet = Utils.Instantiate(_bulletPrefab, GameModel.Instance.BoardRoot.transform);
+            var bullet = Utils.Instantiate(_bulletPrefab, SL.Get<GameModel>().BoardRoot.transform);
             bullet.transform.position = _fireTransform.position;
 
             if(bullet != null)

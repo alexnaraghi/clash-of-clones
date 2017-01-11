@@ -53,7 +53,7 @@ public static class CombatUtils
 
         // Create an instance of the shell and store a reference to it's rigidbody.
         Rigidbody projectileRigidbody =
-            Utils.Instantiate (projectilePrefab, GameModel.Instance.BoardRoot.transform);
+            Utils.Instantiate (projectilePrefab, SL.Get<GameModel>().BoardRoot.transform);
         projectileRigidbody.transform.position = fireTransform.position;
         projectileRigidbody.transform.rotation = fireTransform.rotation;
 
@@ -184,7 +184,7 @@ public static class CombatUtils
 
     public static Entity GetClosestEnemyBuilding(Entity entity)
     {
-        var enemy = GameModel.Instance.GetOppositePlayer(entity.Owner);
+        var enemy = SL.Get<GameModel>().GetOppositePlayer(entity.Owner);
 
         // EARLY OUT! //
         if(enemy == null) return null;

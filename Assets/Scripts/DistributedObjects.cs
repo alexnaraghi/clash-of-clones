@@ -26,7 +26,7 @@ public class DistributedObjects : MonoBehaviour
                 var go = Instantiate(_prefabToSpawn);
                 go.transform.position = pos;
                 go.transform.SetParent(transform);
-                GameModel.Instance.MyPlayer.RotateForPlayer(go);
+                SL.Get<GameModel>().MyPlayer.RotateForPlayer(go);
             }
         }
     }

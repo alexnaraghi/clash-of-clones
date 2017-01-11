@@ -21,8 +21,6 @@ public class CardFigurineSlot : MonoBehaviour
     // A grid snapper is dynamically attached to the figurine while grabbed so we can track which square we 
     // will be placing into).
     private GridSnapVR _snapper;
-    private GameObject _placementHighlighter;
-    private GameObject _territoryUI;
 
     private float _elapsedSpawnSeconds;
     private const float _spawnMetersPerSecond = 150f;
@@ -39,30 +37,31 @@ public class CardFigurineSlot : MonoBehaviour
 
     private void Awake()
     {
-        if(GameModel.Instance.MyPlayer.CardState != null)
+        if(SL.Get<GameModel>().MyPlayer.CardState != null)
         {
-            GameModel.Instance.MyPlayer.CardState.CardChangedEvent.AddListener(onCardChanged);
+            SL.Get<GameModel>().MyPlayer.CardState.CardChangedEvent.AddListener(onCardChanged);
         }
-
-        _placementHighlighter = GameModel.Instance.GridHighlight.gameObject;
-        _territoryUI = GameModel.Instance.TerritoryCanvas.gameObject;
     }
 
     private void OnEnable()
     {
-        GameModel.Instance.MyPlayer.ManaChangedEvent.AddListener(onManaChanged);
+        SL.Get<GameModel>().MyPlayer.ManaChangedEvent.AddListener(onManaChanged);
     }
 
     private void OnDisable()
     {
-        GameModel.Instance.MyPlayer.ManaChangedEvent.RemoveListener(onManaChanged);
+        if (SL.Exists && SL.Get<GameModel>() != null && SL.Get<GameModel>().MyPlayer.ManaChangedEvent != null)
+        {
+            SL.Get<GameModel>().MyPlayer.ManaChangedEvent.RemoveListener(onManaChanged);
+        }
     }
 
     private void OnDestroy()
     {
-        if (GameModel.Instance != null && GameModel.Instance.MyPlayer.CardState != null)
+        // Might be a bad idea to try and access service locator on destroy.
+        if (SL.Exists && SL.Get<GameModel>() != null && SL.Get<GameModel>().MyPlayer.CardState != null)
         {
-            GameModel.Instance.MyPlayer.CardState.CardChangedEvent.RemoveListener(onCardChanged);
+            SL.Get<GameModel>().MyPlayer.CardState.CardChangedEvent.RemoveListener(onCardChanged);
         }
     }
 
@@ -70,7 +69,7 @@ public class CardFigurineSlot : MonoBehaviour
     {
         if(index == HandIndex)
         {
-            var handState = GameModel.Instance.MyPlayer.CardState.Hand;
+            var handState = SL.Get<GameModel>().MyPlayer.CardState.Hand;
 
             // EARLY OUT! //
             if(handState == null)
@@ -97,7 +96,7 @@ public class CardFigurineSlot : MonoBehaviour
 
     private GameObject createFigurineFromDefinition(CardData data)
     {
-        var prefab = ResourceManager.Instance.Load<GameObject>(Consts.UnitGhostsPath + data.GhostPrefabName);
+        var prefab = SL.Get<ResourceManager>().Load<GameObject>(Consts.UnitGhostsPath + data.GhostPrefabName);
 
         GameObject go = null;
         if(prefab != null)
@@ -144,7 +143,7 @@ public class CardFigurineSlot : MonoBehaviour
         {
             // Don't allow a card to be picked up if we don't have enough mana.
             // TODO: Add visual indication to the player.
-            bool canPlayCard = GameModel.Instance.MyPlayer.CanPlayCard(_figurine.Data);
+            bool canPlayCard = SL.Get<GameModel>().MyPlayer.CanPlayCard(_figurine.Data);
             if(canPlayCard)
             {
                 _figurine.transform.SetParent(null);
@@ -162,9 +161,9 @@ public class CardFigurineSlot : MonoBehaviour
                 }
                 _snapper.GridSquareChangedEvent.AddListener(OnFigurineGridSquareChanged);
 
-                if(_territoryUI != null && !_figurine.Data.IsProjectile)
+                if(!_figurine.Data.IsProjectile)
                 {
-                    _territoryUI.SetActive(true);
+                    SL.Get<TerritoryUI>().Show();
                 }
             }
         }
@@ -204,29 +203,22 @@ public class CardFigurineSlot : MonoBehaviour
             _snapper = null;
         }
 
-        if(_placementHighlighter != null)
-        {
-            _placementHighlighter.SetActive(false);
-        }
-
-        if(_territoryUI != null)
-        {
-            _territoryUI.SetActive(false);
-        }
+        SL.Get<GridSquareHighlight>().gameObject.SetActive(false);
+        SL.Get<TerritoryUI>().Hide();
     }
 
     private void OnFigurineGridSquareChanged()
     {
-        if(_placementHighlighter != null && _snapper != null)
+        if(_snapper != null)
         {
             bool isHighlightActive = _snapper.IsOverBoard && isPlaceableTerritory(_snapper.WorldPosition);
-            _placementHighlighter.SetActive(isHighlightActive);
+            SL.Get<GridSquareHighlight>().gameObject.SetActive(isHighlightActive);
 
             if(isHighlightActive)
             {
                 var center = TerritoryData.GetCenter(_snapper.GridPoint.X, _snapper.GridPoint.Y);
                 var snappedPos = new Vector3(center.x, 1f, center.z);
-                _placementHighlighter.transform.position = snappedPos;
+                SL.Get<GridSquareHighlight>().transform.position = snappedPos;
             }
         }
     }
@@ -241,7 +233,7 @@ public class CardFigurineSlot : MonoBehaviour
         }
 
         var card = _figurine.Data;
-        bool canPlayCard = GameModel.Instance.MyPlayer.CanPlayCard(card);
+        bool canPlayCard = SL.Get<GameModel>().MyPlayer.CanPlayCard(card);
         if(canPlayCard && _snapper.IsOverBoard)
         {
             var gridPoint = _snapper.GridPoint;
@@ -265,7 +257,7 @@ public class CardFigurineSlot : MonoBehaviour
     {
         // If the territory is NOT controlled by the enemy ie friendly or neutral, except projectiles.
             return _figurine.Data.IsProjectile
-                || !GameModel.Instance.EnemyPlayer.IsInTerritory(position);
+                || !SL.Get<GameModel>().EnemyPlayer.IsInTerritory(position);
     }
 
     // Sends the figurine down to the destination position over time.  Once down, actually spawns the entity
@@ -292,12 +284,12 @@ public class CardFigurineSlot : MonoBehaviour
 
         // This will cause a card change event to be invoked which will re-populate the slot
         // automatically.
-        GameModel.Instance.MyPlayer.PlayCard(figurine.Data, destination);
+        SL.Get<GameModel>().MyPlayer.PlayCard(figurine.Data, destination);
     }
 
     private void onManaChanged()
     {
-        int mana = Mathf.FloorToInt(GameModel.Instance.MyPlayer.Mana);
+        int mana = Mathf.FloorToInt(SL.Get<GameModel>().MyPlayer.Mana);
 
         if(_figurine != null)
         {

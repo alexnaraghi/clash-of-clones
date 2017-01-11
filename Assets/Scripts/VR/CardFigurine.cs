@@ -29,17 +29,20 @@ public class CardFigurine : VRTK_InteractableObject
 
     protected override void OnEnable()
     {
-        GameModel.Instance.MyPlayer.ManaChangedEvent.AddListener(onManaChanged);
+        SL.Get<GameModel>().MyPlayer.ManaChangedEvent.AddListener(onManaChanged);
     }
 
     protected override void OnDisable()
     {
-        GameModel.Instance.MyPlayer.ManaChangedEvent.RemoveListener(onManaChanged);
+        if (SL.Exists && SL.Get<GameModel>() != null && SL.Get<GameModel>().MyPlayer.ManaChangedEvent != null)
+        {
+            SL.Get<GameModel>().MyPlayer.ManaChangedEvent.RemoveListener(onManaChanged);
+        }
     }
 
     private void onManaChanged()
     {
-        int mana = Mathf.FloorToInt(GameModel.Instance.MyPlayer.Mana);
+        int mana = Mathf.FloorToInt(SL.Get<GameModel>().MyPlayer.Mana);
 
         if(_data != null)
         {
@@ -50,6 +53,6 @@ public class CardFigurine : VRTK_InteractableObject
     private void setInteractable(bool isInteractable)
     {
         // Only allow grabs on playable cards.
-        isGrabbable = GameModel.Instance.MyPlayer.CanPlayCard(_data);
+        isGrabbable = SL.Get<GameModel>().MyPlayer.CanPlayCard(_data);
     }
 }

@@ -26,8 +26,8 @@ public class ManaUI : MonoBehaviour
 
     void Update()
     {
-        _slider.value = GameModel.Instance.MyPlayer.Mana;
-        int mana = Mathf.FloorToInt(GameModel.Instance.MyPlayer.Mana);
+        _slider.value = SL.Get<GameModel>().MyPlayer.Mana;
+        int mana = Mathf.FloorToInt(SL.Get<GameModel>().MyPlayer.Mana);
 
         if(_lastUpdatedMana != mana)
         {

@@ -32,7 +32,7 @@ public class Instant : MonoBehaviour
 
     private void onInit()
     {
-        var card = Config.Instance.GetCardByName(_entityToSpawn);
+        var card = SL.Get<Config>().GetCardByName(_entityToSpawn);
         if(card != null)
         {
             card.SpawnChargeSeconds = 0;

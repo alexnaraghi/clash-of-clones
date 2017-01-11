@@ -23,8 +23,8 @@ public class ManaUIVR : MonoBehaviour
 
     void Update()
     {
-        _slider.Value = GameModel.Instance.MyPlayer.Mana / Consts.MaxMana;
-        int mana = Mathf.FloorToInt(GameModel.Instance.MyPlayer.Mana);
+        _slider.Value = SL.Get<GameModel>().MyPlayer.Mana / Consts.MaxMana;
+        int mana = Mathf.FloorToInt(SL.Get<GameModel>().MyPlayer.Mana);
 
         if(_lastUpdatedMana != mana)
         {

@@ -53,7 +53,7 @@ public class Projectile: MonoBehaviour, IProjectile
         
         _isCollided = true;
 
-        var card = Config.Instance.GetCardByName(_entityToSpawn);
+        var card = SL.Get<Config>().GetCardByName(_entityToSpawn);
 
         if(card != null)
         {

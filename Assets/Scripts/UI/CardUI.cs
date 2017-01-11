@@ -61,7 +61,7 @@ public class CardUI : MonoBehaviour
 
     void Start()
     {
-        GameModel.Instance.GameOverEvent.AddListener(onGameEnded);
+        SL.Get<GameModel>().GameOverEvent.AddListener(onGameEnded);
     }
 
     private void onGameEnded()
@@ -82,7 +82,7 @@ public class CardUI : MonoBehaviour
         Definition = definition;
 
         _manaText.text = definition.ManaCost.ToString();
-        _image.sprite = ResourceManager.Instance.Load<Sprite>(Consts.ImagePath + definition.CardImageName);
+        _image.sprite = SL.Get<ResourceManager>().Load<Sprite>(Consts.ImagePath + definition.CardImageName);
     }
 
     public void OnToggled(bool isOn)
@@ -92,7 +92,7 @@ public class CardUI : MonoBehaviour
 
         if(isOn)
         {
-            _ghost.SetCard(Definition, GameModel.Instance.RightPlayer);
+            _ghost.SetCard(Definition, SL.Get<GameModel>().RightPlayer);
         }
         else
         {

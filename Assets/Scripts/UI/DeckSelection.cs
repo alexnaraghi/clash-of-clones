@@ -26,10 +26,10 @@ public class DeckSelection : MonoBehaviour
 
     private void loadCards()
     {
-        var availableCards = Config.Instance.DeckSelections.Cards;
+        var availableCards = SL.Get<Config>().DeckSelections.Cards;
         foreach(var cardName in availableCards)
         {
-            var card = Config.Instance.GetCardByName(cardName);
+            var card = SL.Get<Config>().GetCardByName(cardName);
             var element = Instantiate(SelectionElementPrefab);
             if(card != null && element != null)
             {

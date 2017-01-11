@@ -11,17 +11,8 @@ using UnityEngine.SceneManagement;
 /// </summary>
 public class GameModel : MonoBehaviour 
 {
-    // Singleton instance.
-    // Singletons suck, consider something more robust.  Can we have multiple game-states at a time?
-    // Might be possible if we implement hosted multiplayer.
-    public static GameModel Instance;
-
     // The parent of all board objects
     public GameObject BoardRoot;
-
-    // Some global gameplay UI access.  Consider moving this somewhere else?
-    public TerritoryUI TerritoryCanvas;
-    public GridSquareHighlight GridHighlight;
 
     [Range(0, 1)] 
     public int LocalPlayerNum;
@@ -68,16 +59,6 @@ public class GameModel : MonoBehaviour
 
     void Awake()
     {
-        if(Instance == null)
-        {
-            Instance = this;
-        }
-        else
-        {
-            Debug.LogWarning("More than once game state instance is running!  Destroying...");
-            Destroy(this);
-        }
-
         // EARLY OUT! //
         if (LeftPlayer == null || RightPlayer == null)
         {

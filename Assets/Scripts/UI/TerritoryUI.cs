@@ -11,6 +11,7 @@ public class TerritoryUI : MonoBehaviour
     /// The prefab of the image to display a territory with.
     /// </summary>
     [SerializeField] private Image _imagePrefab;
+    [SerializeField] private GameObject _canvas;
 
     /// <summary>
     /// Pool of images to use for the territory.
@@ -19,12 +20,22 @@ public class TerritoryUI : MonoBehaviour
     private List<RectTransform> _imagePool;
     private int _numberOfTerritoriesToPool = 6;
 
+    public void Show()
+    {
+        _canvas.SetActive(true);
+    }
+
+    public void Hide()
+    {
+        _canvas.SetActive(false);
+    }
+
     void Start()
     {
         // EARLY OUT! //
-        if(_imagePrefab == null)
+        if(_imagePrefab == null || _canvas == null)
         {
-            Debug.LogWarning("TerritoryDisplay requires an image prefab.");
+            Debug.LogWarning("TerritoryDisplay requires an image prefab and canvas.");
             return;
         }
 
@@ -36,7 +47,7 @@ public class TerritoryUI : MonoBehaviour
             var rectTransform = image.GetComponent<RectTransform>();
             if(rectTransform != null)
             {
-                rectTransform.SetParent(transform, false);
+                rectTransform.SetParent(_canvas.transform, false);
                 rectTransform.localPosition = Vector3.zero;
                 rectTransform.localRotation = Quaternion.identity;
                 _imagePool.Add(rectTransform);
@@ -47,7 +58,7 @@ public class TerritoryUI : MonoBehaviour
     void Update()
     {
         int numImagesUsed = 0;
-        var player = GameModel.Instance.EnemyPlayer;
+        var player = SL.Get<GameModel>().EnemyPlayer;
         foreach(var building in player.Buildings)
         {
             if(building.Entity != null && building.Entity.HP > 0)

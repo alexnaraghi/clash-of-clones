@@ -59,9 +59,9 @@ public class PlacementGhost : MonoBehaviour
         if(Model != null)
         {
             // If the model is active, it is in a placeable location.
-            if(IsValidPlacementPosition && GameModel.Instance.MyPlayer.CanPlayCard(_card))
+            if(IsValidPlacementPosition && SL.Get<GameModel>().MyPlayer.CanPlayCard(_card))
             {
-                GameModel.Instance.MyPlayer.PlayCard(_card, transform.position);
+                SL.Get<GameModel>().MyPlayer.PlayCard(_card, transform.position);
                 PlacedEvent.Invoke();
                 clear();
                 IsValidPlacementPosition = false;

@@ -103,7 +103,7 @@ public class PlayerModel : MonoBehaviour
 
     void Update()
     {
-        if(GameModel.Instance.IsPlaying)
+        if(SL.Get<GameModel>().IsPlaying)
         {
             float previousMana = Mana;
             float unclampedMana = Mana + Consts.ManaRechargePerSecond * Time.deltaTime;
@@ -161,7 +161,7 @@ public class PlayerModel : MonoBehaviour
     {
         if(go != null)
         {
-            if(this == GameModel.Instance.LeftPlayer)
+            if(this == SL.Get<GameModel>().LeftPlayer)
             {
                 go.transform.rotation = Quaternion.Euler(0f, -90f, 0f);
             }
@@ -195,8 +195,8 @@ public class PlayerModel : MonoBehaviour
         // EARLY OUT! //
         if(TopOutpost == null || HQ == null || BottomOutpost == null) return;
 
-        TopOutpost.Init(    this, Config.Instance.GetCardByName("Outpost"), false);
-        BottomOutpost.Init( this, Config.Instance.GetCardByName("Outpost"), false);
-        HQ.Init(            this, Config.Instance.GetCardByName("HQ"), false);
+        TopOutpost.Init(    this, SL.Get<Config>().GetCardByName("Outpost"), false);
+        BottomOutpost.Init( this, SL.Get<Config>().GetCardByName("Outpost"), false);
+        HQ.Init(            this, SL.Get<Config>().GetCardByName("HQ"), false);
     }
 }

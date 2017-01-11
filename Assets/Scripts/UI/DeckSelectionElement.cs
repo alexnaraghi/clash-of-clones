@@ -56,6 +56,6 @@ public class DeckSelectionElement : MonoBehaviour
         Definition = definition;
 
         _manaText.text = definition.ManaCost.ToString();
-        _image.sprite = ResourceManager.Instance.Load<Sprite>(Consts.ImagePath + definition.CardImageName);
+        _image.sprite = SL.Get<ResourceManager>().Load<Sprite>(Consts.ImagePath + definition.CardImageName);
     }
 }

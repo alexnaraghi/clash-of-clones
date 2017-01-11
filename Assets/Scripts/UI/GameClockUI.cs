@@ -18,7 +18,7 @@ public class GameClockUI : MonoBehaviour
             return;
         }
 
-        int secondsLeft = Mathf.RoundToInt(GameModel.Instance.SecondsLeft);
+        int secondsLeft = Mathf.RoundToInt(SL.Get<GameModel>().SecondsLeft);
 
         if(_lastUpdatedTime != secondsLeft)
         {

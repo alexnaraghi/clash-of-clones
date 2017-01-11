@@ -65,7 +65,7 @@ public class SnapToGrid : MonoBehaviour
             {
                 // If the territory is NOT controlled by the enemy ie friendly or neutral, except projectiles.
                 bool isPlaceableTerritory = _ghost.Card.IsProjectile
-                    || !GameModel.Instance.EnemyPlayer.IsInTerritory(hit.point);
+                    || !SL.Get<GameModel>().EnemyPlayer.IsInTerritory(hit.point);
 
                 if(isPlaceableTerritory)
                 {

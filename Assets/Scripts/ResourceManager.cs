@@ -6,23 +6,12 @@ using System.Collections.Generic;
 /// </summary>
 public class ResourceManager : MonoBehaviour
 {
-    public static ResourceManager Instance;
-
     public List<Sprite> PreloadedSprites = new List<Sprite>();
 
     private Dictionary<string, UnityEngine.Object> _prefabs = new Dictionary<string, UnityEngine.Object>();
 
     void Awake()
     {
-        // There can be only one.
-        if(Instance != null)
-        {
-            Destroy(gameObject);
-            return;
-        }
-
-        Instance = this;
-
         // Load all preloaded sprites into the dictionary.
         foreach(var sprite in PreloadedSprites)
         {

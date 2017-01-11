@@ -11,13 +11,13 @@ public class CardPanel : MonoBehaviour
 
     void Start()
     {
-        GameModel.Instance.MyPlayer.CardState.HandChangedEvent.AddListener(onHandChanged);
-        GameModel.Instance.MyPlayer.ManaChangedEvent.AddListener(onManaChanged);
+        SL.Get<GameModel>().MyPlayer.CardState.HandChangedEvent.AddListener(onHandChanged);
+        SL.Get<GameModel>().MyPlayer.ManaChangedEvent.AddListener(onManaChanged);
     }
 
     private void onHandChanged()
     {
-        var handState = GameModel.Instance.MyPlayer.CardState.Hand;
+        var handState = SL.Get<GameModel>().MyPlayer.CardState.Hand;
 
         // EARLY OUT! //
         if(handState.Length != Hand.Length)
@@ -38,7 +38,7 @@ public class CardPanel : MonoBehaviour
             }
         }
 
-        var peekCard = GameModel.Instance.MyPlayer.CardState.Peek();
+        var peekCard = SL.Get<GameModel>().MyPlayer.CardState.Peek();
         if(peekCard != null)
         {
             PeekCard.Init(peekCard);
@@ -47,8 +47,8 @@ public class CardPanel : MonoBehaviour
 
     private void onManaChanged()
     {
-        var handState = GameModel.Instance.MyPlayer.CardState.Hand;
-        int mana = Mathf.FloorToInt(GameModel.Instance.MyPlayer.Mana);
+        var handState = SL.Get<GameModel>().MyPlayer.CardState.Hand;
+        int mana = Mathf.FloorToInt(SL.Get<GameModel>().MyPlayer.Mana);
 
         for(int i = 0; i < Hand.Length; i++)
         {
