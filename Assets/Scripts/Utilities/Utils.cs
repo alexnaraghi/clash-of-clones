@@ -68,7 +68,7 @@ public static class Utils
 
     public static T Instantiate<T>(T original, Vector3 position, Quaternion rotation) where T : UnityEngine.Object
     {
-        return (T)UnityEngine.Object.Instantiate(original, Vector3.zero, Quaternion.identity);
+        return (T)UnityEngine.Object.Instantiate(original, position, rotation);
     }
 
     
