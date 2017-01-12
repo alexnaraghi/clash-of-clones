@@ -16,9 +16,7 @@ public class CardFigurine : VRTK_InteractableObject
         isGrabbable = true;
         isUsable = true;
         useOnlyIfGrabbed = true;
-        rumbleOnTouch = new Vector2(500f, 1f);
         holdButtonToGrab = false;
-        precisionSnap = true;
     }
 
     public void DisableInteractions()

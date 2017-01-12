@@ -29,12 +29,6 @@ public class ClashTeleport: MonoBehaviour
         }
     }
 
-    protected virtual void Awake()
-    {
-        // Is this necessary?  Found it in vrtk basic teleport.
-        Utilities.SetPlayerObject(gameObject, VRTK_PlayerObject.ObjectTypes.CameraRig);
-    }
-
     protected virtual void OnEnable()
     {
         // Again, this is VRTK behavior.  I'm guessing it is so destination markers can be registered
