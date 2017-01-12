@@ -18,7 +18,7 @@ public class ShellExplosion : MonoBehaviour, IProjectile
     [SerializeField] private float _explosionRadius = 5f;
     
     // Optional.
-    [SerializeField] private ParticleSystem _explosionParticles;
+    [SerializeField] private ParticleSystem _explosionParticlePrefab;
     [SerializeField] private AudioSource _explosionAudio;            
 
     private PlayerModel _owner;
@@ -76,16 +76,15 @@ public class ShellExplosion : MonoBehaviour, IProjectile
             }
         }
 
-        if(_explosionParticles != null)
+        if(_explosionParticlePrefab != null)
         {
-            // Unparent the particles from the shell.
-            _explosionParticles.transform.parent = null;
+            var explosion = Utils.Instantiate(_explosionParticlePrefab, transform.position, transform.rotation);
 
             // Play the particle system.
-            _explosionParticles.Play();
+            explosion.Play();
             
             // Once the particles have finished, destroy the gameobject they are on.
-            Destroy (_explosionParticles.gameObject, _explosionParticles.duration);
+            Destroy (explosion.gameObject, explosion.duration);
         }
 
         if(_explosionAudio != null)
