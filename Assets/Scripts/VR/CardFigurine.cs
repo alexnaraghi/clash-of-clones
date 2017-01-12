@@ -2,6 +2,8 @@
 using System.Collections;
 using System;
 using VRTK;
+using VRTK.GrabAttachMechanics;
+using VRTK.SecondaryControllerGrabActions;
 
 public class CardFigurine : VRTK_InteractableObject 
 {
@@ -11,12 +13,17 @@ public class CardFigurine : VRTK_InteractableObject
 
     public void Init(CardData data)
     {
-        _data = data; 
-        
+        _data = data;
+
+        var grabAttach = gameObject.AddComponent<VRTK_ChildOfControllerGrabAttach>();
+        var swapController = gameObject.AddComponent<VRTK_SwapControllerGrabAction>();
+
         isGrabbable = true;
         isUsable = true;
         useOnlyIfGrabbed = true;
         holdButtonToGrab = false;
+        grabAttachMechanicScript = grabAttach;
+        secondaryGrabActionScript = swapController;
     }
 
     public void DisableInteractions()
