@@ -1,14 +1,17 @@
 ﻿using System.Collections;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using VRTK;
 
 /// <summary>
 /// Controls the core game loop/lifecycle.
 /// </summary>
 public class GameLoop : MonoBehaviour 
 {
-    [SerializeField] private MessageUI _messagePrinter;
-    [SerializeField] private GameObject _gameOverMenu;
+    [SerializeField] private MessageUI _messagePrinterPrefab;
+
+    private MessageUI _messagePrinter;
+    private GameObject _gameOverMenu;
 
     // The scene name to load when the game ends.
     [SerializeField] private string _sceneToLoad = "ClashScene";
@@ -25,7 +28,22 @@ public class GameLoop : MonoBehaviour
 
     void Start()
     {
+        // EARLY OUT! //
+        if(_messagePrinterPrefab == null)
+        {
+            Debug.LogWarning("Require message printer.");
+            return;
+        }
+
+        initPrefabs();
         StartCoroutine(Loop());
+    }
+
+    private void initPrefabs()
+    {
+        _messagePrinter = Instantiate(_messagePrinterPrefab);
+        _gameOverMenu = _messagePrinter.transform.Find("GameOver").gameObject;
+        _gameOverMenu.SetActive(false);
     }
 
     private IEnumerator endGame()
