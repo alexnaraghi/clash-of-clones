@@ -132,12 +132,11 @@ public class CardFigurineSlot : MonoBehaviour
 
     private void onManaChanged()
     {
-        int mana = Mathf.FloorToInt(SL.Get<GameModel>().MyPlayer.Mana);
-
         if(_figurine != null)
         {
-            bool canInteract = _figurine.Data.ManaCost > mana;
-            LockedGameObject.SetActive(canInteract);
+            int mana = Mathf.FloorToInt(SL.Get<GameModel>().MyPlayer.Mana);
+            bool canInteract = _figurine.Data.ManaCost <= mana;
+            LockedGameObject.SetActive(!canInteract);
             _figurine.SetInteractable(canInteract);
         }
     }

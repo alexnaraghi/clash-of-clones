@@ -23,13 +23,16 @@ public class ManaUIVR : MonoBehaviour
 
     void Update()
     {
-        _slider.Value = SL.Get<GameModel>().MyPlayer.Mana / Consts.MaxMana;
-        int mana = Mathf.FloorToInt(SL.Get<GameModel>().MyPlayer.Mana);
-
-        if(_lastUpdatedMana != mana)
+        if(SL.Get<GameModel>().IsPlaying)
         {
-            _countText.text = mana.ToString();
-            _lastUpdatedMana = mana;
+            _slider.Value = SL.Get<GameModel>().MyPlayer.Mana / Consts.MaxMana;
+            int mana = Mathf.FloorToInt(SL.Get<GameModel>().MyPlayer.Mana);
+
+            if(_lastUpdatedMana != mana)
+            {
+                _countText.text = mana.ToString();
+                _lastUpdatedMana = mana;
+            }
         }
     }
 }

@@ -66,17 +66,18 @@ public class CardFigurine : MonoBehaviour
     {
         if(isInteractable)
         {
-            if(_ignoreHovering == null)
-            {
-                _ignoreHovering = gameObject.AddComponent<IgnoreHovering>();
-            }
-        }
-        else
-        {
             if(_ignoreHovering != null)
             {
                 Destroy(_ignoreHovering);
                 _ignoreHovering = null;
+            }
+        }
+        else
+        {
+
+            if(_ignoreHovering == null)
+            {
+                _ignoreHovering = gameObject.AddComponent<IgnoreHovering>();
             }
         }
     }
