@@ -78,6 +78,8 @@ public class GameLoop : MonoBehaviour
 
         yield return new WaitForSeconds(2f);
 
+        yield return SL.Get<FigurineTutorial>().StepTutorial();
+
         //_messagePrinter.HideMessage();
 
         SL.Get<GameModel>().InitGame(TestFactory.GetDefaultPlayerDeck(), TestFactory.GetDefaultEnemyDeck());
