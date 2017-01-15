@@ -1,92 +1,53 @@
 ﻿using UnityEngine;
-using System.Collections;
-using VRTK;
+using UnityEngine.Events;
 
 /// <summary>
-/// VRTK's teleport logic is way too wacky/convoluted for what we want to do.
-/// All a teleport has to do is adjust the camera rig to the destination marker's transform.  That's it.
+/// All a teleport has to do is adjust the camera rig to the destination marker's transform.
 /// </summary>
 public class ClashTeleport: MonoBehaviour
 {
-    public event TeleportEventHandler Teleporting;
-    public event TeleportEventHandler Teleported;
+    public UnityEvent TeleportingEvent;
+    public UnityEvent TeleportedEvent;
 
-    public void InitDestinationSetListener(GameObject markerMaker, bool register)
+    public Transform TeleportingLocation;
+    private ClashTeleportLocation[] _locations;
+
+    private void Start()
     {
-        if (markerMaker)
+        _locations = GameObject.FindObjectsOfType<ClashTeleportLocation>();
+
+        foreach(var location in _locations)
         {
-            foreach (var worldMarker in markerMaker.GetComponents<VRTK_DestinationMarker>())
+            location.TeleportSetEvent.AddListener(onTeleporting);
+        }
+    }
+
+    private void OnDestroy()
+    {
+        if(_locations != null)
+        {
+            foreach(var location in _locations)
             {
-                if (register)
-                {
-                    worldMarker.DestinationMarkerSet += new DestinationMarkerEventHandler(DoTeleport);
-                }
-                else
-                {
-                    worldMarker.DestinationMarkerSet -= new DestinationMarkerEventHandler(DoTeleport);
-                }
+                location.TeleportSetEvent.RemoveListener(onTeleporting);
             }
         }
     }
 
-    protected virtual void OnEnable()
+    private void onTeleporting(ClashTeleportLocation location)
     {
-        // Again, this is VRTK behavior.  I'm guessing it is so destination markers can be registered
-        // on the same frame as this.
-        StartCoroutine(InitListenersAtEndOfFrame());
-    }
-
-    protected virtual void OnDisable()
-    {
-        InitDestinationMarkerListeners(false);
-    }
-
-    protected void OnTeleporting(object sender, DestinationMarkerEventArgs e)
-    {
-        if (Teleporting != null)
+        if(location != null && location.Destination != null)
         {
-            Teleporting(this, e);
-        }
-    }
+            var destination = location.Destination.transform;
+            TeleportingLocation = destination;
 
-    protected void OnTeleported(object sender, DestinationMarkerEventArgs e)
-    {
-        if (Teleported != null)
-        {
-            Teleported(this, e);
-        }
-    }
+            TeleportingEvent.Invoke();
 
-    private void InitDestinationMarkerListeners(bool state)
-    {
-        var leftHand = VRTK_DeviceFinder.GetControllerLeftHand();
-        var rightHand = VRTK_DeviceFinder.GetControllerRightHand();
-        InitDestinationSetListener(leftHand, state);
-        InitDestinationSetListener(rightHand, state);
-        foreach (var destinationMarker in VRTK_ObjectCache.registeredDestinationMarkers)
-        {
-            if (destinationMarker.gameObject != leftHand && destinationMarker.gameObject != rightHand)
-            {
-                InitDestinationSetListener(destinationMarker.gameObject, state);
-            }
-        }
-    }
+            transform.position = destination.position;
+            transform.rotation = destination.rotation;
+            transform.localScale = destination.localScale;
 
-    private IEnumerator InitListenersAtEndOfFrame()
-    {
-        yield return new WaitForEndOfFrame();
-        InitDestinationMarkerListeners(true);
-    }
-
-    private void DoTeleport(object sender, DestinationMarkerEventArgs e)
-    {
-        if(e.target != null)
-        {
-            OnTeleporting(sender, e);
-            transform.position = e.target.position;
-            transform.rotation = e.target.rotation;
-            transform.localScale = e.target.localScale;
-            OnTeleported(sender, e);
+            TeleportedEvent.Invoke();
+            TeleportingLocation = null;
         }
     }
 }

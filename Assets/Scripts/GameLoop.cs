@@ -1,7 +1,6 @@
 ﻿using System.Collections;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using VRTK;
 
 /// <summary>
 /// Controls the core game loop/lifecycle.
