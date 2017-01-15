@@ -1,12 +1,5 @@
-﻿using System;
-using System.Collections;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.Events;
-using VRTK;
-
-// TODO:  This script does quite a few unrelated things.  I should break this up into several scripts for each
-// visual or interaction component of a slot.  The slot should just contain logic for when a figurine is 
-// grabbed, used, etc.
 
 /// <summary>
 /// Slot for a card that can be interacted with.
@@ -14,19 +7,16 @@ using VRTK;
 public class CardFigurineSlot : MonoBehaviour 
 {
     public int HandIndex;
+    public UnityEvent CardChangedEvent;
     public GameObject LockedGameObject;
+
+    // The prefab to generate that contains all interaction scripts, and initializes the visuals using the
+    // card data that we pass in.
+    [SerializeField] private CardFigurine _figurinePrefab;
 
     private CardFigurine _figurine;
 
-    // A grid snapper is dynamically attached to the figurine while grabbed so we can track which square we 
-    // will be placing into).
-    private GridSnapVR _snapper;
-
-    private float _elapsedSpawnSeconds;
-    private const float _spawnMetersPerSecond = 150f;
-
-    public UnityEvent CardChangedEvent;
-
+    // The current figurine in the slot.
     public CardFigurine Figurine
     {
         get
@@ -65,6 +55,35 @@ public class CardFigurineSlot : MonoBehaviour
         }
     }
 
+    private CardFigurine createFigurineFromDefinition(CardData data)
+    {
+        CardFigurine figurine = null;
+        if(_figurinePrefab != null && data != null)
+        {
+            // Parent to this slot.
+            figurine = Utils.Instantiate(_figurinePrefab, transform);
+            if(figurine != null)
+            {
+                figurine.transform.localPosition = Vector3.zero;
+                figurine.transform.localRotation = Quaternion.identity;
+                figurine.Init(data);
+            }
+        }
+        return figurine;
+    }
+
+    private void destroyFigurine()
+    {
+        if (_figurine != null)
+        {
+            // Destroy the figurine.
+            _figurine.FigurinePlacedEvent.RemoveListener(onFigurinePlaced);
+            Destroy(_figurine.gameObject);
+            _figurine = null;
+        }
+    }
+
+    // Triggered when the card at this hand index was changed.
     private void onCardChanged(int index)
     {
         if(index == HandIndex)
@@ -82,209 +101,33 @@ public class CardFigurineSlot : MonoBehaviour
             destroyFigurine();
 
             var data = handState[index];
-            var go = createFigurineFromDefinition(data);
-            if(go != null)
+            _figurine = createFigurineFromDefinition(data);
+            if(_figurine != null)
             {
-                _figurine = go.AddComponent<CardFigurine>();
-                _figurine.Init(data);
-                registerFigurine();
+                _figurine.FigurinePlacedEvent.AddListener(onFigurinePlaced);
             }
+
+            // Update if we have enough mana to use this figurine.
+            onManaChanged();
 
             CardChangedEvent.Invoke();
         }
     }
 
-    private GameObject createFigurineFromDefinition(CardData data)
+    // Triggered when the figurine was placed.
+    private void onFigurinePlaced(Vector3 destination)
     {
-        var prefab = SL.Get<ResourceManager>().Load<GameObject>(Consts.UnitGhostsPath + data.GhostPrefabName);
-
-        GameObject go = null;
-        if(prefab != null)
+        if (_figurine != null)
         {
-            // Parent to this slot.
-            go = Utils.Instantiate(prefab, transform);
-            go.transform.localPosition = Vector3.zero;
-            go.transform.localRotation = Quaternion.identity;
+            var data = _figurine.Data;
+
+            // Destroy the figurine.
+            destroyFigurine();
+
+            // This will cause a card change event to be invoked which will re-populate the slot
+            // automatically.
+            SL.Get<GameModel>().MyPlayer.PlayCard(data, destination);
         }
-
-        return go;
-    }
-
-    private void destroyFigurine()
-    {
-        if(_figurine != null)
-        {
-            // If destroyed while held.
-            _figurine.InteractableObjectUsed -= OnFigurineUsed;
-
-            unregisterFigurine();
-            Destroy(_figurine.gameObject);
-            _figurine = null;
-        }
-    }
-
-    // Assume figurine exists.
-    private void registerFigurine()
-    {
-        _figurine.InteractableObjectGrabbed += onGrabbed;
-        _figurine.InteractableObjectUngrabbed += onUngrabbed;
-    }
-
-    // Assume figurine exists.
-    private void unregisterFigurine()
-    {
-        _figurine.InteractableObjectGrabbed -= onGrabbed;
-        _figurine.InteractableObjectUngrabbed -= onUngrabbed;
-    }
-
-    private void onGrabbed(object sender, InteractableObjectEventArgs e)
-    {
-        if(_figurine != null)
-        {
-            // Don't allow a card to be picked up if we don't have enough mana.
-            // TODO: Add visual indication to the player.
-            bool canPlayCard = SL.Get<GameModel>().MyPlayer.CanPlayCard(_figurine.Data);
-            if(canPlayCard)
-            {
-                _figurine.transform.SetParent(null);
-                _figurine.InteractableObjectUsed += OnFigurineUsed;
-
-                // Attach a snapper so we know if we are over the board.
-                _snapper = _figurine.GetComponent<GridSnapVR>();
-                if(_snapper != null)
-                {
-                    _snapper.enabled = true;
-                }
-                else
-                {
-                    _snapper = _figurine.gameObject.AddComponent<GridSnapVR>();
-                }
-                _snapper.GridSquareChangedEvent.AddListener(OnFigurineGridSquareChanged);
-
-                if(!_figurine.Data.IsProjectile)
-                {
-                    SL.Get<TerritoryUI>().Show();
-                }
-            }
-        }
-    }
-
-    private void onUngrabbed(object sender, InteractableObjectEventArgs e)
-    {
-        ungrab(shouldReturnToSlot : true);
-    }
-
-    /// <summary>
-    /// Ungrabs the figurine.
-    /// </summary>
-    /// <param name="shouldReturnToSlot">If true, returns the figurine to the slot and repositions.
-    /// If false, the figurine will be unparented.</param>
-    private void ungrab(bool shouldReturnToSlot)
-    {
-        if(_figurine != null)
-        {
-            _figurine.InteractableObjectUsed -= OnFigurineUsed;
-            if(shouldReturnToSlot)
-            {
-                _figurine.transform.SetParent(transform);
-                _figurine.transform.localPosition = Vector3.zero;
-                _figurine.transform.localRotation = Quaternion.identity;
-            }
-            else
-            {
-                _figurine.transform.SetParent(null);
-            }
-        }
-        
-        if(_snapper != null)
-        {
-            _snapper.enabled = false;
-            _snapper.GridSquareChangedEvent.RemoveListener(OnFigurineGridSquareChanged);
-            _snapper = null;
-        }
-
-        SL.Get<GridSquareHighlight>().gameObject.SetActive(false);
-        SL.Get<TerritoryUI>().Hide();
-    }
-
-    private void OnFigurineGridSquareChanged()
-    {
-        if(_snapper != null)
-        {
-            bool isHighlightActive = _snapper.IsOverBoard && isPlaceableTerritory(_snapper.WorldPosition);
-            SL.Get<GridSquareHighlight>().gameObject.SetActive(isHighlightActive);
-
-            if(isHighlightActive)
-            {
-                var center = TerritoryData.GetCenter(_snapper.GridPoint.X, _snapper.GridPoint.Y);
-                var snappedPos = new Vector3(center.x, 1f, center.z);
-                SL.Get<GridSquareHighlight>().transform.position = snappedPos;
-            }
-        }
-    }
-
-    private void OnFigurineUsed(object sender, InteractableObjectEventArgs e)
-    {
-        // EARLY OUT! //
-        if(_figurine == null || _snapper == null)
-        {
-            Debug.LogWarning(string.Format("Cannot use figurine, missing data. Figurine:{0} Snapper:{1}", _figurine, _snapper));
-            return;
-        }
-
-        var card = _figurine.Data;
-        bool canPlayCard = SL.Get<GameModel>().MyPlayer.CanPlayCard(card);
-        if(canPlayCard && _snapper.IsOverBoard)
-        {
-            var gridPoint = _snapper.GridPoint;
-
-            if(isPlaceableTerritory(_snapper.WorldPosition))
-            {
-                var snappedPosition = TerritoryData.GetCenter(gridPoint.X, gridPoint.Y);
-
-                // Send the figurine down to its spawn position.
-                var pos = _figurine.transform.position;
-                _figurine.ForceStopInteracting();
-                _figurine.DisableInteractions();
-                ungrab(shouldReturnToSlot : false);
-
-                StartCoroutine(DropFigurineToSpawn(pos, snappedPosition));
-            }
-        }
-    }
-
-    private bool isPlaceableTerritory(Vector3 position)
-    {
-        // If the territory is NOT controlled by the enemy ie friendly or neutral, except projectiles.
-            return _figurine.Data.IsProjectile
-                || !SL.Get<GameModel>().EnemyPlayer.IsInTerritory(position);
-    }
-
-    // Sends the figurine down to the destination position over time.  Once down, actually spawns the entity
-    // and destroys the figurine.
-    // Assumes the figurine is no longer grabbed.
-    IEnumerator DropFigurineToSpawn(Vector3 startPos, Vector3 destination)
-    {
-        _elapsedSpawnSeconds = 0f;
-        float totalMeters = Vector3.Distance(startPos, destination);
-        float _totalSeconds = totalMeters / _spawnMetersPerSecond;
-
-        while(_elapsedSpawnSeconds < _totalSeconds)
-        {
-            var currentPos = SteamVR_Utils.Lerp(startPos, destination, _elapsedSpawnSeconds / _totalSeconds);
-            _figurine.transform.position = currentPos;
-
-            _elapsedSpawnSeconds += Time.deltaTime;
-            yield return new WaitForEndOfFrame();
-        }
-
-        // Cleanup the slot before getting a new card from the hand.
-        var figurine = _figurine;
-        destroyFigurine();
-
-        // This will cause a card change event to be invoked which will re-populate the slot
-        // automatically.
-        SL.Get<GameModel>().MyPlayer.PlayCard(figurine.Data, destination);
     }
 
     private void onManaChanged()
@@ -293,7 +136,9 @@ public class CardFigurineSlot : MonoBehaviour
 
         if(_figurine != null)
         {
-            LockedGameObject.SetActive(_figurine.Data.ManaCost > mana);
+            bool canInteract = _figurine.Data.ManaCost > mana;
+            LockedGameObject.SetActive(canInteract);
+            _figurine.SetInteractable(canInteract);
         }
     }
 }
