@@ -10,7 +10,7 @@
                 "Goblin",
                 "Knight",
                 "Balloon",
-                "PoisonSpell"
+                "Necromancer"
             ]
         },
         {
@@ -22,7 +22,7 @@
                 "Necromancer",
                 "Balloon",
                 "GiantSkeleton",
-                "RageEffect",
+                "Goblin",
                 "FireballSpell"
             ]
         },

@@ -82,7 +82,7 @@ public class GameLoop : MonoBehaviour
 
         //_messagePrinter.HideMessage();
 
-        SL.Get<GameModel>().InitGame(TestFactory.GetDefaultPlayerDeck(), TestFactory.GetDefaultEnemyDeck());
+        SL.Get<GameModel>().InitGame(TestFactory.GetDefaultEnemyDeck(), TestFactory.GetDefaultPlayerDeck());
         //_model.InitGame(GameSessionData.Instance.EnemyDeck, GameSessionData.Instance.PlayerDeck);
 
         SL.Get<GameModel>().GameStartedEvent.Invoke();
