@@ -45,4 +45,8 @@ public static class Consts
     public const int SpawnerNumEntitiesInCircle = 3;
 
     public const float AirUnitHeight = 15f;
+
+    // Letting people test made it clear that sometimes people actually reach a little under the board to
+    // place units.  We should allow this, add some area underneath the board to allow it.
+    public const float PlacementBufferY = -5f;
 }

@@ -42,8 +42,7 @@ public class GridSnapVR : MonoBehaviour
         var trackedPos = transform.position;
         var gridPoint = TerritoryData.GetGridPosition(trackedPos);
 
-        // Danger:  Hard coded y to origin
-        bool isAboveBoard = transform.position.y > 0;
+        bool isAboveBoard = transform.position.y > Consts.PlacementBufferY;
 
         // Note this is referring to x and y in 2D space, corresponds to X and Z in 3D space.
         bool isInXBounds = gridPoint.X >= 0 && gridPoint.X < Consts.GridWidth;
