@@ -58,13 +58,13 @@ public class GridSnapVR : MonoBehaviour
         {
             _knownGridPoint = gridPoint;
             _knownWorldPosition = trackedPos;
+        }
 
-            if(_isOverBoard != prevIsOverBoard 
-                || _knownGridPoint.X != prevGridPoint.X 
-                || _knownGridPoint.Y != prevGridPoint.Y)
-            {
-                GridSquareChangedEvent.Invoke();
-            }
+        if(_isOverBoard != prevIsOverBoard 
+            || _knownGridPoint.X != prevGridPoint.X 
+            || _knownGridPoint.Y != prevGridPoint.Y)
+        {
+            GridSquareChangedEvent.Invoke();
         }
     }
 }
