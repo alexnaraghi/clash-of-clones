@@ -1,11 +1,13 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 using Valve.VR.InteractionSystem;
 
 [RequireComponent( typeof( Interactable ) )]
 public class Holdable : MonoBehaviour 
 {
     public bool CanDrop;
+    public Material HighlightMaterial;
     [EnumFlags] public Hand.AttachmentFlags AttachmentFlags = Hand.defaultAttachmentFlags;
     public string AttachPoint;
 
@@ -15,6 +17,7 @@ public class Holdable : MonoBehaviour
     // We used this to return it to it's original slot after being ungrabbed.
     private Vector3 _originalLocalPosition;
     private Quaternion _originalLocalRotation;
+    private Dictionary<MeshRenderer, Material[]> _preHighlightMaterials;
 
     private void Awake()
     {
@@ -56,6 +59,37 @@ public class Holdable : MonoBehaviour
                     transform.localRotation = _originalLocalRotation;
                 }
             }
+        }
+    }
+
+    private void OnHandHoverBegin()
+    {
+        if(HighlightMaterial != null)
+        {
+            _preHighlightMaterials.Clear();
+            foreach(var mesh in GetComponentsInChildren<MeshRenderer>())
+            {
+                _preHighlightMaterials.Add(mesh, mesh.materials);
+                Material[] highlightMaterials = new Material[mesh.materials.Length];
+                for(int i = 0; i < highlightMaterials.Length; i++)
+                {
+                    highlightMaterials[i] = HighlightMaterial;
+                }
+            }
+        }
+    }
+
+
+    //-------------------------------------------------
+    private void OnHandHoverEnd()
+    {
+        if (HighlightMaterial != null)
+        {
+            foreach (var meshKV in _preHighlightMaterials)
+            {
+                meshKV.Key.materials = meshKV.Value;
+            }
+            _preHighlightMaterials.Clear();
         }
     }
 }

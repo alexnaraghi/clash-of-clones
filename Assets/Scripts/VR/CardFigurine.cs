@@ -1,8 +1,10 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 using System;
 using Valve.VR.InteractionSystem;
 using UnityEngine.Events;
+using VRTK.Highlighters;
 
 [Serializable]
 public class FigurinePlacedEvent : UnityEvent<Vector3> { }
@@ -15,8 +17,11 @@ public class FigurinePlacedEvent : UnityEvent<Vector3> { }
 [RequireComponent(typeof(Interactable))]
 public class CardFigurine : MonoBehaviour 
 {
+    public Color HighlightColor;
+
     // Statically attached.
     private Interactable _interactable;
+    private VRTK_BaseHighlighter _highlighter;
 
     // Added on init.
     private CardData _data;
@@ -59,6 +64,11 @@ public class CardFigurine : MonoBehaviour
             go.transform.localPosition = Vector3.zero;
             go.transform.localRotation = Quaternion.identity;
         }
+
+        if(_highlighter != null)
+        {
+            _highlighter.ResetHighlighter();
+        }
     }
 
     // Changes whether this figurine can be interacted with by the player's hands.
@@ -85,6 +95,13 @@ public class CardFigurine : MonoBehaviour
     private void Awake()
     {
         _interactable = gameObject.GetComponent<Interactable>();
+
+        // Optional.
+        _highlighter = gameObject.GetComponent<VRTK_BaseHighlighter>();
+        if(_highlighter != null)
+        {
+            _highlighter.Initialise(null, new Dictionary<string, object>(){ {"resetMainTexture", true} });
+        }
     }
 
     // Is the figurine in a state where it can be placed?
@@ -244,6 +261,8 @@ public class CardFigurine : MonoBehaviour
                 SL.Get<TerritoryUI>().Show();
             }
         }
+
+        unhighlight();
     }
 
     //-------------------------------------------------
@@ -264,4 +283,34 @@ public class CardFigurine : MonoBehaviour
         }
     }
 #endregion
+
+
+
+    private void OnHandHoverBegin()
+    {
+        highlight();
+    }
+
+
+    //-------------------------------------------------
+    private void OnHandHoverEnd()
+    {
+        unhighlight();
+    }
+
+    private void highlight()
+    {
+        if(_highlighter != null)
+        {
+            _highlighter.Highlight(HighlightColor);
+        }
+    }
+
+    private void unhighlight()
+    {
+        if (_highlighter != null)
+        {
+            _highlighter.Unhighlight(null);
+        }
+    }
 }
