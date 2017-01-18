@@ -44,6 +44,7 @@ public class FigurineTutorial : MonoBehaviour
             RealLight.gameObject.SetActive(true);
         }
 
+        SL.Get<MessageUI>().PrintMessage("Destroy Blue!");
         yield return new WaitForSeconds(TutorialEndSeconds);
 
         // When the tutorial is done, disable it and its children.

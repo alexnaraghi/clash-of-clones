@@ -7,11 +7,6 @@ using UnityEngine.SceneManagement;
 /// </summary>
 public class GameLoop : MonoBehaviour 
 {
-    [SerializeField] private MessageUI _messagePrinterPrefab;
-
-    private MessageUI _messagePrinter;
-    private GameObject _gameOverMenu;
-
     // The scene name to load when the game ends.
     [SerializeField] private string _sceneToLoad = "ClashScene";
 
@@ -27,22 +22,7 @@ public class GameLoop : MonoBehaviour
 
     void Start()
     {
-        // EARLY OUT! //
-        if(_messagePrinterPrefab == null)
-        {
-            Debug.LogWarning("Require message printer.");
-            return;
-        }
-
-        initPrefabs();
         StartCoroutine(Loop());
-    }
-
-    private void initPrefabs()
-    {
-        _messagePrinter = Instantiate(_messagePrinterPrefab);
-        _gameOverMenu = _messagePrinter.transform.Find("GameOver").gameObject;
-        _gameOverMenu.SetActive(false);
     }
 
     private IEnumerator endGame()
@@ -64,23 +44,7 @@ public class GameLoop : MonoBehaviour
 
     private IEnumerator RoundStarting()
     {
-        var messageObj = GameObject.Find("CenterMessage");
-        if(messageObj != null)
-        {
-            _messagePrinter = messageObj.GetComponent<MessageUI>();
-            if(_messagePrinter != null)
-            {
-                _messagePrinter.PrintMessage("Clash of Clones");
-            }
-        }
-
-        // Do a cool effect.
-
-        yield return new WaitForSeconds(2f);
-
         yield return SL.Get<FigurineTutorial>().StepTutorial();
-
-        //_messagePrinter.HideMessage();
 
         SL.Get<GameModel>().InitGame(TestFactory.GetDefaultEnemyDeck(), TestFactory.GetDefaultPlayerDeck());
         //_model.InitGame(GameSessionData.Instance.EnemyDeck, GameSessionData.Instance.PlayerDeck);
@@ -96,17 +60,13 @@ public class GameLoop : MonoBehaviour
 
             if(SL.Get<GameModel>().SecondsLeft <= 10f)
             {
-                _messagePrinter.PrintMessage(Mathf.Max(1f, Mathf.RoundToInt(SL.Get<GameModel>().SecondsLeft)).ToString());
+                SL.Get<MessageUI>().PrintMessage(Mathf.Max(1f, Mathf.RoundToInt(SL.Get<GameModel>().SecondsLeft)).ToString());
             }
 
             yield return null;
         }
 
-        if(_messagePrinter != null)
-        {
-            _messagePrinter.HideMessage();
-        }
-
+        SL.Get<MessageUI>().HideMessage();
         SL.Get<GameModel>().IsPlaying = false;
     }
 
@@ -116,31 +76,20 @@ public class GameLoop : MonoBehaviour
         PlayerModel winner = determineWinner();
 
         // Print message.
-        if(_messagePrinter != null)
+        if(winner != null)
         {
-            if(winner != null)
-            {
-                _messagePrinter.PrintMessage(winner.Name + " won!");
-            }
-            else
-            {
-                _messagePrinter.PrintMessage("Tie game!");
-            }
+            SL.Get<MessageUI>().PrintMessage(winner.Name + " won!");
+        }
+        else
+        {
+            SL.Get<MessageUI>().PrintMessage("Tie game!");
         }
 
         // Do a cool effect.
 
         yield return new WaitForSeconds(3f);
 
-        if(_messagePrinter != null)
-        {
-            _messagePrinter.HideMessage();
-        }
-
-        if(_gameOverMenu != null)
-        {
-            _gameOverMenu.SetActive(true);
-        }
+        SL.Get<MessageUI>().ShowGameOverUI();
     }
 
     private bool isGameOver()
