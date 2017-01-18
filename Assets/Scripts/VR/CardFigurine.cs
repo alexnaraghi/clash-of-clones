@@ -18,6 +18,8 @@ public class FigurinePlacedEvent : UnityEvent<Vector3> { }
 public class CardFigurine : MonoBehaviour 
 {
     public Color HighlightColor;
+    public ushort HapticSpawnDrop = 1500;
+    public ushort HapticGridSquareChange = 500;
 
     // Statically attached.
     private Interactable _interactable;
@@ -123,7 +125,7 @@ public class CardFigurine : MonoBehaviour
     }
 
     // Detatches the object and places it on the board.
-    private void detachToBoard()
+    private void detachToBoard(Hand hand)
     {
         // EARLY OUT! //
         if(_snapper == null)
@@ -139,13 +141,13 @@ public class CardFigurine : MonoBehaviour
         var pos = transform.position;
         SetInteractable(false);
 
-        StartCoroutine(dropFigurineToSpawn(pos, snappedPosition));
+        StartCoroutine(dropFigurineToSpawn(pos, snappedPosition, hand));
     }
 
     // Sends the figurine down to the destination position over time.  Once down, actually spawns the entity
     // and destroys the figurine.
     // Assumes the figurine is no longer grabbed.
-    private IEnumerator dropFigurineToSpawn(Vector3 startPos, Vector3 destination)
+    private IEnumerator dropFigurineToSpawn(Vector3 startPos, Vector3 destination, Hand hand)
     {
         _elapsedSpawnSeconds = 0f;
         float totalMeters = Vector3.Distance(startPos, destination);
@@ -153,6 +155,8 @@ public class CardFigurine : MonoBehaviour
 
         while(_elapsedSpawnSeconds < _totalSeconds)
         {
+            hand.controller.TriggerHapticPulse( HapticSpawnDrop );
+
             var currentPos = SteamVR_Utils.Lerp(startPos, destination, _elapsedSpawnSeconds / _totalSeconds);
             transform.position = currentPos;
 
@@ -189,7 +193,7 @@ public class CardFigurine : MonoBehaviour
                 Hand hand = GetComponentInParent<Hand>();
 				if ( hand && hand.controller != null )
 				{
-                    hand.controller.TriggerHapticPulse( 500 );
+                    hand.controller.TriggerHapticPulse( HapticGridSquareChange );
 				}
             }
         }
@@ -226,7 +230,7 @@ public class CardFigurine : MonoBehaviour
 
                 if(canPlaceFigurineOnBoard())
                 {
-                    detachToBoard();
+                    detachToBoard(hand);
                 }
                 else
                 {
