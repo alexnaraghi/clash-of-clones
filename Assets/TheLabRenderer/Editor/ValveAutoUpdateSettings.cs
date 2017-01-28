@@ -67,7 +67,7 @@ public class TheLabRenderer_Settings : EditorWindow
 			(!EditorPrefs.HasKey(ignore + buildTarget) &&
 				EditorUserBuildSettings.activeBuildTarget != recommended_BuildTarget) ||
 			(!EditorPrefs.HasKey(ignore + showUnitySplashScreen) &&
-				PlayerSettings.showUnitySplashScreen != recommended_ShowUnitySplashScreen) ||
+				PlayerSettings.SplashScreen.show != recommended_ShowUnitySplashScreen) ||
 			(!EditorPrefs.HasKey(ignore + defaultIsFullScreen) &&
 				PlayerSettings.defaultIsFullScreen != recommended_DefaultIsFullScreen) ||
 			(!EditorPrefs.HasKey(ignore + defaultScreenSize) &&
@@ -115,7 +115,7 @@ public class TheLabRenderer_Settings : EditorWindow
 			updated = true;
 		}
 
-		var devices = UnityEditorInternal.VR.VREditor.GetVREnabledDevices(BuildTargetGroup.Standalone);
+		var devices = UnityEditorInternal.VR.VREditor.GetVREnabledDevicesOnTargetGroup(BuildTargetGroup.Standalone);
 		var hasOpenVR = false;
 		foreach (var device in devices)
 			if (device.ToLower() == "openvr")
@@ -136,7 +136,7 @@ public class TheLabRenderer_Settings : EditorWindow
 				newDevices[devices.Length] = "OpenVR";
 				updated = true;
 			}
-			UnityEditorInternal.VR.VREditor.SetVREnabledDevices(BuildTargetGroup.Standalone, newDevices);
+			UnityEditorInternal.VR.VREditor.SetVREnabledDevicesOnTargetGroup(BuildTargetGroup.Standalone, newDevices);
 		}
 
 		if (updated)
@@ -214,17 +214,17 @@ public class TheLabRenderer_Settings : EditorWindow
 		}
 
 		if (!EditorPrefs.HasKey(ignore + showUnitySplashScreen) &&
-			PlayerSettings.showUnitySplashScreen != recommended_ShowUnitySplashScreen)
+			PlayerSettings.SplashScreen.show != recommended_ShowUnitySplashScreen)
 		{
 			++numItems;
 
-			GUILayout.Label(showUnitySplashScreen + string.Format(currentValue, PlayerSettings.showUnitySplashScreen));
+			GUILayout.Label(showUnitySplashScreen + string.Format(currentValue, PlayerSettings.SplashScreen.show));
 
 			GUILayout.BeginHorizontal();
 
 			if (GUILayout.Button(string.Format(useRecommended, recommended_ShowUnitySplashScreen)))
 			{
-				PlayerSettings.showUnitySplashScreen = recommended_ShowUnitySplashScreen;
+				PlayerSettings.SplashScreen.show = recommended_ShowUnitySplashScreen;
 			}
 
 			GUILayout.FlexibleSpace();
@@ -639,7 +639,7 @@ public class TheLabRenderer_Settings : EditorWindow
 					// Only ignore those that do not currently match our recommended settings.
 					if (EditorUserBuildSettings.activeBuildTarget != recommended_BuildTarget)
 						EditorPrefs.SetBool(ignore + buildTarget, true);
-					if (PlayerSettings.showUnitySplashScreen != recommended_ShowUnitySplashScreen)
+					if (PlayerSettings.SplashScreen.show != recommended_ShowUnitySplashScreen)
 						EditorPrefs.SetBool(ignore + showUnitySplashScreen, true);
 					if (PlayerSettings.defaultIsFullScreen != recommended_DefaultIsFullScreen)
 						EditorPrefs.SetBool(ignore + defaultIsFullScreen, true);

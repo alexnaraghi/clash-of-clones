@@ -5,20 +5,20 @@
 /// </summary>
 [RequireComponent(typeof(Entity))]
 [RequireComponent(typeof(EntityAggro))]
-[RequireComponent(typeof(NavMeshAgent))]
+[RequireComponent(typeof(UnityEngine.AI.NavMeshAgent))]
 public class Navigator : MonoBehaviour, INavigable
 {
     [SerializeField] private bool _isNavigating;
     [SerializeField] private Vector3 _destination;
 
-    private NavMeshAgent _agent;
+    private UnityEngine.AI.NavMeshAgent _agent;
     private Entity _entity;
     private EntityAggro _aggro;
 
     void Awake()
     {
         _entity = GetComponent<Entity>();
-        _agent = GetComponent<NavMeshAgent>();
+        _agent = GetComponent<UnityEngine.AI.NavMeshAgent>();
         _aggro = GetComponent<EntityAggro>();
 
         // EARLY OUT! //

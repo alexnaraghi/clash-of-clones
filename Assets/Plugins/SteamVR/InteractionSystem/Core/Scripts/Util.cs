@@ -569,7 +569,7 @@ namespace Valve.VR.InteractionSystem
 
 		//-------------------------------------------------
 #if (UNITY_5_5 || UNITY_5_4)
-		public static float PathLength( NavMeshPath path )
+		public static float PathLength( UnityEngine.AI.NavMeshPath path )
 #else
 		public static float PathLength( UnityEngine.AI.NavMeshPath path )
 #endif

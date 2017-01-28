@@ -496,7 +496,6 @@ public class ValveCamera : MonoBehaviour
 				{
 					0, 1, 2, 0, 2, 3
 				};
-				mesh.Optimize();
 				mesh.UploadMeshData( false );
 
 				m_adaptiveQualityDebugQuad = new GameObject( "AdaptiveQualityDebugQuad" );

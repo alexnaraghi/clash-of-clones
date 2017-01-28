@@ -86,7 +86,7 @@ public class TimedBomb : MonoBehaviour
             _explosionParticles.Play();
             
             // Once the particles have finished, destroy the gameobject they are on.
-            Destroy (_explosionParticles.gameObject, _explosionParticles.duration);
+            Destroy (_explosionParticles.gameObject, _explosionParticles.main.duration);
         }
 
         if(_explosionAudio != null)
