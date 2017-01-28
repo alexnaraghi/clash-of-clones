@@ -21,11 +21,9 @@ public class EntityAggro : MonoBehaviour
     void Awake()
     {
         _entity = GetComponent<Entity>();
-        
-        if(_entity == null)
-        {
-            Debug.LogWarning("Requires an entity.");
-        }
+
+        // EARLY OUT! //        
+        if(Utils.DisabledFromMissingObject(_entity)) return;
 
         _entity.SpawnedEvent.AddListener(onSpawned);
     }

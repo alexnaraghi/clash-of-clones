@@ -33,11 +33,7 @@ public class TerritoryUI : MonoBehaviour
     void Start()
     {
         // EARLY OUT! //
-        if(_imagePrefab == null || _canvas == null)
-        {
-            Debug.LogWarning("TerritoryDisplay requires an image prefab and canvas.");
-            return;
-        }
+        if(Utils.DisabledFromMissingObject(_imagePrefab, _canvas)) return;
 
         _imagePool = new List<RectTransform>();
 

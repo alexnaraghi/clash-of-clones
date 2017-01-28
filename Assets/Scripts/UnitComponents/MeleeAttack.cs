@@ -30,12 +30,8 @@ public class MeleeAttack : MonoBehaviour
         _aggro = GetComponent<EntityAggro>();
         _animator = GetComponent<EntityAnimator>();
 
-        // EARLY OUT! //
-        if(_entity == null || _aggro == null || GetComponent<Rigidbody>() == null)
-        {
-            Debug.LogWarning("Requires entity, aggro, rigidbody.");
-            return;
-        }
+        // EARLY OUT! //        
+        if(Utils.DisabledFromMissingObject(_entity, _aggro, GetComponent<Rigidbody>())) return;
 
         _entity.SpawnedEvent.AddListener(onSpawned);
     }

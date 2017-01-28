@@ -32,11 +32,7 @@ public class CastProjectileSpell : MonoBehaviour
         _entity = GetComponent<Entity>();
 
         // EARLY OUT! //
-        if(_entity == null)
-        {
-            Debug.LogWarning("Requires entity.");
-            return;
-        }
+        if(Utils.DisabledFromMissingObject(_entity)) return;
 
         _entity.InitializedEvent.AddListener(onInit);
         _entity.SpawnedEvent.AddListener(onSpawned);

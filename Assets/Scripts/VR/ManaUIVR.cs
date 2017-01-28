@@ -13,12 +13,8 @@ public class ManaUIVR : MonoBehaviour
 
     void Start()
     {
-        // EARLY OUT! //
-        if(_slider == null || _countText == null)
-        {
-            Debug.LogWarning("Mana requires slider and count text.");
-            return;
-        }
+        // EARLY OUT! //        
+        if(Utils.DisabledFromMissingObject(_slider, _countText)) return;
     }
 
     void Update()

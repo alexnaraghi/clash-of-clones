@@ -55,12 +55,8 @@ public class TankShooting : MonoBehaviour
         _aggro = GetComponent<EntityAggro>();
         _rigidbody = GetComponent<Rigidbody>();
 
-        // EARLY OUT! //
-        if(_entity == null || _aggro == null || _rigidbody == null)
-        {
-            Debug.LogWarning("TankShooting requires entity, aggro, and rigidbody.");
-            return;
-        }
+        // EARLY OUT! //        
+        if(Utils.DisabledFromMissingObject(_entity, _aggro, _rigidbody)) return;
 
         _entity.SpawnedEvent.AddListener(onSpawned);
     }

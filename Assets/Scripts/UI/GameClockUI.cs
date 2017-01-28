@@ -12,11 +12,7 @@ public class GameClockUI : MonoBehaviour
     void Update()
     {
         // EARLY OUT! //
-        if(_timer == null)
-        {
-            Debug.LogWarning("Clock requires text.");
-            return;
-        }
+        if(Utils.DisabledFromMissingObject(_timer)) return;
 
         int secondsLeft = Mathf.RoundToInt(SL.Get<GameModel>().SecondsLeft);
 

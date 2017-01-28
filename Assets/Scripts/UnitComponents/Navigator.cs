@@ -21,12 +21,8 @@ public class Navigator : MonoBehaviour, INavigable
         _agent = GetComponent<UnityEngine.AI.NavMeshAgent>();
         _aggro = GetComponent<EntityAggro>();
 
-        // EARLY OUT! //
-        if(_entity == null || _agent == null || _aggro == null)
-        {
-            Debug.LogWarning("Navigator requires entity, agent, and aggro");
-            return;
-        }
+        // EARLY OUT! //        
+        if(Utils.DisabledFromMissingObject(_entity, _agent, _aggro)) return;
 
         _entity.InitializedEvent.AddListener(init);
         _entity.SpawnedEvent.AddListener(onSpawned);
