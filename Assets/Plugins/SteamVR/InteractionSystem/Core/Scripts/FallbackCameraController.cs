@@ -61,7 +61,8 @@ namespace Valve.VR.InteractionSystem
 			float deltaRealTime = realTimeNow - realTime;
 			realTime = realTimeNow;
 
-			Vector3 delta = new Vector3( right, 0.0f, forward ) * currentSpeed * deltaRealTime;
+            // ALEX N: Changed this to account for scale.
+            Vector3 delta = Vector3.Scale(new Vector3( right, 0.0f, forward), transform.lossyScale) * currentSpeed * deltaRealTime;
 
 			transform.position += transform.TransformDirection( delta );
 
