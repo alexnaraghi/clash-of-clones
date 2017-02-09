@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.Assertions;
 
 /// <summary>
@@ -7,6 +8,13 @@ using UnityEngine.Assertions;
 [RequireComponent(typeof(Rigidbody))]
 public class ShellExplosion : MonoBehaviour, IProjectile
 {
+    /// <summary>
+    /// Triggered when the projectile is destroyed.
+    /// </summary>
+    public UnityEvent DestroyedEvent { get { return _destroyedEvent; } }
+
+    [SerializeField] private UnityEvent _destroyedEvent;
+
     /// <summary>
     /// The time in seconds before the shell is removed.
     /// </summary>
@@ -24,6 +32,15 @@ public class ShellExplosion : MonoBehaviour, IProjectile
     private PlayerModel _owner;
     private Rigidbody _rigidbody;
     private int _areaDamage;
+
+    public void Init(Entity creator)
+    {
+        // EARLY OUT ! //
+        if(creator == null) return;
+
+        _owner = creator.Owner;
+        _areaDamage = creator.AreaAttackDamage;
+    }
     
     private void Start ()
     {
@@ -34,16 +51,7 @@ public class ShellExplosion : MonoBehaviour, IProjectile
         Destroy (gameObject, _maxLifeTime);
     }
 
-    public void Init(Entity creator)
-    {
-        // EARLY OUT ! //
-        if(creator == null) return;
-
-        _owner = creator.Owner;
-        _areaDamage = creator.AreaAttackDamage;
-    }
-
-    void Update()
+    private void Update()
     {
         // Point the projectile to its direction of movement.
         if(_rigidbody != null && !Mathf.Approximately(_rigidbody.velocity.sqrMagnitude, 0f))
@@ -96,5 +104,11 @@ public class ShellExplosion : MonoBehaviour, IProjectile
 
         // Destroy the shell.
         Destroy (gameObject);
+    }
+
+    private void OnDestroy()
+    {
+        _destroyedEvent.Invoke();
+        _destroyedEvent.RemoveAllListeners();
     }
 }

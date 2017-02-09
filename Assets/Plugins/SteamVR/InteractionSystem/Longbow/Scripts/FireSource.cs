@@ -12,11 +12,12 @@ namespace Valve.VR.InteractionSystem
 	//-------------------------------------------------------------------------
 	public class FireSource : MonoBehaviour
 	{
-		public GameObject fireParticlePrefab;
+        public float scalar = 5f;
+        public GameObject fireParticlePrefab;
 		public bool startActive;
 		private GameObject fireObject;
 
-		public ParticleSystem customParticles;
+        public ParticleSystem customParticles;
 
 		public bool isBurning;
 
@@ -104,7 +105,8 @@ namespace Valve.VR.InteractionSystem
 				if ( fireParticlePrefab != null )
 				{
 					fireObject = Instantiate( fireParticlePrefab, transform.position, transform.rotation ) as GameObject;
-					fireObject.transform.parent = transform;
+                    fireObject.transform.parent = transform;
+                    fireObject.transform.localScale = Vector3.one * scalar;
 				}
 			}
 		}

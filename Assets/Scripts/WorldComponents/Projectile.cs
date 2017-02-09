@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.Assertions;
 
 /// <summary>
@@ -7,6 +8,13 @@ using UnityEngine.Assertions;
 [RequireComponent(typeof(Rigidbody))]
 public class Projectile: MonoBehaviour, IProjectile
 {
+    /// <summary>
+    /// Triggered when the projectile is destroyed.
+    /// </summary>
+    public UnityEvent DestroyedEvent { get { return _destroyedEvent; } }
+
+    [SerializeField] private UnityEvent _destroyedEvent;
+
     /// <summary>
     /// The time in seconds before the projectile is removed.
     /// </summary>
@@ -68,5 +76,10 @@ public class Projectile: MonoBehaviour, IProjectile
 
         // Destroy the shell.
         Destroy (gameObject);
+    }
+
+    private void OnDestroy()
+    {
+        _destroyedEvent.Invoke();
     }
 }

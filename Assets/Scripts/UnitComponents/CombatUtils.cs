@@ -41,11 +41,11 @@ public static class CombatUtils
         return velocity;
     }
 
-    public static void FireProjectile(Entity creator, Rigidbody projectilePrefab, Transform fireTransform, 
+    public static IProjectile FireProjectile(Entity creator, Rigidbody projectilePrefab, Transform fireTransform, 
         Vector3 destination, float secondsToFlyHorizontalMeter)
     {
         // EARLY OUT! //
-        if(Utils.DisabledFromMissingObject(creator, projectilePrefab, fireTransform)) return;
+        if(Utils.DisabledFromMissingObject(creator, projectilePrefab, fireTransform)) return null;
 
         // Create an instance of the shell and store a reference to it's rigidbody.
         Rigidbody projectileRigidbody =
@@ -69,6 +69,8 @@ public static class CombatUtils
         {
             Debug.LogWarning("Problem with the projectile setup.");
         }
+
+        return projectile;
     }
 
     /// <summary>
