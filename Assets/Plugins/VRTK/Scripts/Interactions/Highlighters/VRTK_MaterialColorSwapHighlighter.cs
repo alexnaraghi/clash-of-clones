@@ -119,52 +119,56 @@ namespace VRTK.Highlighters
         {
             foreach (Renderer renderer in GetComponentsInChildren<Renderer>(true))
             {
-                var swapCustomMaterials = new Material[renderer.materials.Length];
-
-                for (int i = 0; i < renderer.materials.Length; i++)
+                // alexn: Change to not highlight particles.
+                if(renderer.gameObject.layer != LayerMask.NameToLayer("Particles"))
                 {
-                    var material = renderer.materials[i];
-                    if (customMaterial)
+                    var swapCustomMaterials = new Material[renderer.materials.Length];
+
+                    for (int i = 0; i < renderer.materials.Length; i++)
                     {
-                        material = customMaterial;
-                        swapCustomMaterials[i] = material;
-                    }
-
-                    var faderRoutineID = material.GetInstanceID().ToString();
-
-                    if (faderRoutines.ContainsKey(faderRoutineID) && faderRoutines[faderRoutineID] != null)
-                    {
-                        StopCoroutine(faderRoutines[faderRoutineID]);
-                        faderRoutines.Remove(faderRoutineID);
-                    }
-
-                    material.EnableKeyword("_EMISSION");
-
-                    if (resetMainTexture && material.HasProperty("_MainTex"))
-                    {
-                        renderer.material.SetTexture("_MainTex", new Texture());
-                    }
-
-                    if (material.HasProperty("_Color"))
-                    {
-                        if (duration > 0f)
+                        var material = renderer.materials[i];
+                        if (customMaterial)
                         {
-                            faderRoutines[faderRoutineID] = StartCoroutine(CycleColor(material, material.color, color, duration));
+                            material = customMaterial;
+                            swapCustomMaterials[i] = material;
                         }
-                        else
+
+                        var faderRoutineID = material.GetInstanceID().ToString();
+
+                        if (faderRoutines.ContainsKey(faderRoutineID) && faderRoutines[faderRoutineID] != null)
                         {
-                            material.color = color;
-                            if (material.HasProperty("_EmissionColor"))
+                            StopCoroutine(faderRoutines[faderRoutineID]);
+                            faderRoutines.Remove(faderRoutineID);
+                        }
+
+                        material.EnableKeyword("_EMISSION");
+
+                        if (resetMainTexture && material.HasProperty("_MainTex"))
+                        {
+                            renderer.material.SetTexture("_MainTex", new Texture());
+                        }
+
+                        if (material.HasProperty("_Color"))
+                        {
+                            if (duration > 0f)
                             {
-                                material.SetColor("_EmissionColor", VRTK_SharedMethods.ColorDarken(color, emissionDarken));
+                                faderRoutines[faderRoutineID] = StartCoroutine(CycleColor(material, material.color, color, duration));
+                            }
+                            else
+                            {
+                                material.color = color;
+                                if (material.HasProperty("_EmissionColor"))
+                                {
+                                    material.SetColor("_EmissionColor", VRTK_SharedMethods.ColorDarken(color, emissionDarken));
+                                }
                             }
                         }
                     }
-                }
 
-                if (customMaterial)
-                {
-                    renderer.materials = swapCustomMaterials;
+                    if (customMaterial)
+                    {
+                        renderer.materials = swapCustomMaterials;
+                    }
                 }
             }
         }
