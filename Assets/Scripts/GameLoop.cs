@@ -31,8 +31,7 @@ public class GameLoop : MonoBehaviour
 
         yield return null;
 
-        SceneManager.LoadScene(_sceneToLoad, LoadSceneMode.Single);
-
+        SteamVR_LoadLevel.Begin(_sceneToLoad);
     }
 
     private IEnumerator Loop()
