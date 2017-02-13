@@ -60,4 +60,34 @@ public static class Utils
     {
         return new Vector3(src.x, 0f, src.z);
     }
+
+    public static T Instantiate<T>(T original, Transform parent) where T : UnityEngine.Object
+    {
+        return (T)UnityEngine.Object.Instantiate(original, parent);
+    }
+
+    public static T Instantiate<T>(T original, Vector3 position, Quaternion rotation) where T : UnityEngine.Object
+    {
+        return (T)UnityEngine.Object.Instantiate(original, position, rotation);
+    }
+
+    /// <summary>
+    /// Disables the MonoBehaviour if any of the given unity objects are null.
+    /// </summary>
+    /// <returns>True if one of the given objects was null, false if all had a valid reference.</returns>
+    public static bool DisabledFromMissingObject(this MonoBehaviour mb, params UnityEngine.Object[] dependencies)
+    {
+        bool isNull = false;
+        foreach(var dependency in dependencies)
+        {
+            if(dependency == null)
+            {
+                Debug.LogError(string.Format("{0}: Dependency {1} is null.", mb.name, dependency.GetType()));
+                isNull = true;
+                mb.enabled = false;
+            }
+        }
+
+        return isNull;
+    }
 }

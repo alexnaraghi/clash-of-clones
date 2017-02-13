@@ -41,19 +41,17 @@ public static class CombatUtils
         return velocity;
     }
 
-    public static void FireProjectile(Entity creator, Rigidbody projectilePrefab, Transform fireTransform, 
+    public static IProjectile FireProjectile(Entity creator, Rigidbody projectilePrefab, Transform fireTransform, 
         Vector3 destination, float secondsToFlyHorizontalMeter)
     {
         // EARLY OUT! //
-        if(creator == null || projectilePrefab == null || fireTransform == null)
-        {
-            Debug.LogWarning("Requires creator, projectilePrefab, fireTransform");
-            return;
-        }
+        if(Utils.DisabledFromMissingObject(creator, projectilePrefab, fireTransform)) return null;
 
         // Create an instance of the shell and store a reference to it's rigidbody.
         Rigidbody projectileRigidbody =
-            GameObject.Instantiate (projectilePrefab, fireTransform.position, fireTransform.rotation) as Rigidbody;
+            Utils.Instantiate (projectilePrefab, fireTransform.position, fireTransform.rotation);
+
+        projectileRigidbody.transform.SetParent(SL.Get<GameModel>().BoardRoot.transform, worldPositionStays: true);
 
         Vector3 velocity = CombatUtils.CalculateVelocityToHit(
             fireTransform.position, 
@@ -71,6 +69,8 @@ public static class CombatUtils
         {
             Debug.LogWarning("Problem with the projectile setup.");
         }
+
+        return projectile;
     }
 
     /// <summary>
@@ -182,7 +182,7 @@ public static class CombatUtils
 
     public static Entity GetClosestEnemyBuilding(Entity entity)
     {
-        var enemy = GameModel.Instance.GetOppositePlayer(entity.Owner);
+        var enemy = SL.Get<GameModel>().GetOppositePlayer(entity.Owner);
 
         // EARLY OUT! //
         if(enemy == null) return null;

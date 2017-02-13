@@ -5,30 +5,15 @@ using System.Linq;
 
 public class Config : MonoBehaviour 
 {
-    public static Config Instance;
-
     public CardDataList Cards;
     public DeckDataList Decks;
     public DeckSelectionData DeckSelections;
 
-    private const string CARD_PATH = "Data/CardConfig";
-    private const string DECK_PATH = "Data/DeckConfig";
-    private const string DECK_SELECTION_PATH = "Data/DeckSelectionConfig";
-
+    private const string CARD_PATH = "CardConfig";
+    private const string DECK_PATH = "DeckConfig";
+    private const string DECK_SELECTION_PATH = "DeckSelectionConfig";
+    
     void Awake()
-    {
-        if (Instance == null)
-        {
-            Instance = this;
-        }
-        else
-        {
-            Debug.LogWarning("More than one card config exists!  Destroying...");
-            Destroy(this);
-        }
-    }
-
-    void Start()
     {
         Cards = IO.LoadFromJson<CardDataList>(CARD_PATH);
         Decks = IO.LoadFromJson<DeckDataList>(DECK_PATH);
@@ -83,17 +68,17 @@ public class Config : MonoBehaviour
             // Pre-load all card prefabs to avoid performance hitches during gameplay.
             if(!string.IsNullOrEmpty(card.PrefabName))
             {
-                ResourceManager.Instance.Load<GameObject>(Consts.UnitsPath + card.PrefabName);
+                SL.Get<ResourceManager>().Load<GameObject>(Consts.UnitsPath + card.PrefabName);
             }
 
             if(!string.IsNullOrEmpty(card.GhostPrefabName))
             {
-                ResourceManager.Instance.Load<GameObject>(Consts.UnitGhostsPath + card.GhostPrefabName);
+                SL.Get<ResourceManager>().Load<GameObject>(Consts.UnitGhostsPath + card.GhostPrefabName);
             }
 
             if(!string.IsNullOrEmpty(card.CardImageName))
             {
-                ResourceManager.Instance.Load<Sprite>(Consts.ImagePath + card.CardImageName);
+                SL.Get<ResourceManager>().Load<Sprite>(Consts.ImagePath + card.CardImageName);
             }
         }
         

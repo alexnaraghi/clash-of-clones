@@ -25,12 +25,12 @@ public class DrawDebugGrid : MonoBehaviour
 
         if(IsDrawingEnemyGrid)
         {
-            CreateTerritoryGridForPlayer(GameModel.Instance.EnemyPlayer);
+            CreateTerritoryGridForPlayer(SL.Get<GameModel>().EnemyPlayer);
         }
         
         if(IsDrawingFriendlyGrid)
         {
-            CreateTerritoryGridForPlayer(GameModel.Instance.MyPlayer);
+            CreateTerritoryGridForPlayer(SL.Get<GameModel>().MyPlayer);
         }
 
         if(IsDrawingMapGrid)

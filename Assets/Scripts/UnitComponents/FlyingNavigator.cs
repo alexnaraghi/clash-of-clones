@@ -18,12 +18,8 @@ public class FlyingNavigator : MonoBehaviour, INavigable
         _entity = GetComponent<Entity>();
         _aggro = GetComponent<EntityAggro>();
 
-        // EARLY OUT! //
-        if(_entity == null || _aggro == null)
-        {
-            Debug.LogWarning("Navigator requires entity, agent, and aggro");
-            return;
-        }
+        // EARLY OUT! //        
+        if(Utils.DisabledFromMissingObject(_entity, _aggro)) return;
 
         _entity.SpawnedEvent.AddListener(onSpawned);
     }

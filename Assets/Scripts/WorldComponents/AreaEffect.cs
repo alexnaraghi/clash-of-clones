@@ -37,12 +37,8 @@ public class AreaEffect : MonoBehaviour
     {
         _entity = GetComponent<Entity>();
 
-        // EARLY OUT! //
-        if(_entity == null )
-        {
-            Debug.LogWarning("Requires entity.");
-            return;
-        }
+        // EARLY OUT! //        
+        if(Utils.DisabledFromMissingObject(_entity)) return;
 
         _entity.SpawnedEvent.AddListener(onSpawned);
     }
@@ -62,7 +58,7 @@ public class AreaEffect : MonoBehaviour
             var clockPrefab = Resources.Load<GameObject>(Consts.SpawnClockPrefabPath);
             if(clockPrefab != null)
             {
-                var go = Instantiate(clockPrefab);
+                var go = Utils.Instantiate(clockPrefab, SL.Get<GameModel>().BoardRoot.transform);
                 if(go != null)
                 {
                     var clock = go.GetComponent<SpawnClock>();

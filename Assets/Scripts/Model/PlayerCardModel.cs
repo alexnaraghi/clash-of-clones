@@ -1,18 +1,24 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 using UnityEngine.Events;
 using System.Collections.Generic;
 using System.Linq;
+
+[System.Serializable]
+public class CardChangedEvent : UnityEvent<int> {}
 
 /// <summary>
 /// Represents the state of the game with respect to the players' cards.
 /// </summary>
 public class PlayerCardModel : MonoBehaviour 
 {
+    public CardChangedEvent CardChangedEvent;
     public UnityEvent HandChangedEvent;
 
     public List<CardData> Deck;
     public List<CardData> Discard;
-    public CardData[] Hand;
+
+    [NonSerialized] public CardData[] Hand;
 
     void Awake()
     {
@@ -64,7 +70,7 @@ public class PlayerCardModel : MonoBehaviour
     /// </summary>
     public CardData GetRandomCardFromHand()
     {
-        int rand = Random.Range(0, Hand.Length);
+        int rand = UnityEngine.Random.Range(0, Hand.Length);
         return Hand[rand];
     }
 
@@ -76,7 +82,7 @@ public class PlayerCardModel : MonoBehaviour
         //Debug.Log("Shuffling discard into deck, Count: " + Discard.Count);
         
         // Randomized shuffle.
-        Deck = Discard.OrderBy(c => Random.value).ToList();
+        Deck = Discard.OrderBy(c => UnityEngine.Random.value).ToList();
         Discard.Clear();
     }
 
@@ -91,6 +97,7 @@ public class PlayerCardModel : MonoBehaviour
             }
 
             Hand[i] = drawCard();
+            CardChangedEvent.Invoke(i);
         }
 
         HandChangedEvent.Invoke();
@@ -104,6 +111,7 @@ public class PlayerCardModel : MonoBehaviour
         }
         Hand[handIndex] = drawCard();
 
+        CardChangedEvent.Invoke(handIndex);
         HandChangedEvent.Invoke();
     }
 

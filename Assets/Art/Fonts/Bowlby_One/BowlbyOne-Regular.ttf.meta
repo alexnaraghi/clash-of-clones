@@ -1,0 +1,20 @@
+fileFormatVersion: 2
+guid: 3d7fe0a26ba72d949874021dc3d6995e
+timeCreated: 1432116480
+licenseType: Store
+TrueTypeFontImporter:
+  serializedVersion: 4
+  fontSize: 60
+  forceTextureCase: -1
+  characterSpacing: 0
+  characterPadding: 1
+  includeFontData: 1
+  fontNames:
+  - Bowlby One
+  fallbackFontReferences: []
+  customCharacters: 
+  fontRenderingMode: 0
+  ascentCalculationMode: 1
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

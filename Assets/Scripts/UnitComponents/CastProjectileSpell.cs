@@ -27,16 +27,12 @@ public class CastProjectileSpell : MonoBehaviour
 
     private Entity _entity;
 
-    void Awake()
+    private void Awake()
     {
         _entity = GetComponent<Entity>();
 
         // EARLY OUT! //
-        if(_entity == null)
-        {
-            Debug.LogWarning("Requires entity.");
-            return;
-        }
+        if(Utils.DisabledFromMissingObject(_entity)) return;
 
         _entity.InitializedEvent.AddListener(onInit);
         _entity.SpawnedEvent.AddListener(onSpawned);
@@ -61,19 +57,27 @@ public class CastProjectileSpell : MonoBehaviour
             if(fireTransform != null)
             {
                 // Fire a projectile to this position.
-                CombatUtils.FireProjectile(_entity, 
+                var projectile = CombatUtils.FireProjectile(_entity, 
                     _projectile, 
                     fireTransform, 
                     transform.position, 
                     _secondsToFlyHorizontalMeter);
 
-                // Change the clip to the firing clip and play it.
-                _shootingAudio.clip = _fireClip;
-                _shootingAudio.Play ();
+                if(projectile != null)
+                {
+                    // Change the clip to the firing clip and play it.
+                    _shootingAudio.clip = _fireClip;
+                    _shootingAudio.Play ();
 
-                // The spell is complete.
-                // TODO: Destroy.
+                    projectile.DestroyedEvent.AddListener(onProjectileDestroyed);
+                }
+
             }
         }
+    }
+
+    private void onProjectileDestroyed()
+    {
+        Destroy(gameObject);
     }
 }

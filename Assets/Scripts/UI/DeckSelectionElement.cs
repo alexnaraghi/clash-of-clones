@@ -3,7 +3,6 @@ using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.Assertions;
 using UnityEngine.UI;
-using VRStandardAssets.Utils;
 
 /// <summary>
 /// The display of a card in our hand.
@@ -14,11 +13,10 @@ public class DeckSelectionElement : MonoBehaviour
     [SerializeField] private Image _image;
     [SerializeField] private Text _manaText;
     [SerializeField] private Image _manaIcon;
-    [SerializeField] private VRInteractiveItem _interactiveItem;
 
-    private Color _imageOriginalColor;
-    private Color _manaTextOriginalColor;
-    private Color _manaIconOriginalColor;
+    // private Color _imageOriginalColor;
+    // private Color _manaTextOriginalColor;
+    // private Color _manaIconOriginalColor;
 
     public CardData Definition;
 
@@ -30,14 +28,16 @@ public class DeckSelectionElement : MonoBehaviour
         Assert.IsNotNull(_manaText);
         Assert.IsNotNull(_manaIcon);
 
-        _imageOriginalColor = _image.color;
-        _manaTextOriginalColor = _manaText.color;
-        _manaIconOriginalColor = _manaIcon.color;
+        // _imageOriginalColor = _image.color;
+        // _manaTextOriginalColor = _manaText.color;
+        // _manaIconOriginalColor = _manaIcon.color;
 
+/*
         if(_interactiveItem != null)
         {
             _interactiveItem.OnClick.AddListener(onClick);
         }
+*/
     }
 
     private void onClick()
@@ -56,6 +56,6 @@ public class DeckSelectionElement : MonoBehaviour
         Definition = definition;
 
         _manaText.text = definition.ManaCost.ToString();
-        _image.sprite = ResourceManager.Instance.Load<Sprite>(Consts.ImagePath + definition.CardImageName);
+        _image.sprite = SL.Get<ResourceManager>().Load<Sprite>(Consts.ImagePath + definition.CardImageName);
     }
 }

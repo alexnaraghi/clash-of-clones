@@ -173,7 +173,7 @@ public class Entity : MonoBehaviour
             var clockPrefab = Resources.Load<GameObject>(Consts.SpawnClockPrefabPath);
             if(clockPrefab != null)
             {
-                var go = Instantiate(clockPrefab);
+                var go = Utils.Instantiate(clockPrefab, SL.Get<GameModel>().BoardRoot.transform);
                 if(go != null)
                 {
                     var clock = go.GetComponent<SpawnClock>();
@@ -244,7 +244,9 @@ public class Entity : MonoBehaviour
 
         if(_deathEffectPrefab != null)
         {
-            var go = (GameObject)Instantiate(_deathEffectPrefab, transform.position, Quaternion.identity);
+            var go = Utils.Instantiate(_deathEffectPrefab, SL.Get<GameModel>().BoardRoot.transform);
+            go.transform.position = transform.position;
+
             if(go != null)
             {
                 Destroy(go, 1.5f);
@@ -266,7 +268,7 @@ public class Entity : MonoBehaviour
     /// <returns>The created entity.</returns>
     public static Entity SpawnFromDefinition(PlayerModel owner, CardData definition, Vector3 position, bool isFromPlayersHand)
     {
-         var prefab = ResourceManager.Instance.Load<GameObject>(Consts.UnitsPath + definition.PrefabName);
+         var prefab = SL.Get<ResourceManager>().Load<GameObject>(Consts.UnitsPath + definition.PrefabName);
                              
         // EARLY OUT! //
         if(prefab == null)
@@ -280,7 +282,9 @@ public class Entity : MonoBehaviour
         {
             spawnPosition.y = Consts.AirUnitHeight;
         }
-        var go = (GameObject)Instantiate(prefab, spawnPosition, Quaternion.identity);
+        var go = Utils.Instantiate(prefab, SL.Get<GameModel>().BoardRoot.transform);
+        go.transform.position = spawnPosition;
+
         var entity = go.GetComponent<Entity>();
 
         // EARLY OUT! //

@@ -37,11 +37,7 @@ public class DirectShooting : MonoBehaviour
         _aggro = GetComponent<EntityAggro>();
 
         // EARLY OUT! //
-        if(_entity == null || _aggro == null || _bulletPrefab == null || _fireTransform == null)
-        {
-            Debug.LogWarning("Requires entity, aggro, bulletPrefab, fireTransform.");
-            return;
-        }
+        if(Utils.DisabledFromMissingObject(_entity, _aggro, _bulletPrefab, _fireTransform)) return;
 
         _entity.SpawnedEvent.AddListener(onSpawned);
     }
@@ -80,7 +76,7 @@ public class DirectShooting : MonoBehaviour
     {
         if(target != null)
         {
-            var bullet = Instantiate(_bulletPrefab);
+            var bullet = Utils.Instantiate(_bulletPrefab, SL.Get<GameModel>().BoardRoot.transform);
             bullet.transform.position = _fireTransform.position;
 
             if(bullet != null)

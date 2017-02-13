@@ -7,6 +7,7 @@ using UnityEngine.UI;
 public class MessageUI : MonoBehaviour 
 {
     [SerializeField] private Text _text;
+    [SerializeField] private GameObject _gameOverMenu;
 
     /// <summary>
     /// The number of seconds to display the message.
@@ -36,6 +37,19 @@ public class MessageUI : MonoBehaviour
         if(_text == null) return;
 
         _text.enabled = false;
+    }
+
+    public void ShowGameOverUI()
+    {
+        if(_text != null)
+        {
+            _text.enabled = false;
+        }
+
+        if(_gameOverMenu != null)
+        {
+            _gameOverMenu.SetActive(true);
+        }
     }
 
     void OnDestroy()

@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.Assertions;
 
 /// <summary>
@@ -7,6 +8,13 @@ using UnityEngine.Assertions;
 [RequireComponent(typeof(Rigidbody))]
 public class ShellExplosion : MonoBehaviour, IProjectile
 {
+    /// <summary>
+    /// Triggered when the projectile is destroyed.
+    /// </summary>
+    public UnityEvent DestroyedEvent { get { return _destroyedEvent; } }
+
+    [SerializeField] private UnityEvent _destroyedEvent;
+
     /// <summary>
     /// The time in seconds before the shell is removed.
     /// </summary>
@@ -18,12 +26,21 @@ public class ShellExplosion : MonoBehaviour, IProjectile
     [SerializeField] private float _explosionRadius = 5f;
     
     // Optional.
-    [SerializeField] private ParticleSystem _explosionParticles;
+    [SerializeField] private ParticleSystem _explosionParticlePrefab;
     [SerializeField] private AudioSource _explosionAudio;            
 
     private PlayerModel _owner;
     private Rigidbody _rigidbody;
     private int _areaDamage;
+
+    public void Init(Entity creator)
+    {
+        // EARLY OUT ! //
+        if(creator == null) return;
+
+        _owner = creator.Owner;
+        _areaDamage = creator.AreaAttackDamage;
+    }
     
     private void Start ()
     {
@@ -34,16 +51,7 @@ public class ShellExplosion : MonoBehaviour, IProjectile
         Destroy (gameObject, _maxLifeTime);
     }
 
-    public void Init(Entity creator)
-    {
-        // EARLY OUT ! //
-        if(creator == null) return;
-
-        _owner = creator.Owner;
-        _areaDamage = creator.AreaAttackDamage;
-    }
-
-    void Update()
+    private void Update()
     {
         // Point the projectile to its direction of movement.
         if(_rigidbody != null && !Mathf.Approximately(_rigidbody.velocity.sqrMagnitude, 0f))
@@ -76,16 +84,15 @@ public class ShellExplosion : MonoBehaviour, IProjectile
             }
         }
 
-        if(_explosionParticles != null)
+        if(_explosionParticlePrefab != null)
         {
-            // Unparent the particles from the shell.
-            _explosionParticles.transform.parent = null;
+            var explosion = Utils.Instantiate(_explosionParticlePrefab, transform.position, transform.rotation);
 
             // Play the particle system.
-            _explosionParticles.Play();
+            explosion.Play();
             
             // Once the particles have finished, destroy the gameobject they are on.
-            Destroy (_explosionParticles.gameObject, _explosionParticles.duration);
+            Destroy (explosion.gameObject, explosion.main.duration);
         }
 
         if(_explosionAudio != null)
@@ -97,5 +104,11 @@ public class ShellExplosion : MonoBehaviour, IProjectile
 
         // Destroy the shell.
         Destroy (gameObject);
+    }
+
+    private void OnDestroy()
+    {
+        _destroyedEvent.Invoke();
+        _destroyedEvent.RemoveAllListeners();
     }
 }

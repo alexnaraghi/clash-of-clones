@@ -31,7 +31,7 @@ public class TimedBomb : MonoBehaviour
             var clockPrefab = Resources.Load<GameObject>(Consts.SpawnClockPrefabPath);
             if(clockPrefab != null)
             {
-                var go = Instantiate(clockPrefab);
+                var go = Utils.Instantiate(clockPrefab, SL.Get<GameModel>().BoardRoot.transform);
                 if(go != null)
                 {
                     var clock = go.GetComponent<SpawnClock>();
@@ -86,7 +86,7 @@ public class TimedBomb : MonoBehaviour
             _explosionParticles.Play();
             
             // Once the particles have finished, destroy the gameobject they are on.
-            Destroy (_explosionParticles.gameObject, _explosionParticles.duration);
+            Destroy (_explosionParticles.gameObject, _explosionParticles.main.duration);
         }
 
         if(_explosionAudio != null)

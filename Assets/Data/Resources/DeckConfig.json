@@ -1,0 +1,43 @@
+{
+    "Decks": [
+        {
+            "Name": "Deck1",
+            "CardList": [
+                "SkellyFlyersSpell",
+                "SkellyArmy",
+                "SkellyHouse",
+                "Tank2",
+                "Goblin",
+                "Knight",
+                "Balloon",
+                "Necromancer"
+            ]
+        },
+        {
+            "Name": "Deck2",
+            "CardList": [
+                "SkellyHouse",
+                "Tank",
+                "Turret",
+                "Necromancer",
+                "Balloon",
+                "GiantSkeleton",
+                "Goblin",
+                "FireballSpell"
+            ]
+        },
+        {
+            "Name": "Tester",
+            "CardList": [
+                "RageEffect",
+                "RageEffect",
+                "RageEffect",
+                "RageEffect",
+                "Goblin",
+                "Goblin",
+                "Goblin",
+                "Goblin"
+            ]
+        }
+    ]
+}

@@ -39,7 +39,7 @@ public class AIController : MonoBehaviour
     void Update()
     {
         // EARLY OUT! //
-        if(_player == null || !GameModel.Instance.IsPlaying) return;
+        if(_player == null || !SL.Get<GameModel>().IsPlaying) return;
 
         _intervalSeconds -= Time.deltaTime;
 
@@ -69,7 +69,7 @@ public class AIController : MonoBehaviour
             if(randomCard.IsProjectile)
             {
                 // Shoot at a random enemy building.
-                var enemy = GameModel.Instance.GetOppositePlayer(_player);
+                var enemy = SL.Get<GameModel>().GetOppositePlayer(_player);
                 var randomBuilding = enemy.Buildings[Random.Range(0, enemy.Buildings.Length)];
                 if(randomBuilding.Entity != null)
                 {
