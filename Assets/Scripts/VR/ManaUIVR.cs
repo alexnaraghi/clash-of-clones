@@ -14,7 +14,7 @@ public class ManaUIVR : MonoBehaviour
     void Start()
     {
         // EARLY OUT! //        
-        if(Utils.DisabledFromMissingObject(_slider, _countText)) return;
+        if(this.DisabledFromMissingObject(_slider, _countText)) return;
     }
 
     void Update()

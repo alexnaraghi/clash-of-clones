@@ -31,7 +31,7 @@ public class MeleeAttack : MonoBehaviour
         _animator = GetComponent<EntityAnimator>();
 
         // EARLY OUT! //        
-        if(Utils.DisabledFromMissingObject(_entity, _aggro, GetComponent<Rigidbody>())) return;
+        if(this.DisabledFromMissingObject(_entity, _aggro, GetComponent<Rigidbody>())) return;
 
         _entity.SpawnedEvent.AddListener(onSpawned);
     }

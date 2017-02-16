@@ -33,7 +33,7 @@ public class TerritoryUI : MonoBehaviour
     void Start()
     {
         // EARLY OUT! //
-        if(Utils.DisabledFromMissingObject(_imagePrefab, _canvas)) return;
+        if(this.DisabledFromMissingObject(_imagePrefab, _canvas)) return;
 
         _imagePool = new List<RectTransform>();
 

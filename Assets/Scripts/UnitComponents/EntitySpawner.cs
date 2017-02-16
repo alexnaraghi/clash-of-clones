@@ -23,7 +23,7 @@ public class EntitySpawner : MonoBehaviour
         _entity = GetComponent<Entity>();
 
         // EARLY OUT! //        
-        if(Utils.DisabledFromMissingObject(_entity)) return;
+        if(this.DisabledFromMissingObject(_entity)) return;
 
         _entity.InitializedEvent.AddListener(onInit);
         _entity.SpawnedEvent.AddListener(onSpawned);

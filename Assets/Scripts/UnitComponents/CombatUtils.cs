@@ -45,7 +45,7 @@ public static class CombatUtils
         Vector3 destination, float secondsToFlyHorizontalMeter)
     {
         // EARLY OUT! //
-        if(Utils.DisabledFromMissingObject(creator, projectilePrefab, fireTransform)) return null;
+        if(creator == null || projectilePrefab == null || fireTransform == null) return null;
 
         // Create an instance of the shell and store a reference to it's rigidbody.
         Rigidbody projectileRigidbody =

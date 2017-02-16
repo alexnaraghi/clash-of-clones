@@ -22,7 +22,7 @@ public class Navigator : MonoBehaviour, INavigable
         _aggro = GetComponent<EntityAggro>();
 
         // EARLY OUT! //        
-        if(Utils.DisabledFromMissingObject(_entity, _agent, _aggro)) return;
+        if(this.DisabledFromMissingObject(_entity, _agent, _aggro)) return;
 
         _entity.InitializedEvent.AddListener(init);
         _entity.SpawnedEvent.AddListener(onSpawned);

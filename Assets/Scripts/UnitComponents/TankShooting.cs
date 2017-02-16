@@ -56,7 +56,7 @@ public class TankShooting : MonoBehaviour
         _rigidbody = GetComponent<Rigidbody>();
 
         // EARLY OUT! //        
-        if(Utils.DisabledFromMissingObject(_entity, _aggro, _rigidbody)) return;
+        if(this.DisabledFromMissingObject(_entity, _aggro, _rigidbody)) return;
 
         _entity.SpawnedEvent.AddListener(onSpawned);
     }

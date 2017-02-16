@@ -19,7 +19,7 @@ public class FlyingNavigator : MonoBehaviour, INavigable
         _aggro = GetComponent<EntityAggro>();
 
         // EARLY OUT! //        
-        if(Utils.DisabledFromMissingObject(_entity, _aggro)) return;
+        if(this.DisabledFromMissingObject(_entity, _aggro)) return;
 
         _entity.SpawnedEvent.AddListener(onSpawned);
     }

@@ -12,7 +12,7 @@ public class GameClockUI : MonoBehaviour
     void Update()
     {
         // EARLY OUT! //
-        if(Utils.DisabledFromMissingObject(_timer)) return;
+        if(this.DisabledFromMissingObject(_timer)) return;
 
         int secondsLeft = Mathf.RoundToInt(SL.Get<GameModel>().SecondsLeft);
 

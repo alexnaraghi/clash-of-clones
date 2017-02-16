@@ -38,7 +38,7 @@ public class AreaEffect : MonoBehaviour
         _entity = GetComponent<Entity>();
 
         // EARLY OUT! //        
-        if(Utils.DisabledFromMissingObject(_entity)) return;
+        if(this.DisabledFromMissingObject(_entity)) return;
 
         _entity.SpawnedEvent.AddListener(onSpawned);
     }

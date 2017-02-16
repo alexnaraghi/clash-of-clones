@@ -24,7 +24,7 @@ public class SpawnOnEvent : MonoBehaviour
         _entity = GetComponent<Entity>();
 
         // EARLY OUT! //        
-        if(Utils.DisabledFromMissingObject(_entity)) return;
+        if(this.DisabledFromMissingObject(_entity)) return;
 
         switch(_triggerReason)
         {

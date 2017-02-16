@@ -16,7 +16,7 @@ public class EntityAnimator : MonoBehaviour
         _entity = GetComponent<Entity>();
 
         // EARLY OUT! //
-        if(Utils.DisabledFromMissingObject(_entity, _animator)) return;
+        if(this.DisabledFromMissingObject(_entity, _animator)) return;
 
         _entity.SpawnedEvent.AddListener(onSpawned);
     }

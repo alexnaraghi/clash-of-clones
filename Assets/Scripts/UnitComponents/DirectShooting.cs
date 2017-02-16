@@ -37,7 +37,7 @@ public class DirectShooting : MonoBehaviour
         _aggro = GetComponent<EntityAggro>();
 
         // EARLY OUT! //
-        if(Utils.DisabledFromMissingObject(_entity, _aggro, _bulletPrefab, _fireTransform)) return;
+        if(this.DisabledFromMissingObject(_entity, _aggro, _bulletPrefab, _fireTransform)) return;
 
         _entity.SpawnedEvent.AddListener(onSpawned);
     }
