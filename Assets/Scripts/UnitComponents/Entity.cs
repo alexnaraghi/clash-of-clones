@@ -237,6 +237,12 @@ public class Entity : MonoBehaviour
         _activeEffects.Remove(effect);
     }
 
+    public void ForceDie()
+    {
+        _isDead = true;
+        die();
+    }
+
     private void die()
     {
         DiedEvent.Invoke();

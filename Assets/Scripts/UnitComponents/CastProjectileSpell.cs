@@ -78,6 +78,6 @@ public class CastProjectileSpell : MonoBehaviour
 
     private void onProjectileDestroyed()
     {
-        Destroy(gameObject);
+        _entity.ForceDie();
     }
 }
