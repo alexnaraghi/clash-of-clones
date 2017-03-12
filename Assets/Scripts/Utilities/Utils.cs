@@ -53,6 +53,28 @@ public static class Utils
         return src.GetComponent(typeof(T)) as T;
     }
 
+    public static T[] GetInterfaces<T>(this MonoBehaviour src) where T : class
+    {
+        var components = src.GetComponents(typeof(T));
+        T[] toReturn = new T[components.Length];
+        for(int i = 0; i < components.Length; i++)
+        {
+            toReturn[i] = components[i] as T;
+        }
+        return toReturn;
+    }
+
+    public static T[] GetInterfaces<T>(this GameObject src) where T : class
+    {
+        var components = src.GetComponents(typeof(T));
+        T[] toReturn = new T[components.Length];
+        for(int i = 0; i < components.Length; i++)
+        {
+            toReturn[i] = components[i] as T;
+        }
+        return toReturn;
+    }
+
     /// <summary>
     /// Zeroes out the y component of the vector.
     /// </summary>
