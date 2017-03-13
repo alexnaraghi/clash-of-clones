@@ -32,7 +32,7 @@ public class NetReplicationManager : MonoBehaviour
         }
     }
 
-    public void HostSpawn(GameObject go)
+    public void Spawn(GameObject go)
     {
         var components = go.GetInterfaces<NetBehaviourBase>();
         foreach(var component in components)
@@ -44,7 +44,7 @@ public class NetReplicationManager : MonoBehaviour
         // TODO: spawn this to on all clients.
     }
 
-    public void HostDespawn(GameObject go)
+    public void Despawn(GameObject go)
     {
         var components = go.GetInterfaces<NetBehaviourBase>();
         foreach(var component in components)
@@ -66,7 +66,7 @@ public class NetReplicationManager : MonoBehaviour
         component.Init(_latestId++);
     }
 
-    private void takeSnapshot()
+    public void TakeSnapshot()
     {
         _snapshot.Clear();
         foreach(var component in _replicants)
@@ -77,7 +77,7 @@ public class NetReplicationManager : MonoBehaviour
         }
     }
 
-    private void applySnapshot()
+    public void ApplySnapshot()
     {
         foreach(var sample in _snapshot)
         {

@@ -2,12 +2,12 @@
 
 public class NetworkTest : MonoBehaviour 
 {
-    private TransportManager _network;
+    private NetTransportManager _network;
 
     // Use this for initialization
     void Start () 
     {
-        _network = GetComponent<TransportManager>();
+        _network = GetComponent<NetTransportManager>();
     }
 
     public void Connect()

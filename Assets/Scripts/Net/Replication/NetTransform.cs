@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 [Serializable]
@@ -16,9 +14,15 @@ public struct NetTransformData
 
 public class NetTransform : NetBehaviourBase
 {
-    public override void Apply(object state)
+    public override bool HasDelta()
     {
-        var data = (NetTransformData)state;
+        var data = (NetTransformData)LatestState;
+        return data.Position == transform.position;
+    }
+    
+    public override void Rollback()
+    {
+        var data = (NetTransformData)LatestState;
         transform.position = data.Position;
     }
 
@@ -27,14 +31,4 @@ public class NetTransform : NetBehaviourBase
         var data = new NetTransformData(transform.position);
         return data;
     }
-
-    // Use this for initialization
-    void Start () {
-		
-	}
-	
-	// Update is called once per frame
-	void Update () {
-		
-	}
 }

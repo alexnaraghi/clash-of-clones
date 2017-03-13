@@ -6,11 +6,11 @@ using UnityEngine.Networking;
 /// Manages the transport layer of the network.
 /// Maintains a list of connections, and can send and receive data to them.
 /// </summary>
-public class TransportManager : MonoBehaviour 
+public class NetTransportManager : MonoBehaviour 
 {
     public int Port = 8888;
     public int NumConnections = 4;
-
+    
     // For debugging, all packets we ever received.
     public List<RawPacket> AllPackets = new List<RawPacket>();
     // Our currently open connections.
