@@ -1,8 +1,10 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
 using UnityEngine;
 using System.Collections.Generic;
 
+/*
 /// <summary>
 /// From tribes networking
 /// the frequency of packet transmission as well
@@ -63,7 +65,8 @@ public class StreamManager : MonoBehaviour
         while(queue.Count > 0)
         {
             var current = queue.Peek();
-            byte[] bytes = NetSerializer.Serialize(current);
+            BinarySerializer serializer = new BinarySerializer();
+            byte[] bytes = serializer.Serialize(current);
 
             if(size + bytes.Length < RawPacket.BUFFER_SIZE)
             {
@@ -90,29 +93,4 @@ public class StreamManager : MonoBehaviour
     }
 }
 
-public static class NetSerializer
-{
-    public static byte[] Serialize<T>(T data)
-    {
-        byte[] bytes;
-
-        BinaryFormatter bf = new BinaryFormatter();
-        using(var ms = new MemoryStream()) 
-        {
-            bf.Serialize(ms, data);
-            bytes = ms.ToArray();
-        }
-        return bytes;
-    }
-
-    public static T Deserialize<T>(byte[] bytes) where T : class
-    {
-        T packet;
-        using (var ms = new MemoryStream(bytes))
-        {
-            BinaryFormatter bf = new BinaryFormatter();
-            packet = bf.Deserialize(ms) as T;
-        }
-        return packet;
-    }
-}
+ */
