@@ -17,6 +17,14 @@ public class NetChatStream : MonoBehaviour, INetStream
 
     private bool _isEnabled;
 
+    public NetQosType[] RequiredChannels
+    {
+        get
+        {
+            return new NetQosType[] { NetQosType.Reliable };
+        }
+    }
+
     public void DisableStream()
     {
         _isEnabled = false;

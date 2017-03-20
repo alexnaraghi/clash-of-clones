@@ -33,17 +33,17 @@ public class NetworkTest : MonoBehaviour
 
     public void Host()
     {
-        _network.StartHost();
+        SL.Get<NetSimulationManager>().StartHost();
     }
 
     public void Client()
     {
-        _network.StartClient();
+        SL.Get<NetSimulationManager>().StartClient();
     }
 
     public void Disconnect()
     {
-        _network.Disconnect();
+        SL.Get<NetSimulationManager>().Disconnect();
     }
 
     private void OnGUI()

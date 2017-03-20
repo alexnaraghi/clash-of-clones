@@ -12,10 +12,11 @@ public class NetAgentManager : MonoBehaviour
     public string ConnectIp = "localhost";
     public string ConnectPort = "8889";
 
-    [SerializeField] private bool _isHost;
-    [SerializeField] private bool _isRunning;
+    [Readonly][SerializeField] private bool _isHost;
+    [Readonly][SerializeField] private bool _isRunning;
+    [Readonly][SerializeField] private NetQosType[] _requiredChannels;
 
-    public bool IsHost { get { return Me != null && Me.IsHost; } }
+    public bool IsHost { get { return _isHost; } }
     public bool IsRunning { get { return _isRunning; } }
 
     public List<NetAgent> Clients = new List<NetAgent>();
@@ -25,16 +26,14 @@ public class NetAgentManager : MonoBehaviour
     public ServerDataReceivedEvent ServerDataReceivedEvent;
     public ClientDataReceivedEvent ClientDataReceivedEvent;
 
-    public void StartHost()
+    public void StartHost(NetQosType[] channels)
     {
         if(!SL.Get<NetConnectionManager>().IsOpen)
         {
             _isHost = true;
             _isRunning = true;
 
-            // TODO: Get the various channels our streams wish to support, so they can be injected.
-            var channels = new NetQosType[] { NetQosType.Reliable, NetQosType.Unreliable };
-
+            _requiredChannels = channels;
             SL.Get<NetConnectionManager>().Open(Convert.ToInt32(MyPort), channels);
 
             // Set up a local client for this host.
@@ -49,15 +48,14 @@ public class NetAgentManager : MonoBehaviour
         }
     }
 
-    public void StartClient()
+    public void StartClient(NetQosType[] channels)
     {
         if (!SL.Get<NetConnectionManager>().IsOpen)
         {
             _isHost = false;
+            _isRunning = true;
 
-            // TODO: Get the various channels our streams wish to support, so they can be injected.
-            var channels = new NetQosType[] { NetQosType.Reliable, NetQosType.Unreliable };
-            
+            _requiredChannels = channels;
             SL.Get<NetConnectionManager>().Open(Convert.ToInt32(MyPort), channels);
             SL.Get<NetConnectionManager>().Connect(ConnectIp, Convert.ToInt32(ConnectPort));
 

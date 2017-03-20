@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class NetReplicationStream : MonoBehaviour
+public class NetReplicationStream : MonoBehaviour, INetStream
 {
     public NetQosType[] ReceiveChannelTypes = new NetQosType[] { NetQosType.Unreliable, NetQosType.Reliable };
     public NetQosType[] AckChannelTypes = new NetQosType[] { NetQosType.Unreliable };
@@ -13,6 +13,14 @@ public class NetReplicationStream : MonoBehaviour
 
     // For testing, sample and apply everything in the game.
     private List<NetReplicationDelta> _snapshot = new List<NetReplicationDelta>();
+
+    public NetQosType[] RequiredChannels
+    {
+        get
+        {
+            return new NetQosType[] { NetQosType.Unreliable };
+        }
+    }
 
     public void Spawn(GameObject go)
     {
@@ -57,6 +65,17 @@ public class NetReplicationStream : MonoBehaviour
             }
         }
     }
+
+    public void EnableStream()
+    {
+
+    }
+
+    public void DisableStream()
+    {
+
+    }
+
     private void Update()
     {
         // Do a tick rate.
