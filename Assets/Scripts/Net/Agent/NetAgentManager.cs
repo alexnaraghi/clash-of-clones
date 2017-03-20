@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
@@ -11,12 +12,14 @@ public class NetAgentManager : MonoBehaviour
     public string MyPort = "8888";
     public string ConnectIp = "localhost";
     public string ConnectPort = "8889";
+    public bool IsRecording;
 
     [Readonly][SerializeField] private bool _isHost;
     [Readonly][SerializeField] private bool _isRunning;
     [Readonly][SerializeField] private NetQosType[] _requiredChannels;
+    [Readonly][SerializeField] private List<NetRecord> _records = new List<NetRecord>();
 
-    public bool IsHost { get { return _isHost; } }
+    public bool IsHost { get { return Me != null && Me.IsHost; } }
     public bool IsRunning { get { return _isRunning; } }
 
     public List<NetAgent> Clients = new List<NetAgent>();
@@ -26,12 +29,20 @@ public class NetAgentManager : MonoBehaviour
     public ServerDataReceivedEvent ServerDataReceivedEvent;
     public ClientDataReceivedEvent ClientDataReceivedEvent;
 
+    private float _recordingStartTime;
+
     public void StartHost(NetQosType[] channels)
     {
         if(!SL.Get<NetConnectionManager>().IsOpen)
         {
             _isHost = true;
             _isRunning = true;
+
+            if(IsRecording)
+            {
+                _recordingStartTime = Time.time;
+                _records.Clear();
+            }
 
             _requiredChannels = channels;
             SL.Get<NetConnectionManager>().Open(Convert.ToInt32(MyPort), channels);
@@ -54,6 +65,12 @@ public class NetAgentManager : MonoBehaviour
         {
             _isHost = false;
             _isRunning = true;
+            
+            if(IsRecording)
+            {
+                _recordingStartTime = Time.time;
+                _records.Clear();
+            }
 
             _requiredChannels = channels;
             SL.Get<NetConnectionManager>().Open(Convert.ToInt32(MyPort), channels);
@@ -113,7 +130,7 @@ public class NetAgentManager : MonoBehaviour
     /// </summary>
     public void ClientSend(NetClientAtom atom, NetQosType channelType)
     {
-        if(!IsHost && Host != null)
+        if(Host != null)
         {
             // If the host is local, skip the whole networking thing.
             if(Host == Me)
@@ -130,6 +147,50 @@ public class NetAgentManager : MonoBehaviour
     public void MigrateHost()
     {
         // TODO:
+    }
+
+    /// <summary>
+    /// Gets all the records received (if IsRecording was set to true).
+    /// </summary>
+    public List<NetRecord> GetRecords()
+    {
+        return _records;
+    }
+
+    /// <summary>
+    /// Very basic replay system.
+    /// </summary>
+    /// <param name="records">The records to replay.</param>
+    public void Replay(List<NetRecord> records)
+    {
+        if(records != null && records.Count > 0)
+        {
+            if(!_isRunning)       
+            {
+                _isRunning = true;
+                IsRecording = false;
+                _records = records;
+                StartCoroutine(stepReplay());
+            }
+        }
+    }
+
+    private IEnumerator stepReplay()
+    {
+        int index = 0;
+        float startTime = Time.time;
+        float currentTime = 0f;
+
+        while(index < _records.Count)
+        {
+            var current = _records[index];
+
+            // Wait for the time to play this record.
+            yield return new WaitForSeconds(current.Timestamp - currentTime);
+            processAtom(current.Atom, current.ChannelType, current.Agent);
+            currentTime = current.Timestamp;
+            index++;
+        }
     }
 
     private void Start()
@@ -211,6 +272,20 @@ public class NetAgentManager : MonoBehaviour
     {
         if(agent != null)
         {
+            if(IsRecording)
+            {
+                // Add a raw record of the atom that was received.
+                // If we have captured all the traffic, we should be able to replicate it later.
+                var record = new NetRecord()
+                {
+                    Timestamp = Time.time - _recordingStartTime,
+                    Atom = atom,
+                    ChannelType = channelType,
+                    Agent = agent
+                };
+                _records.Add(record);
+            }
+
             bool isFromServer;
             if(agent.IsHost && agent.IsLocal)
             {

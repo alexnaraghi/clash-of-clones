@@ -9,6 +9,7 @@ public class NetAgent
 
     public NetAgent(NetConnection connection, bool isHost, bool isLocal)
     {
+        IsHost = isHost;
         IsLocal = isLocal;
         Connection = connection;
     }

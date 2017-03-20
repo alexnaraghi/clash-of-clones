@@ -78,15 +78,7 @@ public class NetChatStream : MonoBehaviour, INetStream
             var network = SL.Get<NetAgentManager>();
             foreach(var client in network.Clients)
             {
-                if(client.IsLocal)
-                {
-                    // Don't send data to the local player over the network.
-                    onServerDataReceived(message, NetQosType.Reliable);
-                }
-                else
-                {
-                    network.HostSend(message, client, NetQosType.Reliable);
-                }
+                network.HostSend(message, client, NetQosType.Reliable);
             }
         }
     }

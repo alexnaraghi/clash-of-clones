@@ -1,5 +1,6 @@
 ﻿using System;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class NetworkTest : MonoBehaviour 
 {
@@ -82,6 +83,15 @@ public class NetworkTest : MonoBehaviour
         if (GUILayout.Button("Disconnect"))
         {
             Disconnect();
+        }
+
+        if (GUILayout.Button("Replay"))
+        {
+            Disconnect();
+            var records = SL.Get<NetAgentManager>().GetRecords();
+
+            //TODO: Reset everything to its initial state.
+            SL.Get<NetAgentManager>().Replay(records);
         }
 
         GUILayout.EndArea();

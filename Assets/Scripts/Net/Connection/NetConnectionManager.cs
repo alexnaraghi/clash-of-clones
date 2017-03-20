@@ -140,18 +140,6 @@ public class NetConnectionManager : MonoBehaviour
         }
     }
 
-    private void sendAck(int connectionId, NetQosType channelType, int index)
-    {
-        var pod = new NetAckPod()
-        {
-            Index = index
-        };
-
-        byte[] buffer = new byte[MaxAtomSize];
-        int length = _serializer.Serialize(pod, buffer);
-        SL.Get<NetTransportManager>().Send(connectionId, buffer, length, channelType);
-    }
-
     /// <summary>
     /// Creates a record of transmission for a net atom.
     /// </summary>
